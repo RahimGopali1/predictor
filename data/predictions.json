@@ -1,5 +1,41 @@
 [
   {
+    "id": "0161add4-a680-4c5d-bed2-201b49d58784",
+    "userName": "User_1blxd",
+    "championId": "ARG",
+    "championName": "Argentina",
+    "championFlag": "🇦🇷",
+    "topPicks": [
+      {
+        "id": "ARG",
+        "name": "Argentina",
+        "pct": 15.052
+      },
+      {
+        "id": "FRA",
+        "name": "France",
+        "pct": 11.28
+      },
+      {
+        "id": "BRA",
+        "name": "Brazil",
+        "pct": 8.01
+      },
+      {
+        "id": "ESP",
+        "name": "Spain",
+        "pct": 7.692
+      },
+      {
+        "id": "POR",
+        "name": "Portugal",
+        "pct": 6.038
+      }
+    ],
+    "simsRun": 50000,
+    "createdAt": "2026-06-08T15:58:38.580Z"
+  },
+  {
     "id": "2a1a60f4-c92b-4b22-826e-9a1a82833ab1",
     "userName": "User_1blxd",
     "championId": "ARG",

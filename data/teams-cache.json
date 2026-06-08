@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-06-08T15:57:03.602Z",
+  "syncedAt": "2026-06-08T15:58:20.330Z",
   "source": "FIFA Sync / Google Search Hints",
   "teamCount": 48,
   "teams": [
@@ -353,7 +353,7 @@
       "name": "Ivory Coast",
       "flag": "🇨🇮",
       "group": "E",
-      "elo": 1800,
+      "elo": 1796,
       "fifaRank": 38,
       "star": "Sébastien Haller",
       "starDOB": "1900-06-22",
@@ -548,7 +548,7 @@
       "name": "Panama",
       "flag": "🇵🇦",
       "group": "L",
-      "elo": 1719,
+      "elo": 1732,
       "fifaRank": 41,
       "star": "A. Carrasquilla",
       "starDOB": "1900-09-10",
@@ -668,7 +668,7 @@
       "name": "Jordan",
       "flag": "🇯🇴",
       "group": "J",
-      "elo": 1641,
+      "elo": 1636,
       "fifaRank": 68,
       "star": "Mousa Al-Tamari",
       "starDOB": "1900-06-26",

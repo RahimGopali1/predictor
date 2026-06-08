@@ -52,3 +52,27 @@ Open **http://localhost:4200/admin** for the admin panel (default key: `wc2026ad
 
 - `PORT` — API port (default `3001`)
 - `ADMIN_KEY` — Admin panel key (default `wc2026admin`)
+
+## Netlify Deployment
+
+This project is configured to deploy the Angular app to Netlify and run the API as a Netlify Function.
+
+1. Create a Supabase project and add a table:
+
+```sql
+create table app_store (
+  key text primary key,
+  value jsonb,
+  updated_at timestamptz default now()
+);
+```
+
+2. Set Netlify environment variables:
+
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `ADMIN_KEY` (optional)
+
+3. Deploy the site to Netlify.
+
+The Angular build will publish from `client/dist/client`, and `/api/*` will route to `netlify/functions/api`.

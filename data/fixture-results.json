@@ -89,5 +89,15 @@
     "awayScore": 2,
     "winner": "NOR"
   },
-  "_syncedAt": "2026-06-08T15:57:03.607Z"
+  "19": {
+    "homeScore": 1,
+    "awayScore": 1,
+    "winner": "ALG"
+  },
+  "20": {
+    "homeScore": 3,
+    "awayScore": 1,
+    "winner": "AUT"
+  },
+  "_syncedAt": "2026-06-08T15:58:20.336Z"
 }
