@@ -57,22 +57,31 @@ Open **http://localhost:4200/admin** for the admin panel (default key: `wc2026ad
 
 This project is configured to deploy the Angular app to Netlify and run the API as a Netlify Function.
 
-1. Create a Supabase project and add a table:
+### Netlify build settings
+- Build command: `npm run build --prefix client`
+- Publish directory: `client/dist/client`
+- Functions directory: `netlify/functions`
+- Redirect rule: `/api/*` → `/.netlify/functions/api/:splat`
 
-```sql
-create table app_store (
-  key text primary key,
-  value jsonb,
-  updated_at timestamptz default now()
-);
-```
-
-2. Set Netlify environment variables:
-
+### Required Netlify environment variables
 - `SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY`
-- `ADMIN_KEY` (optional)
+- `ADMIN_KEY` (optional, default: `wc2026admin`)
 
-3. Deploy the site to Netlify.
+### Supabase setup
+1. Create a new Supabase project.
+2. Open SQL editor in Supabase.
+3. Run the migration script found in `supabase/init.sql`.
+4. Copy the project URL into `SUPABASE_URL`.
+5. Copy the service role key into `SUPABASE_SERVICE_ROLE_KEY`.
+
+### Local fallback
+If `SUPABASE_URL` or `SUPABASE_SERVICE_ROLE_KEY` are missing, the function will still run locally using the repo's `data/` JSON files, but Netlify deployment requires Supabase for durable storage.
+
+### Deploy
+1. Push this repo to GitHub.
+2. Connect the repo to Netlify.
+3. Confirm `netlify.toml` is used by the site.
+4. Deploy.
 
 The Angular build will publish from `client/dist/client`, and `/api/*` will route to `netlify/functions/api`.

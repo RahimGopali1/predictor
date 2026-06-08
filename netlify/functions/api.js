@@ -21,7 +21,7 @@ const supabase = useSupabase
     })
   : null;
 
-const DATA_DIR = path.resolve(process.cwd(), 'data');
+const DATA_DIR = path.resolve(__dirname, '..', '..', 'data');
 const TEAMS_CACHE_PATH = path.join(DATA_DIR, 'teams-cache.json');
 const TEAMS_METADATA_PATH = path.join(DATA_DIR, 'teams-metadata.json');
 const RECENT_MATCHES_PATH = path.join(DATA_DIR, 'recent-matches.json');
@@ -66,7 +66,7 @@ async function readStore(key, defaultValue = []) {
     .from(SUPABASE_TABLE)
     .select('value')
     .eq('key', key)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error(`Supabase read error for ${key}:`, error.message || error);
