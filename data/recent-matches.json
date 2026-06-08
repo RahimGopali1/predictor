@@ -1,0 +1,19 @@
+[
+  { "date": "Jun 6 2026", "home": "GER", "away": "USA", "sH": 2, "sA": 1, "type": "Friendly", "k": 10, "rec": 1.0 },
+  { "date": "Jun 6 2026", "home": "BRA", "away": "EGY", "sH": 2, "sA": 1, "type": "Friendly", "k": 10, "rec": 1.0 },
+  { "date": "Jun 6 2026", "home": "ARG", "away": "RSA", "sH": 2, "sA": 0, "type": "Friendly", "k": 10, "rec": 1.0 },
+  { "date": "Jun 6 2026", "home": "ENG", "away": "NZL", "sH": 1, "sA": 0, "type": "Friendly", "k": 10, "rec": 1.0 },
+  { "date": "May 31 2026", "home": "USA", "away": "SEN", "sH": 3, "sA": 2, "type": "Friendly", "k": 10, "rec": 0.8 },
+  { "date": "Mar 31 2026", "home": "USA", "away": "POR", "sH": 0, "sA": 2, "type": "Friendly", "k": 10, "rec": 0.5 },
+  { "date": "Mar 31 2026", "home": "BRA", "away": "CRO", "sH": 3, "sA": 1, "type": "Friendly", "k": 10, "rec": 0.5 },
+  { "date": "Mar 31 2026", "home": "ENG", "away": "JPN", "sH": 0, "sA": 1, "type": "Friendly", "k": 10, "rec": 0.5 },
+  { "date": "Mar 28 2026", "home": "USA", "away": "BEL", "sH": 2, "sA": 5, "type": "Friendly", "k": 10, "rec": 0.5 },
+  { "date": "Mar 27 2026", "home": "ENG", "away": "URU", "sH": 1, "sA": 1, "type": "Friendly", "k": 10, "rec": 0.5 },
+  { "date": "Mar 26 2026", "home": "FRA", "away": "BRA", "sH": 2, "sA": 1, "type": "Friendly", "k": 10, "rec": 0.5 },
+  { "date": "Mar 31 2026", "home": "COD", "away": "CPV", "sH": 1, "sA": 0, "type": "WC Playoff", "k": 60, "rec": 0.5 },
+  { "date": "Mar 31 2026", "home": "IRQ", "away": "JOR", "sH": 2, "sA": 1, "type": "WC Playoff", "k": 60, "rec": 0.5 },
+  { "date": "Mar 31 2026", "home": "CZE", "away": "NOR", "sH": 2, "sA": 1, "type": "WC Playoff", "k": 60, "rec": 0.5 },
+  { "date": "Mar 31 2026", "home": "NOR", "away": "TUN", "sH": 1, "sA": 0, "type": "WC Playoff", "k": 60, "rec": 0.5 },
+  { "date": "Mar 31 2026", "home": "TUR", "away": "BIH", "sH": 2, "sA": 0, "type": "WC Playoff", "k": 60, "rec": 0.5 },
+  { "date": "Mar 31 2026", "home": "BIH", "away": "SUI", "sH": 1, "sA": 0, "type": "WC Playoff", "k": 60, "rec": 0.5 }
+]

@@ -1,0 +1,121 @@
+<div class="wrap admin-wrap">
+  <header>
+    <div>
+      <div class="header-eyebrow">Admin Dashboard</div>
+      <h1>USER<br><span>PREDICTIONS</span></h1>
+      <p class="header-sub">Track all user simulation results, champion picks, and prediction trends.</p>
+    </div>
+    <div class="header-controls">
+      <a routerLink="/" class="btn-sm" style="text-decoration:none;">← PREDICTOR</a>
+      <button class="btn-sm" *ngIf="authenticated()" (click)="refresh()">↻ REFRESH</button>
+    </div>
+  </header>
+
+  <div class="card" *ngIf="!authenticated()">
+    <div class="card-title">Admin Login</div>
+    <p class="card-sub">Enter admin key to view user predictions. Default key: wc2026admin</p>
+    <div class="login-row">
+      <input type="password" class="search-input" [(ngModel)]="adminKey" placeholder="Admin key..." (keyup.enter)="login()" />
+      <button class="btn-primary" style="width:auto;margin-top:0;" (click)="login()" [disabled]="loading()">
+        {{ loading() ? 'LOADING...' : 'LOGIN' }}
+      </button>
+    </div>
+    <p *ngIf="error()" style="color:var(--red);margin-top:12px;font-size:13px;">{{ error() }}</p>
+  </div>
+
+  <ng-container *ngIf="authenticated() && stats() as s">
+    <div class="stats-grid" style="margin-bottom:24px;">
+      <div class="stat-card">
+        <div class="stat-val">{{ s.totalPredictions }}</div>
+        <div class="stat-lbl">Total Predictions</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" style="color:var(--green);">{{ s.uniqueUsers }}</div>
+        <div class="stat-lbl">Unique Users</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" style="color:var(--blue);font-size:20px;">{{ s.championStats[0]?.flag }} {{ s.championStats[0]?.name || '—' }}</div>
+        <div class="stat-lbl">Most Picked Champion</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Champion Picks — Bar Chart</div>
+      <p class="card-sub">Distribution of predicted winners across all user simulations.</p>
+      <div class="chart-box">
+        <canvas #championChart></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Goal Prediction Sandbox — Activity</div>
+      <p class="card-sub">Most frequently simulated teams in the Goal Prediction Sandbox ({{ s.totalSandboxSims }} matches run).</p>
+      <div class="chart-box">
+        <canvas #sandboxChart></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Champion Distribution Table</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Country</th>
+              <th>Picks</th>
+              <th>Share</th>
+              <th>Bar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of s.championStats">
+              <td><div class="team-cell"><span class="flag">{{ row.flag }}</span><span>{{ row.name }}</span></div></td>
+              <td style="font-family:var(--font-mono);">{{ row.count }}</td>
+              <td style="font-family:var(--font-mono);color:var(--gold);">{{ row.pct.toFixed(1) }}%</td>
+              <td>
+                <div class="pct-track" style="width:120px;">
+                  <div class="pct-fill" [style.width.%]="row.pct"></div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">All User Predictions</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Champion Pick</th>
+              <th>Top 5 Picks</th>
+              <th>Sims Run</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of predictions()">
+              <td style="font-weight:500;color:var(--text);">{{ p.userName }}</td>
+              <td><div class="team-cell"><span class="flag">{{ p.championFlag }}</span><span>{{ p.championName }}</span></div></td>
+              <td style="font-size:12px;">
+                <span *ngFor="let t of p.topPicks; let last = last">{{ t.name }} ({{ t.pct.toFixed(1) }}%)<span *ngIf="!last"> · </span></span>
+              </td>
+              <td style="font-family:var(--font-mono);">{{ p.simsRun.toLocaleString() }}</td>
+              <td style="font-family:var(--font-mono);font-size:11px;color:var(--text3);">{{ p.createdAt | date:'medium' }}</td>
+            </tr>
+            <tr *ngIf="predictions().length === 0">
+              <td colspan="5" style="text-align:center;color:var(--text3);padding:32px;">No predictions yet. Run simulations on the predictor page.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<footer>
+  <div class="wrap">2026 FIFA WORLD CUP PREDICTOR · ADMIN PANEL</div>
+</footer>

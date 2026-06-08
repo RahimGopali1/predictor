@@ -1,0 +1,435 @@
+﻿<body>
+  <div class="wrap">
+
+    <header>
+      <div>
+        <div class="header-eyebrow">Dixon-Coles Model Â· 50,000 Monte Carlo Simulations</div>
+        <h1>2026 FIFA<br><span>WORLD CUP</span><br>PREDICTOR</h1>
+        <p class="header-sub">A statistically rigorous tournament simulator using Elo ratings, Dixon-Coles goal
+          correction, dynamic in-game state modeling, and optional cosmic influence.</p>
+      </div>
+      <div class="header-controls">
+        <button class="btn-sm" id="guide-btn">ðŸ“– GUIDES: ON</button>
+        <button class="btn-sm" id="senior-btn">âš™ï¸ ACCESSIBILITY</button>
+      </div>
+    </header>
+
+    <nav class="step-nav">
+      <div class="step-card active" data-step="1" style="--step-color:#2dce6e">
+        <div class="step-num">01</div>
+        <div class="step-name">Data &amp; History</div>
+      </div>
+      <div class="step-card" data-step="2" style="--step-color:#e8b84b">
+        <div class="step-num">02</div>
+        <div class="step-name">Team Ratings</div>
+      </div>
+      <div class="step-card" data-step="3" style="--step-color:#fb923c">
+        <div class="step-num">03</div>
+        <div class="step-name">Goal Sandbox</div>
+      </div>
+      <div class="step-card" data-step="4" style="--step-color:#4d9fff">
+        <div class="step-num">04</div>
+        <div class="step-name">Run Simulations</div>
+      </div>
+      <div class="step-card" data-step="5" style="--step-color:#e8b84b">
+        <div class="step-num">05</div>
+        <div class="step-name">Final Odds</div>
+      </div>
+      <div class="step-card" data-step="6" style="--step-color:#a78bfa">
+        <div class="step-num">â­</div>
+        <div class="step-name">Cosmic Luck</div>
+      </div>
+    </nav>
+
+    <!-- PANEL 1 -->
+    <div class="panel active" id="panel-1">
+      <div class="card">
+        <div class="card-title">49,000 Historical Matches</div>
+        <p class="card-sub">Every international fixture since 1872, weighted by recency, competition level, and match
+          importance.</p>
+        <div class="guide show" id="guide-1">
+          The foundation is a dataset of over <strong>49,000 international matches</strong> spanning 150+ years. Older
+          games matter, but recent competitive fixtures count far more. This global network of results lets us link
+          teams that rarely face each other â€” Colombia vs Japan â€” through shared opponents.
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;">
+          <div
+            style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center;">
+            <div style="font-family:var(--font-head);font-size:48px;color:var(--green);letter-spacing:.04em;">1872</div>
+            <div style="font-size:12px;color:var(--text3);margin-top:4px;">FIRST MATCH â€” Scotland vs England</div>
+          </div>
+          <div
+            style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center;">
+            <div style="font-family:var(--font-head);font-size:48px;color:var(--gold);letter-spacing:.04em;">49K+</div>
+            <div style="font-size:12px;color:var(--text3);margin-top:4px;">MATCHES IN THE DATABASE</div>
+          </div>
+          <div
+            style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center;">
+            <div style="font-family:var(--font-head);font-size:48px;color:var(--blue);letter-spacing:.04em;">48</div>
+            <div style="font-size:12px;color:var(--text3);margin-top:4px;">TEAMS IN 2026 TOURNAMENT</div>
+          </div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:20px;">
+          <div
+            style="font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:16px;">
+            Model Improvements vs Standard Elo</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div style="display:flex;gap:10px;align-items:flex-start;">
+              <div style="width:6px;height:6px;background:var(--green);border-radius:50%;margin-top:5px;flex-shrink:0;">
+              </div>
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Dixon-Coles Goal
+                  Correction</div>
+                <div style="font-size:12px;color:var(--text2);">Adjusts 0-0, 1-0, 0-1, 1-1 scoreline probabilities with
+                  a Ï parameter to fix Poisson under-representation of draws.</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;">
+              <div style="width:6px;height:6px;background:var(--gold);border-radius:50%;margin-top:5px;flex-shrink:0;">
+              </div>
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Variable K-Factor</div>
+                <div style="font-size:12px;color:var(--text2);">K=60 for World Cup matches, K=40 for continental
+                  tournaments, K=25 for qualifiers, K=10 for friendlies â€” mirroring FIFA's own weighting.</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;">
+              <div style="width:6px;height:6px;background:var(--blue);border-radius:50%;margin-top:5px;flex-shrink:0;">
+              </div>
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Dynamic In-Game State
+                </div>
+                <div style="font-size:12px;color:var(--text2);">A trailing team increases its attack rate by up to 25%
+                  in the final third of a match, reflecting real tactical shifts.</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;">
+              <div
+                style="width:6px;height:6px;background:var(--purple);border-radius:50%;margin-top:5px;flex-shrink:0;">
+              </div>
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Nation Penalty Data
+                </div>
+                <div style="font-size:12px;color:var(--text2);">Each nation has a calibrated penalty conversion rate
+                  based on historical shootout data â€” Germany ~80%, England ~72%, etc.</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;">
+              <div style="width:6px;height:6px;background:var(--amber);border-radius:50%;margin-top:5px;flex-shrink:0;">
+              </div>
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Host Climate &amp;
+                  Venue Modifier</div>
+                <div style="font-size:12px;color:var(--text2);">Dallas (38Â°C) and Miami venues apply a heat penalty to
+                  high-pressing European teams. Vancouver benefits temperate sides.</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;">
+              <div style="width:6px;height:6px;background:var(--red);border-radius:50%;margin-top:5px;flex-shrink:0;">
+              </div>
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">95% Confidence
+                  Intervals</div>
+                <div style="font-size:12px;color:var(--text2);">Championship probabilities shown with Â±CI derived from
+                  simulation variance â€” not just point estimates.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="next-btn-wrap"><button class="btn-next" onclick="goStep(2)">NEXT: TEAM RATINGS â†’</button></div>
+      </div>
+    </div>
+
+    <!-- PANEL 2 -->
+    <div class="panel" id="panel-2">
+      <div class="card">
+        <div class="card-title">Team Ratings &amp; Form</div>
+        <p class="card-sub">Elo ratings derived from 150 years of match history, updated with variable K-factors by
+          match importance.</p>
+        <div class="guide" id="guide-2">
+          Like chess ratings, higher Elo = stronger team. Beating a top-10 side moves the needle far more than defeating
+          a 50th-ranked nation. The K-factor scales by match type: <strong>World Cup final = KÃ—60</strong>, friendly =
+          KÃ—10. Recent form modifiers use weighted decay â€” June 2026 matches count 100%, March matches 50%.
+        </div>
+        <div class="sub-tabs">
+          <button class="sub-tab active" id="stab-ratings" onclick="showSubTab('ratings')">ELO RANKINGS</button>
+          <button class="sub-tab" id="stab-form" onclick="showSubTab('form')">RECENT FORM</button>
+        </div>
+        <div id="subtab-ratings">
+          <div class="search-wrap">
+            <input type="text" class="search-input" id="team-search" placeholder="Search team..."
+              oninput="renderRatings()">
+          </div>
+          <div class="tbl-wrap">
+            <table id="ratings-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Country</th>
+                  <th>Group</th>
+                  <th>FIFA</th>
+                  <th>Star Player</th>
+                  <th>Squad Value</th>
+                  <th>Pen. Rate</th>
+                  <th>Elo</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div id="subtab-form" style="display:none;">
+          <div class="tbl-wrap">
+            <table id="form-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Matchup</th>
+                  <th>Score</th>
+                  <th>Type</th>
+                  <th>K-Weight</th>
+                  <th>Recency</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="next-btn-wrap"><button class="btn-next" onclick="goStep(3)">NEXT: GOAL SANDBOX â†’</button></div>
+      </div>
+    </div>
+
+    <!-- PANEL 3 -->
+    <div class="panel" id="panel-3">
+      <div class="card">
+        <div class="card-title">Goal Prediction Sandbox</div>
+        <p class="card-sub">See the Dixon-Coles corrected math for any matchup, then watch a live text simulation.</p>
+        <div class="guide" id="guide-3">
+          The <strong>Dixon-Coles model</strong> corrects standard Poisson for low-scoring outcomes. A Ï (rho)
+          correlation term adjusts 0-0, 1-0, 0-1 and 1-1 probabilities, which Poisson systematically under or
+          overestimates. Host teams (USA, Mexico, Canada) receive a <strong>+75 Elo bonus</strong> at home venues, with
+          an additional climate modifier for hot-weather venues.
+        </div>
+        <div class="sandbox-grid">
+          <div>
+            <div class="select-wrap">
+              <label>Team A (Home)</label>
+              <select id="sb-a" onchange="updateMath()"></select>
+            </div>
+            <div class="select-wrap" style="margin-top:12px;">
+              <label>Team B (Away)</label>
+              <select id="sb-b" onchange="updateMath()"></select>
+            </div>
+            <div class="math-box">
+              <div class="math-box-title">Prediction Breakdown</div>
+              <div class="math-row"><span>Team A Elo</span><span id="m-elo-a">â€”</span></div>
+              <div class="math-row"><span>Team A Host Bonus</span><span id="m-host-a">â€”</span></div>
+              <div class="math-row"><span>Team A Form Modifier</span><span id="m-form-a">â€”</span></div>
+              <div class="math-row"><span>Team B Elo</span><span id="m-elo-b">â€”</span></div>
+              <div class="math-row"><span>Team B Host Bonus</span><span id="m-host-b">â€”</span></div>
+              <div class="math-row"><span>Team B Form Modifier</span><span id="m-form-b">â€”</span></div>
+              <div class="math-row"><span>Rating Gap (A âˆ’ B)</span><span id="m-gap">â€”</span></div>
+              <div class="math-row"><span>Î»A (base expected goals)</span><span id="m-la">â€”</span></div>
+              <div class="math-row"><span>Î»B (base expected goals)</span><span id="m-lb">â€”</span></div>
+              <div class="math-row"><span>Dixon-Coles Ï applied</span><span id="m-rho">â€”</span></div>
+              <div class="math-row"><span>Win / Draw / Win odds</span><span id="m-odds">â€”</span></div>
+            </div>
+            <button class="btn-primary" id="play-btn" onclick="startMatch()">â–¶ SIMULATE MATCH</button>
+          </div>
+          <div>
+            <div class="commentary-box">
+              <div class="commentary-score">
+                <div class="score-team">
+                  <div class="score-name" id="sb-name-a">â€”</div>
+                  <div style="font-size:28px;" id="sb-flag-a">ðŸ³ï¸</div>
+                  <div class="score-num" id="sb-score-a">0</div>
+                </div>
+                <div class="score-sep">VS</div>
+                <div class="score-team">
+                  <div class="score-name" id="sb-name-b">â€”</div>
+                  <div style="font-size:28px;" id="sb-flag-b">ðŸ³ï¸</div>
+                  <div class="score-num" id="sb-score-b">0</div>
+                </div>
+              </div>
+              <div class="commentary-feed" id="comm-feed">
+                <div style="padding:24px;text-align:center;color:var(--text3);font-size:13px;">Select two teams and hit
+                  Simulate Match to watch a minute-by-minute text simulation.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="next-btn-wrap"><button class="btn-next" onclick="goStep(4)">NEXT: RUN SIMULATIONS â†’</button></div>
+      </div>
+    </div>
+
+    <!-- PANEL 4 -->
+    <div class="panel" id="panel-4">
+      <div class="card">
+        <div class="card-title">50,000 Tournament Simulations</div>
+        <p class="card-sub">The entire 104-game tournament played 50,000 times in your browser. Elo updates after every
+          simulated match.</p>
+        <div class="guide" id="guide-4">
+          Each simulation plays every group stage match, then resolves the full knockout bracket through to the final â€”
+          including extra time and penalty shootouts. <strong>Elo ratings update dynamically</strong> within each
+          simulation run, so a team that overperforms in the group stage enters the knockouts with a boosted rating.
+          Results aggregate into precise championship odds with 95% confidence intervals.
+        </div>
+        <div class="sim-center">
+          <button class="btn-primary" id="sim-btn" onclick="runSims()" style="font-size:20px;padding:16px 32px;">RUN
+            50,000 SIMULATIONS ðŸ†</button>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Progress</span><span id="prog-text">0 / 50,000</span></div>
+            <div class="progress-track">
+              <div class="progress-fill" id="prog-bar"></div>
+            </div>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-val" id="sim-leader" style="font-size:20px;color:var(--text);">â€”</div>
+              <div class="stat-lbl">Leading Contender</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val" id="sim-pct">â€”</div>
+              <div class="stat-lbl">Championship %</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val" style="color:var(--green);" id="sim-count">0</div>
+              <div class="stat-lbl">Sims Complete</div>
+            </div>
+          </div>
+        </div>
+        <div class="next-btn-wrap"><button class="btn-next" onclick="goStep(5)">NEXT: VIEW ODDS â†’</button></div>
+      </div>
+    </div>
+
+    <!-- PANEL 5 -->
+    <div class="panel" id="panel-5">
+      <div class="card">
+        <div class="card-title">Final Odds &amp; Bracket</div>
+        <p class="card-sub">Championship probabilities with 95% confidence intervals, compared against Opta and betting
+          markets.</p>
+        <div class="guide" id="guide-5">
+          Probabilities show how often each team reached each stage across all 50,000 simulations. The
+          <strong>Â±CI</strong> shows the 95% confidence interval â€” narrower means more certainty. The Bracket tab shows
+          the most probable path (modal bracket), not just a random sample run.
+        </div>
+        <div class="tabs">
+          <button class="tab active" id="tab-odds" onclick="showTab('odds')">PROBABILITY TABLE</button>
+          <button class="tab" id="tab-bracket" onclick="showTab('bracket')">MODAL BRACKET</button>
+          <button class="tab" id="tab-compare" onclick="showTab('compare')">VS OPTA</button>
+        </div>
+        <div id="tabpanel-odds">
+          <div class="tbl-wrap">
+            <table id="odds-table">
+              <thead>
+                <tr>
+                  <th>Country</th>
+                  <th>R32</th>
+                  <th>R16</th>
+                  <th>QF</th>
+                  <th>SF</th>
+                  <th>Final</th>
+                  <th>Champion ðŸ†</th>
+                  <th>Â±95% CI</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div id="tabpanel-bracket" style="display:none;">
+          <div class="bracket-outer" id="bracket-view">
+            <div style="text-align:center;color:var(--text3);padding:48px;">Run simulations to view the modal bracket.
+            </div>
+          </div>
+        </div>
+        <div id="tabpanel-compare" style="display:none;">
+          <p style="font-size:13px;color:var(--text2);margin-bottom:16px;">Comparing our model against Opta
+            Supercomputer and pre-tournament betting market estimates.</p>
+          <div class="tbl-wrap">
+            <table id="compare-table">
+              <thead>
+                <tr>
+                  <th>Country</th>
+                  <th>Our Model</th>
+                  <th>Opta</th>
+                  <th>Markets</th>
+                  <th>FIFA Rank</th>
+                  <th>Diff vs Opta</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 6 â€” COSMIC LUCK -->
+    <div class="panel" id="panel-6">
+      <div class="card">
+        <div class="astro-hero">
+          <div class="astro-title">âœ¦ COSMIC LUCK INDEX âœ¦</div>
+          <p class="astro-sub">Astrological fortune for each nation's star player â€” blended with statistical odds for a
+            holistic prediction.</p>
+        </div>
+        <div class="guide show" id="guide-6">
+          Each nation's star player has a known or estimated birth date. Their <strong>zodiac sign</strong> determines a
+          base cosmic energy profile. For 2026, planetary transits â€” particularly <strong>Jupiter in Gemini</strong>
+          (expansive communication energy) and <strong>Saturn in Pisces</strong> (discipline meets intuition) â€” modify
+          each sign's tournament fortune. This is purely for fun. The universe makes no guarantees.
+        </div>
+        <div style="margin:24px 0;">
+          <div
+            style="font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;color:var(--text3);text-transform:uppercase;margin-bottom:16px;">
+            2026 Planetary Climate</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+            <div style="background:var(--bg3);border:1px solid rgba(167,139,250,.2);border-radius:10px;padding:16px;">
+              <div style="font-size:22px;margin-bottom:6px;">â™ƒ</div>
+              <div style="font-size:13px;font-weight:600;color:var(--purple);margin-bottom:4px;">Jupiter in Gemini</div>
+              <div style="font-size:12px;color:var(--text2);">Favors adaptable, quick-thinking players. Air signs
+                (Gemini, Libra, Aquarius) and Mercury-ruled players receive a fortune boost.</div>
+            </div>
+            <div style="background:var(--bg3);border:1px solid rgba(232,184,75,.2);border-radius:10px;padding:16px;">
+              <div style="font-size:22px;margin-bottom:6px;">â™„</div>
+              <div style="font-size:13px;font-weight:600;color:var(--gold);margin-bottom:4px;">Saturn in Pisces</div>
+              <div style="font-size:12px;color:var(--text2);">Rewards disciplined players with intuitive qualities.
+                Water signs (Cancer, Scorpio, Pisces) show resilience in high-pressure moments.</div>
+            </div>
+            <div style="background:var(--bg3);border:1px solid rgba(77,159,255,.2);border-radius:10px;padding:16px;">
+              <div style="font-size:22px;margin-bottom:6px;">â™‚</div>
+              <div style="font-size:13px;font-weight:600;color:var(--blue);margin-bottom:4px;">Mars in Leo</div>
+              <div style="font-size:12px;color:var(--text2);">Tournament Mars placement supercharges fire signs. Aries,
+                Leo, and Sagittarius players express peak competitive drive at major stages.</div>
+            </div>
+          </div>
+        </div>
+        <div class="astro-grid" id="astro-grid"></div>
+        <div class="astro-result-box" id="astro-results">
+          <div class="astro-result-title">âœ¦ COSMIC TOURNAMENT FORECAST</div>
+          <div class="tbl-wrap">
+            <table class="astro-blend-table" id="astro-table">
+              <thead>
+                <tr>
+                  <th>Country</th>
+                  <th>Star Player</th>
+                  <th>Sign</th>
+                  <th>Cosmic Score</th>
+                  <th>Stat Odds</th>
+                  <th>Blended Odds</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <p class="disclaimer">âš ï¸ The cosmic luck layer is entirely for entertainment. Planetary positions have no
+            proven effect on football results. Statistical odds remain the reliable predictor.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /wrap -->
+  <footer>
+    <div class="wrap">2026 FIFA WORLD CUP PREDICTOR Â· DIXON-COLES MODEL Â· MONTE CARLO ENGINE Â· FOR ENTERTAINMENT
+      PURPOSES</div>
+  </footer>

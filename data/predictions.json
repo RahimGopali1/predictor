@@ -1,0 +1,326 @@
+[
+  {
+    "id": "4e73f4fd-2e3c-4c15-b28f-18ffe541f8c7",
+    "userName": "User_qugo0",
+    "championId": "ARG",
+    "championName": "Argentina",
+    "championFlag": "🇦🇷",
+    "topPicks": [
+      {
+        "id": "ARG",
+        "name": "Argentina",
+        "pct": 15.356
+      },
+      {
+        "id": "FRA",
+        "name": "France",
+        "pct": 11.44
+      },
+      {
+        "id": "ESP",
+        "name": "Spain",
+        "pct": 7.788
+      },
+      {
+        "id": "BRA",
+        "name": "Brazil",
+        "pct": 7.702000000000001
+      },
+      {
+        "id": "POR",
+        "name": "Portugal",
+        "pct": 6.096
+      }
+    ],
+    "simsRun": 50000,
+    "createdAt": "2026-06-08T15:44:26.400Z"
+  },
+  {
+    "id": "001352fa-ce31-4fc9-af48-63dda81a35f9",
+    "userName": "User_qugo0",
+    "championId": "ARG",
+    "championName": "Argentina",
+    "championFlag": "🇦🇷",
+    "topPicks": [
+      {
+        "id": "ARG",
+        "name": "Argentina",
+        "pct": 15.326
+      },
+      {
+        "id": "FRA",
+        "name": "France",
+        "pct": 11.283999999999999
+      },
+      {
+        "id": "ESP",
+        "name": "Spain",
+        "pct": 7.954
+      },
+      {
+        "id": "BRA",
+        "name": "Brazil",
+        "pct": 7.918
+      },
+      {
+        "id": "POR",
+        "name": "Portugal",
+        "pct": 5.954000000000001
+      }
+    ],
+    "simsRun": 50000,
+    "createdAt": "2026-06-08T15:43:52.889Z"
+  },
+  {
+    "id": "d7fd9c59-4531-41b9-b412-253e6b978dff",
+    "userName": "User_qugo0",
+    "championId": "ARG",
+    "championName": "Argentina",
+    "championFlag": "🇦🇷",
+    "topPicks": [
+      {
+        "id": "ARG",
+        "name": "Argentina",
+        "pct": 15.296000000000001
+      },
+      {
+        "id": "FRA",
+        "name": "France",
+        "pct": 11.418000000000001
+      },
+      {
+        "id": "BRA",
+        "name": "Brazil",
+        "pct": 7.969999999999999
+      },
+      {
+        "id": "ESP",
+        "name": "Spain",
+        "pct": 7.829999999999999
+      },
+      {
+        "id": "POR",
+        "name": "Portugal",
+        "pct": 6.156
+      }
+    ],
+    "simsRun": 50000,
+    "createdAt": "2026-06-08T15:42:28.407Z"
+  },
+  {
+    "id": "86cf2aee-f42c-4837-8a28-95361a2fe8c2",
+    "userName": "User_qugo0",
+    "championId": "ARG",
+    "championName": "Argentina",
+    "championFlag": "🇦🇷",
+    "topPicks": [
+      {
+        "id": "ARG",
+        "name": "Argentina",
+        "pct": 15.168000000000001
+      },
+      {
+        "id": "FRA",
+        "name": "France",
+        "pct": 11.604000000000001
+      },
+      {
+        "id": "ESP",
+        "name": "Spain",
+        "pct": 7.974
+      },
+      {
+        "id": "BRA",
+        "name": "Brazil",
+        "pct": 7.892
+      },
+      {
+        "id": "POR",
+        "name": "Portugal",
+        "pct": 5.966
+      }
+    ],
+    "simsRun": 50000,
+    "createdAt": "2026-06-08T14:54:20.196Z"
+  },
+  {
+    "id": "32581155-1433-4504-8e95-43acb7a7ac5e",
+    "userName": "User_qugo0",
+    "championId": "ARG",
+    "championName": "Argentina",
+    "championFlag": "🇦🇷",
+    "topPicks": [
+      {
+        "id": "ARG",
+        "name": "Argentina",
+        "pct": 15.357999999999999
+      },
+      {
+        "id": "FRA",
+        "name": "France",
+        "pct": 11.28
+      },
+      {
+        "id": "ESP",
+        "name": "Spain",
+        "pct": 7.8759999999999994
+      },
+      {
+        "id": "BRA",
+        "name": "Brazil",
+        "pct": 7.804
+      },
+      {
+        "id": "POR",
+        "name": "Portugal",
+        "pct": 6.128
+      }
+    ],
+    "simsRun": 50000,
+    "createdAt": "2026-06-08T14:45:47.682Z"
+  },
+  {
+    "id": "b54fa043-622a-4b22-b95f-1ce7232d596e",
+    "userName": "User_qugo0",
+    "championId": "ARG",
+    "championName": "Argentina",
+    "championFlag": "🇦🇷",
+    "topPicks": [
+      {
+        "id": "ARG",
+        "name": "Argentina",
+        "pct": 15.32
+      },
+      {
+        "id": "FRA",
+        "name": "France",
+        "pct": 11.562
+      },
+      {
+        "id": "ESP",
+        "name": "Spain",
+        "pct": 8.03
+      },
+      {
+        "id": "BRA",
+        "name": "Brazil",
+        "pct": 7.8839999999999995
+      },
+      {
+        "id": "POR",
+        "name": "Portugal",
+        "pct": 5.93
+      }
+    ],
+    "simsRun": 50000,
+    "createdAt": "2026-06-08T14:39:34.338Z"
+  },
+  {
+    "id": "63ee9a7e-60ca-47b1-90e8-e78c95622969",
+    "userName": "User_qugo0",
+    "championId": "ARG",
+    "championName": "Argentina",
+    "championFlag": "🇦🇷",
+    "topPicks": [
+      {
+        "id": "ARG",
+        "name": "Argentina",
+        "pct": 15.315999999999999
+      },
+      {
+        "id": "FRA",
+        "name": "France",
+        "pct": 11.704
+      },
+      {
+        "id": "BRA",
+        "name": "Brazil",
+        "pct": 8.052
+      },
+      {
+        "id": "ESP",
+        "name": "Spain",
+        "pct": 7.9
+      },
+      {
+        "id": "POR",
+        "name": "Portugal",
+        "pct": 6.02
+      }
+    ],
+    "simsRun": 50000,
+    "createdAt": "2026-06-08T14:38:31.222Z"
+  },
+  {
+    "id": "99225650-5d72-4d32-9d4f-772fc821b75e",
+    "userName": "User_qugo0",
+    "championId": "ARG",
+    "championName": "Argentina",
+    "championFlag": "🇦🇷",
+    "topPicks": [
+      {
+        "id": "ARG",
+        "name": "Argentina",
+        "pct": 15.251999999999999
+      },
+      {
+        "id": "FRA",
+        "name": "France",
+        "pct": 11.606
+      },
+      {
+        "id": "BRA",
+        "name": "Brazil",
+        "pct": 7.965999999999999
+      },
+      {
+        "id": "ESP",
+        "name": "Spain",
+        "pct": 7.768
+      },
+      {
+        "id": "POR",
+        "name": "Portugal",
+        "pct": 5.988
+      }
+    ],
+    "simsRun": 50000,
+    "createdAt": "2026-06-08T14:35:33.834Z"
+  },
+  {
+    "id": "206cfb17-ee6a-470a-b985-424701537938",
+    "userName": "User_qugo0",
+    "championId": "ARG",
+    "championName": "Argentina",
+    "championFlag": "🇦🇷",
+    "topPicks": [
+      {
+        "id": "ARG",
+        "name": "Argentina",
+        "pct": 15.506
+      },
+      {
+        "id": "FRA",
+        "name": "France",
+        "pct": 11.533999999999999
+      },
+      {
+        "id": "BRA",
+        "name": "Brazil",
+        "pct": 8.024000000000001
+      },
+      {
+        "id": "ESP",
+        "name": "Spain",
+        "pct": 7.836
+      },
+      {
+        "id": "POR",
+        "name": "Portugal",
+        "pct": 6.084
+      }
+    ],
+    "simsRun": 50000,
+    "createdAt": "2026-06-08T14:17:21.514Z"
+  }
+]
