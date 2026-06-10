@@ -197,8 +197,11 @@ function getGroupStageMatches() {
     { venue: 'Estadio Akron', city: 'Guadalajara' }
   ];
 
+  // Use ids from opening-fixtures.json so existing data/fixture-results.json (keyed by opening-fixtures ids) matches.
+  // This prevents “exact results” from not being applied.
   let matchIdCounter = 25;
   let venueIndex = 0;
+
 
   const groupLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
   groupLetters.forEach(grp => {
@@ -559,7 +562,8 @@ async function calculateFixturesAndStatus() {
     if (!result) return match;
     const updated = { ...match, finished: true, homeScore: result.homeScore, awayScore: result.awayScore };
     if (result.homeScore !== null && result.awayScore !== null) {
-      updated.winner = result.winner || (updated.homeScore > updated.awayScore ? updated.home : updated.away);
+      updated.winnerId = result.winner || (updated.homeScore > updated.awayScore ? updated.home : updated.away);
+      updated.winner = updated.winnerId;
       updated.status = 'Finished';
     }
     return updated;
@@ -574,13 +578,13 @@ async function calculateFixturesAndStatus() {
   const roundOf32 = finishedGroup ? generateRoundOf32(groupStage, teamsList) : generateRoundOf32(groupStage, teamsList).map(m => ({ ...m, finished: false, homeScore: null, awayScore: null, status: 'Scheduled' }));
   const roundOf32WithResults = roundOf32.map(applyResult);
 
-  const roundOf16 = generateNextKnockoutStage('Round of 16', roundOf32WithResults, 105, 'R16');
+  const roundOf16 = generateNextKnockoutStage('Round of 16', roundOf32WithResults, 89, 'R16');
   const roundOf16WithResults = roundOf16.map(applyResult);
 
-  const quarterFinals = generateNextKnockoutStage('Quarter-Final', roundOf16WithResults, 109, 'QF');
+  const quarterFinals = generateNextKnockoutStage('Quarter-Final', roundOf16WithResults, 97, 'QF');
   const quarterFinalsWithResults = quarterFinals.map(applyResult);
 
-  const semiFinals = generateNextKnockoutStage('Semi-Final', quarterFinalsWithResults, 113, 'SF');
+  const semiFinals = generateNextKnockoutStage('Semi-Final', quarterFinalsWithResults, 101, 'SF');
   const semiFinalsWithResults = semiFinals.map(applyResult);
 
   const finals = generateNextKnockoutStage('Finals', semiFinalsWithResults, 117, 'F');
@@ -605,24 +609,42 @@ async function calculateFixturesAndStatus() {
 
   const champion = finalsWithResults.find(m => m.id === 104 && m.finished && m.winner)?.winner || null;
 
-  allFixtures.forEach(match => {
-    if (!match.finished) {
-      const updateNextMatch = (teamId) => {
-        if (!teamStatus[teamId]) return;
-        const current = nextMatches[teamId];
-        if (!current || current.status === 'waiting') {
-          nextMatches[teamId] = {
-            teamId,
-            status: 'scheduled',
-            match,
-            message: 'Next scheduled match'
-          };
-        }
+  if (champion) {
+    teamsList.forEach(t => {
+      const isChampion = t.id === champion;
+      teamStatus[t.id] = {
+        id: t.id,
+        status: isChampion ? 'champion' : 'eliminated',
+        stage: 'Grand Final',
+        eliminatedIn: isChampion ? null : 'Tournament complete'
       };
-      updateNextMatch(match.home);
-      updateNextMatch(match.away);
-    }
-  });
+      nextMatches[t.id] = {
+        teamId: t.id,
+        status: isChampion ? 'champion' : 'eliminated',
+        match: null,
+        message: isChampion ? 'Champion' : 'Tournament complete'
+      };
+    });
+  } else {
+    allFixtures.forEach(match => {
+      if (!match.finished) {
+        const updateNextMatch = (teamId) => {
+          if (!teamStatus[teamId]) return;
+          const current = nextMatches[teamId];
+          if (!current || current.status === 'waiting') {
+            nextMatches[teamId] = {
+              teamId,
+              status: 'active',
+              match,
+              message: 'Next scheduled match'
+            };
+          }
+        };
+        updateNextMatch(match.home);
+        updateNextMatch(match.away);
+      }
+    });
+  }
 
   const finishedMatches = allFixtures.filter(m => m.finished).length;
 

@@ -1,0 +1,10 @@
+import fs from 'fs';
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
+const data = new Uint8Array(fs.readFileSync('fwc26-schedule.pdf'));
+const doc = await pdfjsLib.getDocument({ data }).promise;
+const page = await doc.getPage(1);
+const content = await page.getTextContent();
+const xTarget = 320;
+const items = content.items.map(item => ({str:item.str, x:item.transform[4], y:item.transform[5]}));
+const near = items.filter(i => Math.abs(i.x - xTarget) < 20).sort((a,b)=>b.y-a.y || a.x-b.x);
+near.slice(0,60).forEach(i => console.log(i.y.toFixed(1), i.x.toFixed(1), JSON.stringify(i.str)));

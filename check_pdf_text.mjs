@@ -1,0 +1,12 @@
+import fs from 'fs';
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
+const data = new Uint8Array(fs.readFileSync('fwc26-schedule.pdf'));
+const doc = await pdfjsLib.getDocument({ data }).promise;
+const page = await doc.getPage(1);
+const content = await page.getTextContent();
+const text = content.items.map(item => item.str).join(' ');
+console.log(text.indexOf('IRQ v NOR'));
+console.log(text.includes('IRQ v NOR'));
+console.log(text.match(/IRQ\s+v\s+NOR/));
+console.log(text.includes('NOR v IRQ'));
+console.log(text.match(/NOR\s+v\s+IRQ/));

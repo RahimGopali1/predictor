@@ -1,0 +1,10 @@
+import fs from 'fs';
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
+const data = new Uint8Array(fs.readFileSync('fwc26-schedule.pdf'));
+const doc = await pdfjsLib.getDocument({ data }).promise;
+const page = await doc.getPage(1);
+const content = await page.getTextContent();
+const text = content.items.map(item => item.str).join(' ');
+const idx = text.indexOf('IRQ  v  NOR');
+console.log('IDX', idx);
+console.log(text.substring(Math.max(0, idx-100), idx+200));

@@ -1,5 +1,230 @@
 [
   {
+    "id": "sim_hu5tixn",
+    "teamA": "USA",
+    "teamB": "PAR",
+    "scoreA": 1,
+    "scoreB": 1,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-10T16:51:03.835Z"
+  },
+  {
+    "id": "sim_pvgs6bu",
+    "teamA": "MEX",
+    "teamB": "RSA",
+    "scoreA": 0,
+    "scoreB": 2,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-10T16:47:56.078Z"
+  },
+  {
+    "id": "sim_y3oi42u",
+    "teamA": "KSA",
+    "teamB": "URU",
+    "scoreA": 1,
+    "scoreB": 4,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-10T16:46:25.330Z"
+  },
+  {
+    "id": "sim_e89c0h9",
+    "teamA": "KSA",
+    "teamB": "URU",
+    "scoreA": 0,
+    "scoreB": 0,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-10T16:46:18.609Z"
+  },
+  {
+    "id": "sim_gfaj96y",
+    "teamA": "KSA",
+    "teamB": "URU",
+    "scoreA": 0,
+    "scoreB": 5,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-10T16:46:12.883Z"
+  },
+  {
+    "id": "sim_7ckbho2",
+    "teamA": "KSA",
+    "teamB": "URU",
+    "scoreA": 1,
+    "scoreB": 2,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-10T16:46:01.234Z"
+  },
+  {
+    "id": "sim_zd9ito5",
+    "teamA": "BEL",
+    "teamB": "EGY",
+    "scoreA": 2,
+    "scoreB": 1,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-10T16:45:26.061Z"
+  },
+  {
+    "id": "sim_39b3ytw",
+    "teamA": "BEL",
+    "teamB": "EGY",
+    "scoreA": 2,
+    "scoreB": 2,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-10T16:45:17.819Z"
+  },
+  {
+    "id": "sim_nbr9xs8",
+    "teamA": "BEL",
+    "teamB": "EGY",
+    "scoreA": 1,
+    "scoreB": 0,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-10T16:45:09.311Z"
+  },
+  {
+    "id": "sim_kkgdllo",
+    "teamA": "BEL",
+    "teamB": "EGY",
+    "scoreA": 2,
+    "scoreB": 1,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-10T16:44:57.117Z"
+  },
+  {
+    "id": "sim_kfh27cn",
+    "teamA": "BEL",
+    "teamB": "EGY",
+    "scoreA": 3,
+    "scoreB": 0,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-10T16:44:51.833Z"
+  },
+  {
+    "id": "sim_9o682jq",
+    "teamA": "ESP",
+    "teamB": "CPV",
+    "scoreA": 3,
+    "scoreB": 0,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-10T16:40:41.551Z"
+  },
+  {
+    "id": "sim_y0m91e8",
+    "teamA": "USA",
+    "teamB": "PAR",
+    "scoreA": 0,
+    "scoreB": 2,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-10T16:38:29.773Z"
+  },
+  {
+    "id": "sim_vgkfukj",
+    "teamA": "CAN",
+    "teamB": "BIH",
+    "scoreA": 2,
+    "scoreB": 0,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-10T16:38:06.220Z"
+  },
+  {
+    "id": "sim_s5sub1l",
+    "teamA": "KOR",
+    "teamB": "CZE",
+    "scoreA": 2,
+    "scoreB": 2,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-10T16:37:41.379Z"
+  },
+  {
+    "id": "sim_mooaopp",
+    "teamA": "MEX",
+    "teamB": "RSA",
+    "scoreA": 1,
+    "scoreB": 0,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-10T16:37:28.047Z"
+  },
+  {
+    "id": "sim_gc1cnxc",
+    "teamA": "MEX",
+    "teamB": "KOR",
+    "scoreA": 0,
+    "scoreB": 1,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-10T15:41:21.861Z"
+  },
+  {
+    "id": "sim_v3kp7da",
+    "teamA": "MEX",
+    "teamB": "KOR",
+    "scoreA": 0,
+    "scoreB": 0,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-09T14:33:40.382Z"
+  },
+  {
+    "id": "sim_m1m4tle",
+    "teamA": "MEX",
+    "teamB": "KOR",
+    "scoreA": 1,
+    "scoreB": 1,
+    "userName": "User_7mwwl",
+    "createdAt": "2026-06-09T14:31:50.999Z"
+  },
+  {
+    "id": "sim_gkx0pwr",
+    "teamA": "MEX",
+    "teamB": "KOR",
+    "scoreA": 0,
+    "scoreB": 0,
+    "userName": "User_t8fqx",
+    "createdAt": "2026-06-09T14:11:31.766Z"
+  },
+  {
+    "id": "sim_ipc8bis",
+    "teamA": "ARG",
+    "teamB": "ALG",
+    "scoreA": 6,
+    "scoreB": 0,
+    "userName": "User_t8fqx",
+    "createdAt": "2026-06-09T14:09:53.444Z"
+  },
+  {
+    "id": "sim_3xy4kgy",
+    "teamA": "ALG",
+    "teamB": "JOR",
+    "scoreA": 0,
+    "scoreB": 2,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-09T14:04:45.862Z"
+  },
+  {
+    "id": "sim_hxc01x5",
+    "teamA": "GHA",
+    "teamB": "ENG",
+    "scoreA": 0,
+    "scoreB": 3,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-09T14:03:22.554Z"
+  },
+  {
+    "id": "sim_w6w8vl3",
+    "teamA": "ESP",
+    "teamB": "CPV",
+    "scoreA": 0,
+    "scoreB": 1,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-09T14:02:00.305Z"
+  },
+  {
+    "id": "sim_83h9qjv",
+    "teamA": "URU",
+    "teamB": "CPV",
+    "scoreA": 2,
+    "scoreB": 0,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-09T13:56:47.536Z"
+  },
+  {
     "id": "sim_vtx8spc",
     "teamA": "USA",
     "teamB": "AUS",

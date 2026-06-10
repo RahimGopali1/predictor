@@ -11,12 +11,59 @@ import { PredictionService } from '../../services/prediction.service';
 import { SimulationService } from '../../services/simulation.service';
 import { TeamService } from '../../services/team.service';
 
+interface SandboxFixture {
+  id: number;
+  date: string;
+  time: string;
+  group: string;
+  home: string;
+  away: string;
+  venue: string;
+  city: string;
+}
+
 interface CommEvent {
   min: number | string;
   type: string;
   side?: string;
   txt?: string;
 }
+
+interface MatchupCard {
+  fixture: any;
+  teamA: Team;
+  teamB: Team;
+  pw: number;
+  pd: number;
+  pl: number;
+}
+
+const OPENING_FIXTURES: SandboxFixture[] = [
+  { id: 1, date: 'Jun 12, 2026', time: '3:00 PM ET', group: 'A', home: 'MEX', away: 'RSA', venue: 'Estadio Azteca', city: 'Mexico City' },
+  { id: 2, date: 'Jun 12, 2026', time: '10:00 PM ET', group: 'A', home: 'KOR', away: 'CZE', venue: 'Estadio Akron', city: 'Guadalajara' },
+  { id: 3, date: 'Jun 13, 2026', time: '3:00 PM ET', group: 'B', home: 'CAN', away: 'BIH', venue: 'BMO Field', city: 'Toronto' },
+  { id: 4, date: 'Jun 13, 2026', time: '9:00 PM ET', group: 'D', home: 'USA', away: 'PAR', venue: 'SoFi Stadium', city: 'Los Angeles' },
+  { id: 5, date: 'Jun 14, 2026', time: '9:00 PM ET', group: 'B', home: 'QAT', away: 'SUI', venue: "Levi's Stadium", city: 'San Francisco Bay Area' },
+  { id: 6, date: 'Jun 15, 2026', time: '12:00 AM ET', group: 'D', home: 'AUS', away: 'TUR', venue: 'BC Place', city: 'Vancouver' },
+  { id: 7, date: 'Jun 14, 2026', time: '6:00 PM ET', group: 'C', home: 'BRA', away: 'MAR', venue: 'MetLife Stadium', city: 'New York/New Jersey' },
+  { id: 8, date: 'Jun 14, 2026', time: '3:00 PM ET', group: 'C', home: 'HAI', away: 'SCO', venue: 'Gillette Stadium', city: 'Boston' },
+  { id: 9, date: 'Jun 15, 2026', time: '7:00 PM ET', group: 'E', home: 'GER', away: 'CUW', venue: 'NRG Stadium', city: 'Houston' },
+  { id: 10, date: 'Jun 15, 2026', time: '1:00 PM ET', group: 'F', home: 'NED', away: 'JPN', venue: 'AT&T Stadium', city: 'Dallas' },
+  { id: 11, date: 'Jun 15, 2026', time: '4:00 PM ET', group: 'E', home: 'CIV', away: 'ECU', venue: 'Lincoln Financial Field', city: 'Philadelphia' },
+  { id: 12, date: 'Jun 15, 2026', time: '10:00 PM ET', group: 'F', home: 'SWE', away: 'TUN', venue: 'Estadio BBVA', city: 'Monterrey' },
+  { id: 13, date: 'Jun 15, 2026', time: '3:00 PM ET', group: 'G', home: 'BEL', away: 'EGY', venue: 'Lumen Field', city: 'Seattle' },
+  { id: 14, date: 'Jun 15, 2026', time: '12:00 PM ET', group: 'G', home: 'IRN', away: 'NZL', venue: 'SoFi Stadium', city: 'Los Angeles' },
+  { id: 15, date: 'Jun 15, 2026', time: '9:00 PM ET', group: 'H', home: 'KSA', away: 'URU', venue: 'Hard Rock Stadium', city: 'Miami' },
+  { id: 16, date: 'Jun 15, 2026', time: '6:00 PM ET', group: 'H', home: 'ESP', away: 'CPV', venue: 'Mercedes-Benz Stadium', city: 'Atlanta' },
+  { id: 17, date: 'Jun 16, 2026', time: '3:00 PM ET', group: 'I', home: 'FRA', away: 'SEN', venue: 'MetLife Stadium', city: 'New York/New Jersey' },
+  { id: 18, date: 'Jun 16, 2026', time: '6:00 PM ET', group: 'I', home: 'IRQ', away: 'NOR', venue: 'Gillette Stadium', city: 'Boston' },
+  { id: 19, date: 'Jun 16, 2026', time: '9:00 PM ET', group: 'J', home: 'ARG', away: 'ALG', venue: 'Arrowhead Stadium', city: 'Kansas City' },
+  { id: 20, date: 'Jun 17, 2026', time: '12:00 AM ET', group: 'J', home: 'AUT', away: 'JOR', venue: "Levi's Stadium", city: 'San Francisco Bay Area' },
+  { id: 21, date: 'Jun 17, 2026', time: '7:00 PM ET', group: 'L', home: 'GHA', away: 'PAN', venue: 'BMO Field', city: 'Toronto' },
+  { id: 22, date: 'Jun 17, 2026', time: '4:00 PM ET', group: 'L', home: 'ENG', away: 'CRO', venue: 'AT&T Stadium', city: 'Dallas' },
+  { id: 23, date: 'Jun 17, 2026', time: '1:00 PM ET', group: 'K', home: 'POR', away: 'COD', venue: 'NRG Stadium', city: 'Houston' },
+  { id: 24, date: 'Jun 17, 2026', time: '10:00 PM ET', group: 'K', home: 'UZB', away: 'COL', venue: 'Estadio Azteca', city: 'Mexico City' }
+];
 
 @Component({
   selector: 'app-predictor',
@@ -41,10 +88,11 @@ export class PredictorComponent implements OnInit, OnDestroy {
   guidesVisible = signal(true);
   seniorMode = signal(false);
   subTab = signal<'ratings' | 'form'>('ratings');
-  oddsTab = signal<'odds' | 'bracket' | 'compare'>('odds');
+  oddsTab = signal<'odds' | 'bracket' | 'compare' | 'matchups'>('odds');
   teamSearch = '';
 
   selectedTeam = 'USA';
+  selectedSandboxRound: 1 | 2 | 3 = 1;
   sbTeamA = 'USA';
   sbTeamB = 'PAR';
   upcomingMatch: UpcomingMatch | null = null;
@@ -78,7 +126,7 @@ export class PredictorComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     void Promise.all([
       this.teamService.loadTeams(true),
-      this.fixtureService.loadStatus(true)
+      this.fixtureService.loadStatus(false)
     ]).then(() => {
       this.initSimState();
       this.onTeamSelect();
@@ -96,7 +144,7 @@ export class PredictorComponent implements OnInit, OnDestroy {
 
   goStep(n: number): void {
     this.currentStep.set(n);
-    if (n === 3) void this.fixtureService.loadStatus(true).then(() => this.onTeamSelect());
+    if (n === 3) void this.fixtureService.loadStatus(false).then(() => this.onTeamSelect());
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -113,7 +161,7 @@ export class PredictorComponent implements OnInit, OnDestroy {
     this.subTab.set(name);
   }
 
-  showTab(name: 'odds' | 'bracket' | 'compare'): void {
+  showTab(name: 'odds' | 'bracket' | 'compare' | 'matchups'): void {
     this.oddsTab.set(name);
   }
 
@@ -129,44 +177,223 @@ export class PredictorComponent implements OnInit, OnDestroy {
   }
 
   onTeamSelect(): void {
-    const match = this.fixtureService.getUpcomingMatch(this.selectedTeam);
+    let match = this.getSandboxFixtureMatch(this.selectedTeam, this.selectedSandboxRound);
     const next = this.fixtureService.getTeamNext(this.selectedTeam);
+    if (!match) {
+      match = this.fixtureService.getUpcomingMatch(this.selectedTeam);
+    }
+    if (!match && next?.match && next.match.home && next.match.away && next.match.home !== 'TBD' && next.match.away !== 'TBD') {
+      const isHome = next.match.home === this.selectedTeam;
+      const opponentId = isHome ? next.match.away : next.match.home;
+      match = {
+        fixture: next.match,
+        selectedId: this.selectedTeam,
+        opponentId,
+        isHome,
+        teamStatus: next.status,
+        statusMessage: next.message
+      };
+    }
+    if (!match) {
+      match = this.getOpeningFixtureMatch(this.selectedTeam);
+    }
+
     this.upcomingMatch = match;
-    this.teamNextStatus = next?.status ?? null;
-    this.statusMessage = next?.message ?? null;
+    this.teamNextStatus = match ? 'active' : (next?.status ?? null);
+    this.statusMessage = match?.statusMessage ?? next?.message ?? null;
 
     if (match?.fixture) {
+      match = this.withNepalTime(match);
+      this.upcomingMatch = match;
+      this.resetSandboxMatch();
       this.sbTeamA = match.fixture.home;
       this.sbTeamB = match.fixture.away;
+      this.sbNameA = this.teamService.findTeam(this.sbTeamA)?.name ?? this.sbTeamA ?? 'TBD';
+      this.sbFlagA = this.teamService.findTeam(this.sbTeamA)?.flag ?? '🏳️';
+      this.sbNameB = this.teamService.findTeam(this.sbTeamB)?.name ?? this.sbTeamB ?? 'TBD';
+      this.sbFlagB = this.teamService.findTeam(this.sbTeamB)?.flag ?? '🏳️';
       this.updateMath();
     } else {
       this.sbNameA = this.selectedTeamObj()?.name ?? '—';
-      this.sbNameB = '—';
+      this.sbNameB = this.teamNextStatus === 'champion'
+        ? 'Champion'
+        : this.teamNextStatus === 'eliminated'
+          ? 'No fixture'
+          : 'Awaiting opponent';
       this.sbFlagA = this.selectedTeamObj()?.flag ?? '🏳️';
       this.sbFlagB = '🏳️';
+      if (!this.statusMessage) {
+        this.statusMessage = 'No upcoming fixture is available yet.';
+      }
     }
   }
 
-  async syncFixtures(): Promise<void> {
-    await this.fixtureService.loadStatus(true);
+  selectSandboxRound(round: 1 | 2 | 3): void {
+    this.selectedSandboxRound = round;
     this.onTeamSelect();
   }
 
+  resetCurrentSandbox(): void {
+    this.resetSandboxMatch();
+    this.updateMath();
+  }
+
+  private getOpeningFixtureMatch(teamId: string): UpcomingMatch | null {
+    return this.getSandboxFixtureMatch(teamId, 1);
+  }
+
+  private getSandboxFixtureMatch(teamId: string, round: 1 | 2 | 3): UpcomingMatch | null {
+    const fixture = this.getGroupRoundFixtures().find(f =>
+      f.matchday === round && (f.home === teamId || f.away === teamId)
+    );
+    if (!fixture) return null;
+
+    const isHome = fixture.home === teamId;
+    const opponentId = isHome ? fixture.away : fixture.home;
+
+    return {
+      fixture: {
+        ...fixture,
+        stage: 'Group',
+        label: `Group ${fixture.group}`,
+        isHome
+      },
+      selectedId: teamId,
+      opponentId,
+      isHome,
+      teamStatus: 'active',
+      statusMessage: `Group round ${round} fixture`
+    };
+  }
+
+  private withNepalTime(match: UpcomingMatch): UpcomingMatch {
+    const nepalTime = this.toNepalTime(match.fixture.date, match.fixture.time);
+    return {
+      ...match,
+      fixture: {
+        ...match.fixture,
+        date: nepalTime.date,
+        time: nepalTime.time
+      }
+    };
+  }
+
+  private toNepalTime(dateText: string, timeText: string): { date: string; time: string } {
+    if (!timeText.includes('ET')) {
+      return { date: dateText, time: timeText };
+    }
+
+    const parsed = /([A-Za-z]{3})\s+(\d{1,2}),\s+(\d{4})/.exec(dateText);
+    const time = /(\d{1,2}):(\d{2})\s+(AM|PM)/.exec(timeText);
+    if (!parsed || !time) {
+      return { date: dateText, time: timeText };
+    }
+
+    const months: Record<string, number> = {
+      Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
+      Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11
+    };
+    const month = months[parsed[1]];
+    if (month === undefined) {
+      return { date: dateText, time: timeText };
+    }
+
+    let hour = Number(time[1]);
+    const minute = Number(time[2]);
+    if (time[3] === 'PM' && hour !== 12) hour += 12;
+    if (time[3] === 'AM' && hour === 12) hour = 0;
+
+    const easternAsUtc = Date.UTC(Number(parsed[3]), month, Number(parsed[2]), hour + 4, minute);
+    const nepal = new Date(easternAsUtc + (5 * 60 + 45) * 60 * 1000);
+    const fmtDate = new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      timeZone: 'UTC'
+    }).format(nepal);
+    const fmtTime = new Intl.DateTimeFormat('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+      timeZone: 'UTC'
+    }).format(nepal);
+
+    return { date: fmtDate, time: `${fmtTime} NPT` };
+  }
+
+  private getGroupRoundFixtures(): Array<SandboxFixture & { matchday: 1 | 2 | 3 }> {
+    const fixtures: Array<SandboxFixture & { matchday: 1 | 2 | 3 }> = OPENING_FIXTURES.map(f => ({
+      ...f,
+      matchday: 1
+    }));
+
+    const venues = [
+      { venue: 'MetLife Stadium', city: 'New York/New Jersey' },
+      { venue: 'SoFi Stadium', city: 'Los Angeles' },
+      { venue: 'AT&T Stadium', city: 'Dallas' },
+      { venue: 'Estadio Azteca', city: 'Mexico City' },
+      { venue: 'NRG Stadium', city: 'Houston' },
+      { venue: 'Mercedes-Benz Stadium', city: 'Atlanta' },
+      { venue: 'Lumen Field', city: 'Seattle' },
+      { venue: 'Gillette Stadium', city: 'Boston' },
+      { venue: 'Lincoln Financial Field', city: 'Philadelphia' },
+      { venue: 'Hard Rock Stadium', city: 'Miami' },
+      { venue: "Levi's Stadium", city: 'San Francisco Bay Area' },
+      { venue: 'Arrowhead Stadium', city: 'Kansas City' },
+      { venue: 'BMO Field', city: 'Toronto' },
+      { venue: 'BC Place', city: 'Vancouver' },
+      { venue: 'Estadio BBVA', city: 'Monterrey' },
+      { venue: 'Estadio Akron', city: 'Guadalajara' }
+    ];
+
+    let matchId = 25;
+    let venueIndex = 0;
+    for (const group of ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']) {
+      const md1 = OPENING_FIXTURES.filter(f => f.group === group);
+      if (md1.length < 2) continue;
+
+      const [first, second] = md1;
+      const t1 = first.home;
+      const t2 = first.away;
+      const t3 = second.home;
+      const t4 = second.away;
+      const v1 = venues[venueIndex++ % venues.length];
+      const v2 = venues[venueIndex++ % venues.length];
+      const v3 = venues[venueIndex++ % venues.length];
+      const v4 = venues[venueIndex++ % venues.length];
+
+      fixtures.push(
+        { id: matchId++, date: 'Jun 19, 2026', time: '6:00 PM ET', group, home: t1, away: t3, venue: v1.venue, city: v1.city, matchday: 2 },
+        { id: matchId++, date: 'Jun 20, 2026', time: '9:00 PM ET', group, home: t2, away: t4, venue: v2.venue, city: v2.city, matchday: 2 },
+        { id: matchId++, date: 'Jun 24, 2026', time: '4:00 PM ET', group, home: t1, away: t4, venue: v3.venue, city: v3.city, matchday: 3 },
+        { id: matchId++, date: 'Jun 25, 2026', time: '8:00 PM ET', group, home: t2, away: t3, venue: v4.venue, city: v4.city, matchday: 3 }
+      );
+    }
+
+    return fixtures;
+  }
+
+  private resetSandboxMatch(): void {
+    if (this.commInterval) {
+      clearInterval(this.commInterval);
+      this.commInterval = null;
+    }
+    this.playDisabled = false;
+    this.sbScoreA = 0;
+    this.sbScoreB = 0;
+    this.commLines = [];
+  }
+
   isTeamSelectable(t: Team): boolean {
-    const next = this.fixtureService.getTeamNext(t.id);
-    return next?.status !== 'eliminated' && next?.status !== 'champion';
+    return true;
   }
 
   teamOptionLabel(t: Team): string {
-    const next = this.fixtureService.getTeamNext(t.id);
-    if (next?.status === 'eliminated') return `${t.flag} ${t.name} — ELIMINATED`;
-    if (next?.status === 'champion') return `${t.flag} ${t.name} — CHAMPION 🏆`;
-    if (next?.status === 'waiting') return `${t.flag} ${t.name} — awaiting draw`;
     return `${t.flag} ${t.name} (Group ${t.group})`;
   }
 
   canSimulate(): boolean {
-    return !!this.upcomingMatch?.fixture && this.teamNextStatus === 'active' && !this.playDisabled;
+    return !!this.upcomingMatch?.fixture && !this.playDisabled;
   }
 
   opponentTeam(): Team | undefined {
@@ -185,7 +412,13 @@ export class PredictorComponent implements OnInit, OnDestroy {
   updateMath(): void {
     const a = this.teamService.findTeam(this.sbTeamA);
     const b = this.teamService.findTeam(this.sbTeamB);
-    if (!a || !b) return;
+    if (!a || !b) {
+      this.sbNameA = a?.name ?? this.sbTeamA ?? 'TBD';
+      this.sbFlagA = a?.flag ?? '🏳️';
+      this.sbNameB = b?.name ?? this.sbTeamB ?? 'TBD';
+      this.sbFlagB = b?.flag ?? '🏳️';
+      return;
+    }
     const hA = a.host && !b.host ? 75 : 0;
     const hB = b.host && !a.host ? 75 : 0;
     const fA = this.formMod(a.id);
@@ -393,8 +626,11 @@ export class PredictorComponent implements OnInit, OnDestroy {
     return (statOdds * 0.85 + statOdds * 0.15 * cs * 1.2).toFixed(1) + '%';
   }
 
-  teamForMatch(id: string): Team {
-    return this.teamService.findTeam(id) || { id, name: id, flag: '', group: '', elo: 0, fifaRank: 0, star: '', starDOB: '', value: '', penRate: 0.7, host: false, climate: '' };
+  teamForMatch(id: string | undefined): Team {
+    if (!id) {
+      return { id: 'TBD', name: 'TBD', flag: '🏳️', group: '', elo: 0, fifaRank: 0, star: '', starDOB: '', value: '', penRate: 0.7, host: false, climate: '' };
+    }
+    return this.teamService.findTeam(id) || { id, name: id, flag: '🏳️', group: '', elo: 0, fifaRank: 0, star: '', starDOB: '', value: '', penRate: 0.7, host: false, climate: '' };
   }
 
   isWinner(m: MatchResult, isA: boolean): boolean {
@@ -426,5 +662,62 @@ export class PredictorComponent implements OnInit, OnDestroy {
     ]);
     this.initSimState();
     this.onTeamSelect();
+  }
+
+  getUpcomingMatchups(): MatchupCard[] {
+    const status = this.fixtureStatus();
+    if (!status) return [];
+
+    const matchups: MatchupCard[] = [];
+    const seenFixtures = new Set<string>();
+
+    for (const teamId in status.nextMatches) {
+      const next = status.nextMatches[teamId];
+      if (next?.match && next.status === 'active') {
+        const fixtureKey = `${next.match.id}`;
+        if (!seenFixtures.has(fixtureKey)) {
+          seenFixtures.add(fixtureKey);
+          const teamA = this.teamService.findTeam(next.match.home);
+          const teamB = this.teamService.findTeam(next.match.away);
+          if (teamA && teamB) {
+            const probs = this.simService.winDrawLossProbs(teamA, teamB, this.recentMatches());
+            matchups.push({
+              fixture: next.match,
+              teamA,
+              teamB,
+              pw: probs.pw,
+              pd: probs.pd,
+              pl: probs.pl
+            });
+          }
+        }
+      }
+    }
+
+    return matchups.sort((a, b) => {
+      const dateA = new Date(a.fixture.date).getTime();
+      const dateB = new Date(b.fixture.date).getTime();
+      return dateA - dateB;
+    });
+  }
+
+  getMatchupsByTeam(): { [key: string]: MatchupCard[] } {
+    const byTeam: { [key: string]: MatchupCard[] } = {};
+    this.getUpcomingMatchups().forEach(matchup => {
+      const key1 = matchup.teamA.id;
+      const key2 = matchup.teamB.id;
+      if (!byTeam[key1]) byTeam[key1] = [];
+      if (!byTeam[key2]) byTeam[key2] = [];
+      byTeam[key1].push(matchup);
+      byTeam[key2].push(matchup);
+    });
+    return byTeam;
+  }
+
+  getQualifiedTeams(): Team[] {
+    return [...this.teams()].filter(t => {
+      const next = this.fixtureService.getTeamNext(t.id);
+      return next?.status === 'active';
+    }).sort((a, b) => b.elo - a.elo);
   }
 }

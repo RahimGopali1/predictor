@@ -1,0 +1,1115 @@
+﻿{
+    "teamStatus":  {
+                       "ARG":  {
+                                   "id":  "ARG",
+                                   "status":  "active"
+                               },
+                       "FRA":  {
+                                   "id":  "FRA",
+                                   "status":  "active"
+                               },
+                       "ESP":  {
+                                   "id":  "ESP",
+                                   "status":  "active"
+                               },
+                       "BRA":  {
+                                   "id":  "BRA",
+                                   "status":  "active"
+                               },
+                       "ENG":  {
+                                   "id":  "ENG",
+                                   "status":  "active"
+                               },
+                       "POR":  {
+                                   "id":  "POR",
+                                   "status":  "active"
+                               },
+                       "COL":  {
+                                   "id":  "COL",
+                                   "status":  "active"
+                               },
+                       "NED":  {
+                                   "id":  "NED",
+                                   "status":  "active"
+                               },
+                       "URU":  {
+                                   "id":  "URU",
+                                   "status":  "active"
+                               },
+                       "GER":  {
+                                   "id":  "GER",
+                                   "status":  "active"
+                               },
+                       "BEL":  {
+                                   "id":  "BEL",
+                                   "status":  "active"
+                               },
+                       "MAR":  {
+                                   "id":  "MAR",
+                                   "status":  "active"
+                               },
+                       "CRO":  {
+                                   "id":  "CRO",
+                                   "status":  "active"
+                               },
+                       "SUI":  {
+                                   "id":  "SUI",
+                                   "status":  "active"
+                               },
+                       "JPN":  {
+                                   "id":  "JPN",
+                                   "status":  "active"
+                               },
+                       "USA":  {
+                                   "id":  "USA",
+                                   "status":  "active"
+                               },
+                       "ECU":  {
+                                   "id":  "ECU",
+                                   "status":  "active"
+                               },
+                       "AUT":  {
+                                   "id":  "AUT",
+                                   "status":  "active"
+                               },
+                       "SEN":  {
+                                   "id":  "SEN",
+                                   "status":  "active"
+                               },
+                       "IRN":  {
+                                   "id":  "IRN",
+                                   "status":  "active"
+                               },
+                       "NOR":  {
+                                   "id":  "NOR",
+                                   "status":  "active"
+                               },
+                       "KOR":  {
+                                   "id":  "KOR",
+                                   "status":  "active"
+                               },
+                       "AUS":  {
+                                   "id":  "AUS",
+                                   "status":  "active"
+                               },
+                       "CIV":  {
+                                   "id":  "CIV",
+                                   "status":  "active"
+                               },
+                       "TUR":  {
+                                   "id":  "TUR",
+                                   "status":  "active"
+                               },
+                       "SWE":  {
+                                   "id":  "SWE",
+                                   "status":  "active"
+                               },
+                       "CZE":  {
+                                   "id":  "CZE",
+                                   "status":  "active"
+                               },
+                       "BIH":  {
+                                   "id":  "BIH",
+                                   "status":  "active"
+                               },
+                       "MEX":  {
+                                   "id":  "MEX",
+                                   "status":  "active"
+                               },
+                       "PAR":  {
+                                   "id":  "PAR",
+                                   "status":  "active"
+                               },
+                       "EGY":  {
+                                   "id":  "EGY",
+                                   "status":  "active"
+                               },
+                       "ALG":  {
+                                   "id":  "ALG",
+                                   "status":  "active"
+                               },
+                       "CAN":  {
+                                   "id":  "CAN",
+                                   "status":  "active"
+                               },
+                       "UZB":  {
+                                   "id":  "UZB",
+                                   "status":  "active"
+                               },
+                       "SCO":  {
+                                   "id":  "SCO",
+                                   "status":  "active"
+                               },
+                       "GHA":  {
+                                   "id":  "GHA",
+                                   "status":  "active"
+                               },
+                       "PAN":  {
+                                   "id":  "PAN",
+                                   "status":  "active"
+                               },
+                       "RSA":  {
+                                   "id":  "RSA",
+                                   "status":  "active"
+                               },
+                       "TUN":  {
+                                   "id":  "TUN",
+                                   "status":  "active"
+                               },
+                       "KSA":  {
+                                   "id":  "KSA",
+                                   "status":  "active"
+                               },
+                       "CPV":  {
+                                   "id":  "CPV",
+                                   "status":  "active"
+                               },
+                       "COD":  {
+                                   "id":  "COD",
+                                   "status":  "active"
+                               },
+                       "IRQ":  {
+                                   "id":  "IRQ",
+                                   "status":  "active"
+                               },
+                       "QAT":  {
+                                   "id":  "QAT",
+                                   "status":  "active"
+                               },
+                       "JOR":  {
+                                   "id":  "JOR",
+                                   "status":  "active"
+                               },
+                       "HAI":  {
+                                   "id":  "HAI",
+                                   "status":  "active"
+                               },
+                       "CUW":  {
+                                   "id":  "CUW",
+                                   "status":  "active"
+                               },
+                       "NZL":  {
+                                   "id":  "NZL",
+                                   "status":  "active"
+                               }
+                   },
+    "nextMatches":  {
+                        "ARG":  {
+                                    "teamId":  "ARG",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  19,
+                                                  "label":  "Group J",
+                                                  "date":  "Jun 16, 2026",
+                                                  "time":  "9:00 PM ET",
+                                                  "group":  "J",
+                                                  "venue":  "Arrowhead Stadium",
+                                                  "city":  "Kansas City",
+                                                  "home":  "ARG",
+                                                  "away":  "ALG",
+                                                  "homeTeam":  "Argentina",
+                                                  "awayTeam":  "Algeria",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Algeria in Kansas City"
+                                },
+                        "FRA":  {
+                                    "teamId":  "FRA",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  17,
+                                                  "label":  "Group I",
+                                                  "date":  "Jun 16, 2026",
+                                                  "time":  "3:00 PM ET",
+                                                  "group":  "I",
+                                                  "venue":  "MetLife Stadium",
+                                                  "city":  "New York/New Jersey",
+                                                  "home":  "FRA",
+                                                  "away":  "SEN",
+                                                  "homeTeam":  "France",
+                                                  "awayTeam":  "Senegal",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Senegal in New York/New Jersey"
+                                },
+                        "ESP":  {
+                                    "teamId":  "ESP",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  14,
+                                                  "label":  "Group H",
+                                                  "date":  "Jun 15, 2026",
+                                                  "time":  "12:00 PM ET",
+                                                  "group":  "H",
+                                                  "venue":  "Mercedes-Benz Stadium",
+                                                  "city":  "Atlanta",
+                                                  "home":  "ESP",
+                                                  "away":  "CPV",
+                                                  "homeTeam":  "Spain",
+                                                  "awayTeam":  "Cape Verde",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Cape Verde in Atlanta"
+                                },
+                        "BRA":  {
+                                    "teamId":  "BRA",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  7,
+                                                  "label":  "Group C",
+                                                  "date":  "Jun 13, 2026",
+                                                  "time":  "6:00 PM ET",
+                                                  "group":  "C",
+                                                  "venue":  "MetLife Stadium",
+                                                  "city":  "New York/New Jersey",
+                                                  "home":  "BRA",
+                                                  "away":  "MAR",
+                                                  "homeTeam":  "Brazil",
+                                                  "awayTeam":  "Morocco",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Morocco in New York/New Jersey"
+                                },
+                        "ENG":  {
+                                    "teamId":  "ENG",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  22,
+                                                  "label":  "Group L",
+                                                  "date":  "Jun 17, 2026",
+                                                  "time":  "4:00 PM ET",
+                                                  "group":  "L",
+                                                  "venue":  "AT\u0026T Stadium",
+                                                  "city":  "Dallas",
+                                                  "home":  "ENG",
+                                                  "away":  "CRO",
+                                                  "homeTeam":  "England",
+                                                  "awayTeam":  "Croatia",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Croatia in Dallas"
+                                },
+                        "POR":  {
+                                    "teamId":  "POR",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  23,
+                                                  "label":  "Group K",
+                                                  "date":  "Jun 17, 2026",
+                                                  "time":  "1:00 PM ET",
+                                                  "group":  "K",
+                                                  "venue":  "NRG Stadium",
+                                                  "city":  "Houston",
+                                                  "home":  "POR",
+                                                  "away":  "COD",
+                                                  "homeTeam":  "Portugal",
+                                                  "awayTeam":  "DR Congo",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs DR Congo in Houston"
+                                },
+                        "COL":  {
+                                    "teamId":  "COL",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  24,
+                                                  "label":  "Group K",
+                                                  "date":  "Jun 17, 2026",
+                                                  "time":  "10:00 PM ET",
+                                                  "group":  "K",
+                                                  "venue":  "Estadio Azteca",
+                                                  "city":  "Mexico City",
+                                                  "home":  "UZB",
+                                                  "away":  "COL",
+                                                  "homeTeam":  "Uzbekistan",
+                                                  "awayTeam":  "Colombia",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs Uzbekistan in Mexico City"
+                                },
+                        "NED":  {
+                                    "teamId":  "NED",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  11,
+                                                  "label":  "Group F",
+                                                  "date":  "Jun 14, 2026",
+                                                  "time":  "4:00 PM ET",
+                                                  "group":  "F",
+                                                  "venue":  "AT\u0026T Stadium",
+                                                  "city":  "Dallas",
+                                                  "home":  "NED",
+                                                  "away":  "JPN",
+                                                  "homeTeam":  "Netherlands",
+                                                  "awayTeam":  "Japan",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Japan in Dallas"
+                                },
+                        "URU":  {
+                                    "teamId":  "URU",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  13,
+                                                  "label":  "Group H",
+                                                  "date":  "Jun 15, 2026",
+                                                  "time":  "6:00 PM ET",
+                                                  "group":  "H",
+                                                  "venue":  "Hard Rock Stadium",
+                                                  "city":  "Miami",
+                                                  "home":  "KSA",
+                                                  "away":  "URU",
+                                                  "homeTeam":  "Saudi Arabia",
+                                                  "awayTeam":  "Uruguay",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs Saudi Arabia in Miami"
+                                },
+                        "GER":  {
+                                    "teamId":  "GER",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  10,
+                                                  "label":  "Group E",
+                                                  "date":  "Jun 14, 2026",
+                                                  "time":  "1:00 PM ET",
+                                                  "group":  "E",
+                                                  "venue":  "NRG Stadium",
+                                                  "city":  "Houston",
+                                                  "home":  "GER",
+                                                  "away":  "CUW",
+                                                  "homeTeam":  "Germany",
+                                                  "awayTeam":  "Curaçao",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Curaçao in Houston"
+                                },
+                        "BEL":  {
+                                    "teamId":  "BEL",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  16,
+                                                  "label":  "Group G",
+                                                  "date":  "Jun 15, 2026",
+                                                  "time":  "3:00 PM ET",
+                                                  "group":  "G",
+                                                  "venue":  "Lumen Field",
+                                                  "city":  "Seattle",
+                                                  "home":  "BEL",
+                                                  "away":  "EGY",
+                                                  "homeTeam":  "Belgium",
+                                                  "awayTeam":  "Egypt",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Egypt in Seattle"
+                                },
+                        "MAR":  {
+                                    "teamId":  "MAR",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  7,
+                                                  "label":  "Group C",
+                                                  "date":  "Jun 13, 2026",
+                                                  "time":  "6:00 PM ET",
+                                                  "group":  "C",
+                                                  "venue":  "MetLife Stadium",
+                                                  "city":  "New York/New Jersey",
+                                                  "home":  "BRA",
+                                                  "away":  "MAR",
+                                                  "homeTeam":  "Brazil",
+                                                  "awayTeam":  "Morocco",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs Brazil in New York/New Jersey"
+                                },
+                        "CRO":  {
+                                    "teamId":  "CRO",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  22,
+                                                  "label":  "Group L",
+                                                  "date":  "Jun 17, 2026",
+                                                  "time":  "4:00 PM ET",
+                                                  "group":  "L",
+                                                  "venue":  "AT\u0026T Stadium",
+                                                  "city":  "Dallas",
+                                                  "home":  "ENG",
+                                                  "away":  "CRO",
+                                                  "homeTeam":  "England",
+                                                  "awayTeam":  "Croatia",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs England in Dallas"
+                                },
+                        "SUI":  {
+                                    "teamId":  "SUI",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  8,
+                                                  "label":  "Group B",
+                                                  "date":  "Jun 13, 2026",
+                                                  "time":  "3:00 PM ET",
+                                                  "group":  "B",
+                                                  "venue":  "Levi\u0027s Stadium",
+                                                  "city":  "San Francisco Bay Area",
+                                                  "home":  "QAT",
+                                                  "away":  "SUI",
+                                                  "homeTeam":  "Qatar",
+                                                  "awayTeam":  "Switzerland",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs Qatar in San Francisco Bay Area"
+                                },
+                        "JPN":  {
+                                    "teamId":  "JPN",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  11,
+                                                  "label":  "Group F",
+                                                  "date":  "Jun 14, 2026",
+                                                  "time":  "4:00 PM ET",
+                                                  "group":  "F",
+                                                  "venue":  "AT\u0026T Stadium",
+                                                  "city":  "Dallas",
+                                                  "home":  "NED",
+                                                  "away":  "JPN",
+                                                  "homeTeam":  "Netherlands",
+                                                  "awayTeam":  "Japan",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs Netherlands in Dallas"
+                                },
+                        "USA":  {
+                                    "teamId":  "USA",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  37,
+                                                  "label":  "Group D",
+                                                  "date":  "Jun 19, 2026",
+                                                  "time":  "6:00 PM ET",
+                                                  "group":  "D",
+                                                  "venue":  "BMO Field",
+                                                  "city":  "Toronto",
+                                                  "home":  "USA",
+                                                  "away":  "AUS",
+                                                  "homeTeam":  "United States",
+                                                  "awayTeam":  "Australia",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Australia in Toronto"
+                                },
+                        "ECU":  {
+                                    "teamId":  "ECU",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  9,
+                                                  "label":  "Group E",
+                                                  "date":  "Jun 14, 2026",
+                                                  "time":  "7:00 PM ET",
+                                                  "group":  "E",
+                                                  "venue":  "Lincoln Financial Field",
+                                                  "city":  "Philadelphia",
+                                                  "home":  "CIV",
+                                                  "away":  "ECU",
+                                                  "homeTeam":  "Ivory Coast",
+                                                  "awayTeam":  "Ecuador",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs Ivory Coast in Philadelphia"
+                                },
+                        "AUT":  {
+                                    "teamId":  "AUT",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  20,
+                                                  "label":  "Group J",
+                                                  "date":  "Jun 16, 2026",
+                                                  "time":  "12:00 AM ET",
+                                                  "group":  "J",
+                                                  "venue":  "Levi\u0027s Stadium",
+                                                  "city":  "San Francisco Bay Area",
+                                                  "home":  "AUT",
+                                                  "away":  "JOR",
+                                                  "homeTeam":  "Austria",
+                                                  "awayTeam":  "Jordan",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Jordan in San Francisco Bay Area"
+                                },
+                        "SEN":  {
+                                    "teamId":  "SEN",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  17,
+                                                  "label":  "Group I",
+                                                  "date":  "Jun 16, 2026",
+                                                  "time":  "3:00 PM ET",
+                                                  "group":  "I",
+                                                  "venue":  "MetLife Stadium",
+                                                  "city":  "New York/New Jersey",
+                                                  "home":  "FRA",
+                                                  "away":  "SEN",
+                                                  "homeTeam":  "France",
+                                                  "awayTeam":  "Senegal",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs France in New York/New Jersey"
+                                },
+                        "IRN":  {
+                                    "teamId":  "IRN",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  15,
+                                                  "label":  "Group G",
+                                                  "date":  "Jun 15, 2026",
+                                                  "time":  "9:00 PM ET",
+                                                  "group":  "G",
+                                                  "venue":  "SoFi Stadium",
+                                                  "city":  "Los Angeles",
+                                                  "home":  "IRN",
+                                                  "away":  "NZL",
+                                                  "homeTeam":  "Iran",
+                                                  "awayTeam":  "New Zealand",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs New Zealand in Los Angeles"
+                                },
+                        "NOR":  {
+                                    "teamId":  "NOR",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  18,
+                                                  "label":  "Group I",
+                                                  "date":  "Jun 16, 2026",
+                                                  "time":  "6:00 PM ET",
+                                                  "group":  "I",
+                                                  "venue":  "Gillette Stadium",
+                                                  "city":  "Boston",
+                                                  "home":  "IRQ",
+                                                  "away":  "NOR",
+                                                  "homeTeam":  "Iraq",
+                                                  "awayTeam":  "Norway",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs Iraq in Boston"
+                                },
+                        "KOR":  {
+                                    "teamId":  "KOR",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  25,
+                                                  "label":  "Group A",
+                                                  "date":  "Jun 19, 2026",
+                                                  "time":  "6:00 PM ET",
+                                                  "group":  "A",
+                                                  "venue":  "MetLife Stadium",
+                                                  "city":  "New York/New Jersey",
+                                                  "home":  "MEX",
+                                                  "away":  "KOR",
+                                                  "homeTeam":  "Mexico",
+                                                  "awayTeam":  "South Korea",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs Mexico in New York/New Jersey"
+                                },
+                        "AUS":  {
+                                    "teamId":  "AUS",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  37,
+                                                  "label":  "Group D",
+                                                  "date":  "Jun 19, 2026",
+                                                  "time":  "6:00 PM ET",
+                                                  "group":  "D",
+                                                  "venue":  "BMO Field",
+                                                  "city":  "Toronto",
+                                                  "home":  "USA",
+                                                  "away":  "AUS",
+                                                  "homeTeam":  "United States",
+                                                  "awayTeam":  "Australia",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs United States in Toronto"
+                                },
+                        "CIV":  {
+                                    "teamId":  "CIV",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  9,
+                                                  "label":  "Group E",
+                                                  "date":  "Jun 14, 2026",
+                                                  "time":  "7:00 PM ET",
+                                                  "group":  "E",
+                                                  "venue":  "Lincoln Financial Field",
+                                                  "city":  "Philadelphia",
+                                                  "home":  "CIV",
+                                                  "away":  "ECU",
+                                                  "homeTeam":  "Ivory Coast",
+                                                  "awayTeam":  "Ecuador",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Ecuador in Philadelphia"
+                                },
+                        "TUR":  {
+                                    "teamId":  "TUR",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  38,
+                                                  "label":  "Group D",
+                                                  "date":  "Jun 20, 2026",
+                                                  "time":  "9:00 PM ET",
+                                                  "group":  "D",
+                                                  "venue":  "BC Place",
+                                                  "city":  "Vancouver",
+                                                  "home":  "PAR",
+                                                  "away":  "TUR",
+                                                  "homeTeam":  "Paraguay",
+                                                  "awayTeam":  "Türkiye",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs Paraguay in Vancouver"
+                                },
+                        "SWE":  {
+                                    "teamId":  "SWE",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  12,
+                                                  "label":  "Group F",
+                                                  "date":  "Jun 14, 2026",
+                                                  "time":  "10:00 PM ET",
+                                                  "group":  "F",
+                                                  "venue":  "Estadio BBVA",
+                                                  "city":  "Monterrey",
+                                                  "home":  "SWE",
+                                                  "away":  "TUN",
+                                                  "homeTeam":  "Sweden",
+                                                  "awayTeam":  "Tunisia",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Tunisia in Monterrey"
+                                },
+                        "CZE":  {
+                                    "teamId":  "CZE",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  26,
+                                                  "label":  "Group A",
+                                                  "date":  "Jun 20, 2026",
+                                                  "time":  "9:00 PM ET",
+                                                  "group":  "A",
+                                                  "venue":  "SoFi Stadium",
+                                                  "city":  "Los Angeles",
+                                                  "home":  "RSA",
+                                                  "away":  "CZE",
+                                                  "homeTeam":  "South Africa",
+                                                  "awayTeam":  "Czechia",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs South Africa in Los Angeles"
+                                },
+                        "BIH":  {
+                                    "teamId":  "BIH",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  30,
+                                                  "label":  "Group B",
+                                                  "date":  "Jun 20, 2026",
+                                                  "time":  "9:00 PM ET",
+                                                  "group":  "B",
+                                                  "venue":  "Mercedes-Benz Stadium",
+                                                  "city":  "Atlanta",
+                                                  "home":  "BIH",
+                                                  "away":  "SUI",
+                                                  "homeTeam":  "Bosnia",
+                                                  "awayTeam":  "Switzerland",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Switzerland in Atlanta"
+                                },
+                        "MEX":  {
+                                    "teamId":  "MEX",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  25,
+                                                  "label":  "Group A",
+                                                  "date":  "Jun 19, 2026",
+                                                  "time":  "6:00 PM ET",
+                                                  "group":  "A",
+                                                  "venue":  "MetLife Stadium",
+                                                  "city":  "New York/New Jersey",
+                                                  "home":  "MEX",
+                                                  "away":  "KOR",
+                                                  "homeTeam":  "Mexico",
+                                                  "awayTeam":  "South Korea",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs South Korea in New York/New Jersey"
+                                },
+                        "PAR":  {
+                                    "teamId":  "PAR",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  38,
+                                                  "label":  "Group D",
+                                                  "date":  "Jun 20, 2026",
+                                                  "time":  "9:00 PM ET",
+                                                  "group":  "D",
+                                                  "venue":  "BC Place",
+                                                  "city":  "Vancouver",
+                                                  "home":  "PAR",
+                                                  "away":  "TUR",
+                                                  "homeTeam":  "Paraguay",
+                                                  "awayTeam":  "Türkiye",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Türkiye in Vancouver"
+                                },
+                        "EGY":  {
+                                    "teamId":  "EGY",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  16,
+                                                  "label":  "Group G",
+                                                  "date":  "Jun 15, 2026",
+                                                  "time":  "3:00 PM ET",
+                                                  "group":  "G",
+                                                  "venue":  "Lumen Field",
+                                                  "city":  "Seattle",
+                                                  "home":  "BEL",
+                                                  "away":  "EGY",
+                                                  "homeTeam":  "Belgium",
+                                                  "awayTeam":  "Egypt",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs Belgium in Seattle"
+                                },
+                        "ALG":  {
+                                    "teamId":  "ALG",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  19,
+                                                  "label":  "Group J",
+                                                  "date":  "Jun 16, 2026",
+                                                  "time":  "9:00 PM ET",
+                                                  "group":  "J",
+                                                  "venue":  "Arrowhead Stadium",
+                                                  "city":  "Kansas City",
+                                                  "home":  "ARG",
+                                                  "away":  "ALG",
+                                                  "homeTeam":  "Argentina",
+                                                  "awayTeam":  "Algeria",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs Argentina in Kansas City"
+                                },
+                        "CAN":  {
+                                    "teamId":  "CAN",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  29,
+                                                  "label":  "Group B",
+                                                  "date":  "Jun 19, 2026",
+                                                  "time":  "6:00 PM ET",
+                                                  "group":  "B",
+                                                  "venue":  "NRG Stadium",
+                                                  "city":  "Houston",
+                                                  "home":  "CAN",
+                                                  "away":  "QAT",
+                                                  "homeTeam":  "Canada",
+                                                  "awayTeam":  "Qatar",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Qatar in Houston"
+                                },
+                        "UZB":  {
+                                    "teamId":  "UZB",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  24,
+                                                  "label":  "Group K",
+                                                  "date":  "Jun 17, 2026",
+                                                  "time":  "10:00 PM ET",
+                                                  "group":  "K",
+                                                  "venue":  "Estadio Azteca",
+                                                  "city":  "Mexico City",
+                                                  "home":  "UZB",
+                                                  "away":  "COL",
+                                                  "homeTeam":  "Uzbekistan",
+                                                  "awayTeam":  "Colombia",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Colombia in Mexico City"
+                                },
+                        "SCO":  {
+                                    "teamId":  "SCO",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  34,
+                                                  "label":  "Group C",
+                                                  "date":  "Jun 20, 2026",
+                                                  "time":  "9:00 PM ET",
+                                                  "group":  "C",
+                                                  "venue":  "Hard Rock Stadium",
+                                                  "city":  "Miami",
+                                                  "home":  "SCO",
+                                                  "away":  "MAR",
+                                                  "homeTeam":  "Scotland",
+                                                  "awayTeam":  "Morocco",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Morocco in Miami"
+                                },
+                        "GHA":  {
+                                    "teamId":  "GHA",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  21,
+                                                  "label":  "Group L",
+                                                  "date":  "Jun 17, 2026",
+                                                  "time":  "7:00 PM ET",
+                                                  "group":  "L",
+                                                  "venue":  "BMO Field",
+                                                  "city":  "Toronto",
+                                                  "home":  "GHA",
+                                                  "away":  "PAN",
+                                                  "homeTeam":  "Ghana",
+                                                  "awayTeam":  "Panama",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Panama in Toronto"
+                                },
+                        "PAN":  {
+                                    "teamId":  "PAN",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  21,
+                                                  "label":  "Group L",
+                                                  "date":  "Jun 17, 2026",
+                                                  "time":  "7:00 PM ET",
+                                                  "group":  "L",
+                                                  "venue":  "BMO Field",
+                                                  "city":  "Toronto",
+                                                  "home":  "GHA",
+                                                  "away":  "PAN",
+                                                  "homeTeam":  "Ghana",
+                                                  "awayTeam":  "Panama",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs Ghana in Toronto"
+                                },
+                        "RSA":  {
+                                    "teamId":  "RSA",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  26,
+                                                  "label":  "Group A",
+                                                  "date":  "Jun 20, 2026",
+                                                  "time":  "9:00 PM ET",
+                                                  "group":  "A",
+                                                  "venue":  "SoFi Stadium",
+                                                  "city":  "Los Angeles",
+                                                  "home":  "RSA",
+                                                  "away":  "CZE",
+                                                  "homeTeam":  "South Africa",
+                                                  "awayTeam":  "Czechia",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Czechia in Los Angeles"
+                                },
+                        "TUN":  {
+                                    "teamId":  "TUN",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  12,
+                                                  "label":  "Group F",
+                                                  "date":  "Jun 14, 2026",
+                                                  "time":  "10:00 PM ET",
+                                                  "group":  "F",
+                                                  "venue":  "Estadio BBVA",
+                                                  "city":  "Monterrey",
+                                                  "home":  "SWE",
+                                                  "away":  "TUN",
+                                                  "homeTeam":  "Sweden",
+                                                  "awayTeam":  "Tunisia",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs Sweden in Monterrey"
+                                },
+                        "KSA":  {
+                                    "teamId":  "KSA",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  13,
+                                                  "label":  "Group H",
+                                                  "date":  "Jun 15, 2026",
+                                                  "time":  "6:00 PM ET",
+                                                  "group":  "H",
+                                                  "venue":  "Hard Rock Stadium",
+                                                  "city":  "Miami",
+                                                  "home":  "KSA",
+                                                  "away":  "URU",
+                                                  "homeTeam":  "Saudi Arabia",
+                                                  "awayTeam":  "Uruguay",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Uruguay in Miami"
+                                },
+                        "CPV":  {
+                                    "teamId":  "CPV",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  14,
+                                                  "label":  "Group H",
+                                                  "date":  "Jun 15, 2026",
+                                                  "time":  "12:00 PM ET",
+                                                  "group":  "H",
+                                                  "venue":  "Mercedes-Benz Stadium",
+                                                  "city":  "Atlanta",
+                                                  "home":  "ESP",
+                                                  "away":  "CPV",
+                                                  "homeTeam":  "Spain",
+                                                  "awayTeam":  "Cape Verde",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs Spain in Atlanta"
+                                },
+                        "COD":  {
+                                    "teamId":  "COD",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  23,
+                                                  "label":  "Group K",
+                                                  "date":  "Jun 17, 2026",
+                                                  "time":  "1:00 PM ET",
+                                                  "group":  "K",
+                                                  "venue":  "NRG Stadium",
+                                                  "city":  "Houston",
+                                                  "home":  "POR",
+                                                  "away":  "COD",
+                                                  "homeTeam":  "Portugal",
+                                                  "awayTeam":  "DR Congo",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs Portugal in Houston"
+                                },
+                        "IRQ":  {
+                                    "teamId":  "IRQ",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  18,
+                                                  "label":  "Group I",
+                                                  "date":  "Jun 16, 2026",
+                                                  "time":  "6:00 PM ET",
+                                                  "group":  "I",
+                                                  "venue":  "Gillette Stadium",
+                                                  "city":  "Boston",
+                                                  "home":  "IRQ",
+                                                  "away":  "NOR",
+                                                  "homeTeam":  "Iraq",
+                                                  "awayTeam":  "Norway",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Norway in Boston"
+                                },
+                        "QAT":  {
+                                    "teamId":  "QAT",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  8,
+                                                  "label":  "Group B",
+                                                  "date":  "Jun 13, 2026",
+                                                  "time":  "3:00 PM ET",
+                                                  "group":  "B",
+                                                  "venue":  "Levi\u0027s Stadium",
+                                                  "city":  "San Francisco Bay Area",
+                                                  "home":  "QAT",
+                                                  "away":  "SUI",
+                                                  "homeTeam":  "Qatar",
+                                                  "awayTeam":  "Switzerland",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Switzerland in San Francisco Bay Area"
+                                },
+                        "JOR":  {
+                                    "teamId":  "JOR",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  20,
+                                                  "label":  "Group J",
+                                                  "date":  "Jun 16, 2026",
+                                                  "time":  "12:00 AM ET",
+                                                  "group":  "J",
+                                                  "venue":  "Levi\u0027s Stadium",
+                                                  "city":  "San Francisco Bay Area",
+                                                  "home":  "AUT",
+                                                  "away":  "JOR",
+                                                  "homeTeam":  "Austria",
+                                                  "awayTeam":  "Jordan",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs Austria in San Francisco Bay Area"
+                                },
+                        "HAI":  {
+                                    "teamId":  "HAI",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  33,
+                                                  "label":  "Group C",
+                                                  "date":  "Jun 19, 2026",
+                                                  "time":  "6:00 PM ET",
+                                                  "group":  "C",
+                                                  "venue":  "Lincoln Financial Field",
+                                                  "city":  "Philadelphia",
+                                                  "home":  "HAI",
+                                                  "away":  "BRA",
+                                                  "homeTeam":  "Haiti",
+                                                  "awayTeam":  "Brazil",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Brazil in Philadelphia"
+                                },
+                        "CUW":  {
+                                    "teamId":  "CUW",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  10,
+                                                  "label":  "Group E",
+                                                  "date":  "Jun 14, 2026",
+                                                  "time":  "1:00 PM ET",
+                                                  "group":  "E",
+                                                  "venue":  "NRG Stadium",
+                                                  "city":  "Houston",
+                                                  "home":  "GER",
+                                                  "away":  "CUW",
+                                                  "homeTeam":  "Germany",
+                                                  "awayTeam":  "Curaçao",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs Germany in Houston"
+                                },
+                        "NZL":  {
+                                    "teamId":  "NZL",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  15,
+                                                  "label":  "Group G",
+                                                  "date":  "Jun 15, 2026",
+                                                  "time":  "9:00 PM ET",
+                                                  "group":  "G",
+                                                  "venue":  "SoFi Stadium",
+                                                  "city":  "Los Angeles",
+                                                  "home":  "IRN",
+                                                  "away":  "NZL",
+                                                  "homeTeam":  "Iran",
+                                                  "awayTeam":  "New Zealand",
+                                                  "isHome":  false
+                                              },
+                                    "message":  "Next match vs Iran in Los Angeles"
+                                }
+                    },
+    "champion":  null,
+    "groupStageComplete":  false,
+    "resultsSyncedAt":  "2026-06-09T14:10:26.373Z",
+    "finishedMatches":  6,
+    "totalMatches":  72
+}

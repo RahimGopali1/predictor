@@ -222,17 +222,17 @@
     <div class="panel" id="panel-3" [class.active]="currentStep() === 3">
       <div class="card">
         <div class="card-title">Goal Prediction Sandbox</div>
-        <p class="card-sub">Pick a nation to simulate their <strong>next real World Cup fixture</strong> — updated as results come in from FIFA.</p>
+        <p class="card-sub">Pick a nation, choose a group round, and simulate the fixture with the Dixon-Coles goal model.</p>
         <div class="guide" id="guide-3">
-          The <strong>Dixon-Coles model</strong> corrects standard Poisson for low-scoring outcomes. Select any active nation to preview their <strong>next scheduled match</strong> — group stage, knockouts, or final. Results sync from FIFA; eliminated teams are marked automatically. Host teams (USA, Mexico, Canada) receive a <strong>+75 Elo bonus</strong> at home venues.
+          The <strong>Dixon-Coles model</strong> corrects standard Poisson for low-scoring outcomes. Select any nation and switch between Round 1, Round 2, and Round 3 group fixtures. Host teams (USA, Mexico, Canada) receive a <strong>+75 Elo bonus</strong> at home venues.
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
           <div style="font-family:var(--font-mono);font-size:11px;color:var(--text3);" *ngIf="fixtureStatus() as fs">
             {{ fs.finishedMatches }}/{{ fs.totalMatches }} matches completed
             <span *ngIf="fs.resultsSyncedAt"> · synced {{ fs.resultsSyncedAt | date:'short' }}</span>
           </div>
-          <button class="btn-sm" (click)="syncFixtures()" [disabled]="fixtureSyncing()">
-            {{ fixtureSyncing() ? 'SYNCING...' : '↻ SYNC FIFA RESULTS' }}
+          <button class="btn-sm" (click)="resetCurrentSandbox()">
+            RESET MATCH
           </button>
         </div>
         <div class="sandbox-grid">
@@ -240,28 +240,50 @@
             <div class="select-wrap">
               <label>Select Your Team</label>
               <select id="sb-team" [(ngModel)]="selectedTeam" (ngModelChange)="onTeamSelect()">
-              <option *ngFor="let t of sortedTeamsByName()" [value]="t.id" [disabled]="!isTeamSelectable(t)">{{ teamOptionLabel(t) }}</option>
+              <option *ngFor="let t of sortedTeamsByName()" [value]="t.id">{{ teamOptionLabel(t) }}</option>
             </select>
             </div>
-            <div *ngIf="teamNextStatus === 'eliminated'" style="margin-top:12px;padding:16px;background:var(--red-dim);border:1px solid rgba(232,80,80,.3);border-radius:10px;">
-              <div style="font-family:var(--font-head);font-size:18px;color:var(--red);letter-spacing:.06em;margin-bottom:6px;">ELIMINATED</div>
-              <div style="font-size:13px;color:var(--text2);">{{ statusMessage }}</div>
-            </div>
-            <div *ngIf="teamNextStatus === 'champion'" style="margin-top:12px;padding:16px;background:var(--gold-dim);border:1px solid rgba(232,184,75,.3);border-radius:10px;">
-              <div style="font-family:var(--font-head);font-size:18px;color:var(--gold);letter-spacing:.06em;margin-bottom:6px;">🏆 WORLD CHAMPIONS</div>
-              <div style="font-size:13px;color:var(--text2);">{{ statusMessage }}</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;">
+              <button class="btn-sm" (click)="selectSandboxRound(1)" [class.active]="selectedSandboxRound === 1">ROUND 1</button>
+              <button class="btn-sm" (click)="selectSandboxRound(2)" [class.active]="selectedSandboxRound === 2">ROUND 2</button>
+              <button class="btn-sm" (click)="selectSandboxRound(3)" [class.active]="selectedSandboxRound === 3">ROUND 3</button>
             </div>
             <div *ngIf="teamNextStatus === 'waiting'" style="margin-top:12px;padding:16px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;">
               <div style="font-family:var(--font-mono);font-size:11px;color:var(--text3);letter-spacing:.08em;margin-bottom:6px;">AWAITING NEXT FIXTURE</div>
               <div style="font-size:13px;color:var(--text2);">{{ statusMessage }}</div>
             </div>
             <div class="math-box" style="margin-top:12px;" *ngIf="upcomingMatch && opponentTeam() as opp">
-              <div class="math-box-title">Next Match — {{ upcomingMatch.fixture.label }}</div>
-              <div class="math-row"><span>Date</span><span>{{ upcomingMatch.fixture.date }}</span></div>
-              <div class="math-row"><span>Kick-off</span><span>{{ upcomingMatch.fixture.time }}</span></div>
-              <div class="math-row"><span>Venue</span><span>{{ upcomingMatch.fixture.venue }}, {{ upcomingMatch.fixture.city }}</span></div>
-              <div class="math-row"><span>Your side</span><span>{{ selectedTeamObj()?.flag }} {{ selectedTeamObj()?.name }} ({{ upcomingMatch.isHome ? 'Home' : 'Away' }})</span></div>
-              <div class="math-row"><span>Opponent</span><span>{{ opp.flag }} {{ opp.name }} ({{ upcomingMatch.isHome ? 'Away' : 'Home' }})</span></div>
+              <div class="math-box-title">Upcoming Fixture</div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+                <div style="flex:1;min-width:220px;">
+                  <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;">
+                    {{ upcomingMatch.fixture.stage }} · {{ upcomingMatch.fixture.group || 'Stage' }}
+                  </div>
+                  <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;">{{ upcomingMatch.fixture.date }} · {{ upcomingMatch.fixture.time }}</div>
+                  <div style="font-size:12px;color:var(--text2);margin-bottom:12px;">{{ upcomingMatch.fixture.venue }}, {{ upcomingMatch.fixture.city }}</div>
+                  <div style="font-size:12px;color:var(--text3);">{{ upcomingMatch.fixture.label }}</div>
+                </div>
+                <div style="flex:1;min-width:260px;background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:18px;">
+                  <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;margin-bottom:18px;">
+                    <div style="text-align:center;">
+                      <div style="font-size:32px;margin-bottom:6px;">{{ teamForMatch(upcomingMatch.fixture.home).flag }}</div>
+                      <div style="font-size:13px;font-weight:700;color:var(--text);">{{ teamForMatch(upcomingMatch.fixture.home).name }}</div>
+                      <div style="font-size:11px;color:var(--text3);margin-top:4px;">Home</div>
+                    </div>
+                    <div style="font-size:12px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.1em;">vs</div>
+                    <div style="text-align:center;">
+                      <div style="font-size:32px;margin-bottom:6px;">{{ teamForMatch(upcomingMatch.fixture.away).flag }}</div>
+                      <div style="font-size:13px;font-weight:700;color:var(--text);">{{ teamForMatch(upcomingMatch.fixture.away).name }}</div>
+                      <div style="font-size:11px;color:var(--text3);margin-top:4px;">Away</div>
+                    </div>
+                  </div>
+                  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;">
+                    <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;">Selected team</div>
+                    <div style="font-size:14px;font-weight:700;color:var(--text);">{{ selectedTeamObj()?.flag }} {{ selectedTeamObj()?.name }}</div>
+                    <div style="font-size:12px;color:var(--text3);margin-top:4px;">{{ upcomingMatch.isHome ? 'Home' : 'Away' }}</div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="math-box">
               <div class="math-box-title">Prediction Breakdown</div>
@@ -362,6 +384,7 @@
         <div class="tabs">
           <button class="tab active" id="tab-odds" (click)="showTab('odds')" [class.active]="oddsTab() === 'odds'">PROBABILITY TABLE</button>
           <button class="tab" id="tab-bracket" (click)="showTab('bracket')" [class.active]="oddsTab() === 'bracket'">MODAL BRACKET</button>
+          <button class="tab" id="tab-matchups" (click)="showTab('matchups')" [class.active]="oddsTab() === 'matchups'">ALL MATCHUPS</button>
           <button class="tab" id="tab-compare" (click)="showTab('compare')" [class.active]="oddsTab() === 'compare'">VS OPTA</button>
         </div>
         <div *ngIf="oddsTab() === 'odds'" id="tabpanel-odds">
@@ -431,6 +454,51 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div *ngIf="oddsTab() === 'matchups'" id="tabpanel-matchups">
+          <p style="font-size:13px;color:var(--text2);margin-bottom:24px;">All upcoming fixtures for qualified teams with win probability predictions.</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;">
+            <div *ngFor="let matchup of getUpcomingMatchups()" style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;transition:all 0.3s ease;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                <div style="font-size:11px;color:var(--text3);font-family:var(--font-mono);letter-spacing:.08em;">{{ matchup.fixture.stage }}</div>
+                <div style="font-size:11px;color:var(--text3);font-family:var(--font-mono);">{{ matchup.fixture.date | date:'short' }}</div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:12px;">
+                <div style="flex:1;text-align:center;">
+                  <div style="font-size:32px;margin-bottom:4px;">{{ matchup.teamA.flag }}</div>
+                  <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;">{{ matchup.teamA.name }}</div>
+                  <div style="font-size:11px;color:var(--text3);">{{ matchup.fixture.home }}</div>
+                </div>
+                <div style="text-align:center;min-width:60px;">
+                  <div style="font-family:var(--font-head);font-size:12px;color:var(--text3);letter-spacing:.08em;margin-bottom:4px;">VS</div>
+                  <div style="font-size:11px;color:var(--border);">—</div>
+                </div>
+                <div style="flex:1;text-align:center;">
+                  <div style="font-size:32px;margin-bottom:4px;">{{ matchup.teamB.flag }}</div>
+                  <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;">{{ matchup.teamB.name }}</div>
+                  <div style="font-size:11px;color:var(--text3);">{{ matchup.fixture.away }}</div>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
+                <div style="text-align:center;">
+                  <div style="font-family:var(--font-head);font-size:24px;color:var(--gold);font-weight:600;">{{ (matchup.pw * 100).toFixed(0) }}</div>
+                  <div style="font-size:10px;color:var(--text3);margin-top:4px;letter-spacing:.06em;font-family:var(--font-mono);">WIN</div>
+                </div>
+                <div style="text-align:center;">
+                  <div style="font-family:var(--font-head);font-size:24px;color:var(--blue);font-weight:600;">{{ (matchup.pd * 100).toFixed(0) }}</div>
+                  <div style="font-size:10px;color:var(--text3);margin-top:4px;letter-spacing:.06em;font-family:var(--font-mono);">DRAW</div>
+                </div>
+                <div style="text-align:center;">
+                  <div style="font-family:var(--font-head);font-size:24px;color:var(--green);font-weight:600;">{{ (matchup.pl * 100).toFixed(0) }}</div>
+                  <div style="font-size:10px;color:var(--text3);margin-top:4px;letter-spacing:.06em;font-family:var(--font-mono);">WIN</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="getUpcomingMatchups().length === 0" style="text-align:center;padding:48px 24px;color:var(--text2);">
+            <div style="font-size:18px;margin-bottom:8px;">No active matchups yet</div>
+            <div style="font-size:13px;">Sync fixtures to update upcoming matches.</div>
           </div>
         </div>
         <div *ngIf="oddsTab() === 'compare'" id="tabpanel-compare">

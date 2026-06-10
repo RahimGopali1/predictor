@@ -34,14 +34,33 @@ export class FixtureService {
 
   getUpcomingMatch(teamId: string): UpcomingMatch | null {
     const s = this.status();
-    const next = s?.nextMatches[teamId];
+    let next = s?.nextMatches[teamId];
+
+    if (!next?.match) {
+      next = Object.values(s?.nextMatches || {}).find((entry: any) =>
+        entry.match && (entry.match.home === teamId || entry.match.away === teamId)
+      ) as any;
+    }
+
     if (!next?.match) return null;
+
+    const { home, away } = next.match;
+    if (!home || !away || home === 'TBD' || away === 'TBD') {
+      return null;
+    }
+
+    const isHome = next.match.home === teamId
+      ? true
+      : next.match.away === teamId
+        ? false
+        : Boolean(next.match.isHome);
+    const opponentId = isHome ? next.match.away : next.match.home;
 
     return {
       fixture: next.match,
       selectedId: teamId,
-      opponentId: next.match.isHome ? next.match.away : next.match.home,
-      isHome: next.match.isHome,
+      opponentId,
+      isHome,
       teamStatus: next.status,
       statusMessage: next.message
     };
