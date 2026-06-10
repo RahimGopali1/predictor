@@ -3,6 +3,9 @@
   publish = "client/dist/client"
   functions = "netlify/functions"
 
+[install]
+  command = "npm install && npm install --prefix client"
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
