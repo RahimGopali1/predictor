@@ -13,7 +13,7 @@
 
   <div class="card" *ngIf="!authenticated()">
     <div class="card-title">Admin Login</div>
-    <p class="card-sub">Enter admin key to view user predictions. Default key: wc2026admin</p>
+    <p class="card-sub">Enter admin key to view user predictions.</p>
     <div class="login-row">
       <input type="password" class="search-input" [(ngModel)]="adminKey" placeholder="Admin key..." (keyup.enter)="login()" />
       <button class="btn-primary" style="width:auto;margin-top:0;" (click)="login()" [disabled]="loading()">
