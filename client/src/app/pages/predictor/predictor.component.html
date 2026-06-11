@@ -341,7 +341,8 @@
             <!-- selected team pill -->
             <div *ngIf="upcomingMatch"
               style="padding:8px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:8px;background:var(--bg2);font-size:12px;font-weight:600;color:var(--text);">
-              {{ selectedTeamObj()?.flag }} {{ selectedTeamObj()?.name }} {{ upcomingMatch.isHome ? '(HOME)' : '(AWAY)' }}
+              {{ selectedTeamObj()?.flag }} {{ selectedTeamObj()?.name }} {{ upcomingMatch.isHome ? '(HOME)' : '(AWAY)'
+              }}
             </div>
 
             <!-- commentary feed -->
@@ -366,7 +367,7 @@
       </div>
     </div>
   </div>
-  
+
   <!-- PANEL 4 -->
   <div class="panel" id="panel-4" [class.active]="currentStep() === 4">
     <div class="card">
@@ -512,66 +513,51 @@
         </div>
       </div>
       <div *ngIf="oddsTab() === 'matchups'" id="tabpanel-matchups">
-        <p style="font-size:13px;color:var(--text2);margin-bottom:24px;display:none;">All upcoming fixtures for qualified teams with
-          win probability predictions.</p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;">
-          <div *ngFor="let matchup of getUpcomingMatchups()"
-            style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;transition:all 0.3s ease;">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-              <div style="font-size:11px;color:var(--text3);font-family:var(--font-mono);letter-spacing:.08em;">{{
-                matchup.fixture.stage }}</div>
-              <div style="font-size:11px;color:var(--text3);font-family:var(--font-mono);">{{ matchup.fixture.date |
-                date:'short' }}</div>
+        <div class="matchup-grid">
+
+          <div *ngFor="let matchup of getMatchupsToShow()" class="matchup-card">
+
+            <div class="card-meta">
+              <span class="mono-label">{{ matchup.fixture.stage }}</span>
+              <span class="mono-label">{{ matchup.fixture.date | date:'short' }}</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:12px;">
-              <div style="flex:1;text-align:center;">
-                <div style="font-size:32px;margin-bottom:4px;">{{ matchup.teamA.flag }}</div>
-                <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;">{{ matchup.teamA.name
-                  }}</div>
-                <div style="font-size:11px;color:var(--text3);">{{ matchup.fixture.home }}</div>
+
+            <div class="teams">
+              <div class="team">
+                <div class="team-flag">{{ matchup.teamA.flag }}</div>
+                <div class="team-name">{{ matchup.teamA.name }}</div>
+                <div class="team-label">{{ matchup.fixture.home }}</div>
               </div>
-              <div style="text-align:center;min-width:60px;">
-                <div
-                  style="font-family:var(--font-head);font-size:12px;color:var(--text3);letter-spacing:.08em;margin-bottom:4px;">
-                  VS</div>
-                <div style="font-size:11px;color:var(--border);">—</div>
-              </div>
-              <div style="flex:1;text-align:center;">
-                <div style="font-size:32px;margin-bottom:4px;">{{ matchup.teamB.flag }}</div>
-                <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;">{{ matchup.teamB.name
-                  }}</div>
-                <div style="font-size:11px;color:var(--text3);">{{ matchup.fixture.away }}</div>
+              <div class="vs">VS</div>
+              <div class="team">
+                <div class="team-flag">{{ matchup.teamB.flag }}</div>
+                <div class="team-name">{{ matchup.teamB.name }}</div>
+                <div class="team-label">{{ matchup.fixture.away }}</div>
               </div>
             </div>
-            <div
-              style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
-              <div style="text-align:center;">
-                <div style="font-family:var(--font-head);font-size:24px;color:var(--gold);font-weight:600;">{{
-                  (matchup.pw * 100).toFixed(0) }}</div>
-                <div
-                  style="font-size:10px;color:var(--text3);margin-top:4px;letter-spacing:.06em;font-family:var(--font-mono);">
-                  WIN</div>
+
+            <div class="probs">
+              <div class="prob">
+                <div class="prob-val win">{{ (matchup.pw * 100).toFixed(0) }}</div>
+                <div class="prob-label">WIN</div>
               </div>
-              <div style="text-align:center;">
-                <div style="font-family:var(--font-head);font-size:24px;color:var(--blue);font-weight:600;">{{
-                  (matchup.pd * 100).toFixed(0) }}</div>
-                <div
-                  style="font-size:10px;color:var(--text3);margin-top:4px;letter-spacing:.06em;font-family:var(--font-mono);">
-                  DRAW</div>
+              <div class="prob">
+                <div class="prob-val draw">{{ (matchup.pd * 100).toFixed(0) }}</div>
+                <div class="prob-label">DRAW</div>
               </div>
-              <div style="text-align:center;">
-                <div style="font-family:var(--font-head);font-size:24px;color:var(--green);font-weight:600;">{{
-                  (matchup.pl * 100).toFixed(0) }}</div>
-                <div
-                  style="font-size:10px;color:var(--text3);margin-top:4px;letter-spacing:.06em;font-family:var(--font-mono);">
-                  WIN</div>
+              <div class="prob">
+                <div class="prob-val loss">{{ (matchup.pl * 100).toFixed(0) }}</div>
+                <div class="prob-label">LOSS</div>
               </div>
             </div>
+
           </div>
+
         </div>
-        <div *ngIf="getUpcomingMatchups().length === 0" style="text-align:center;padding:48px 24px;color:var(--text2);">
-          <div style="font-size:14px;">Run simulations first</div>
-        </div>
+
+        <!-- <div *ngIf="getUpcomingMatchups().length === 0" class="empty-state">
+          Run simulations first
+        </div> -->
       </div>
       <div *ngIf="oddsTab() === 'compare'" id="tabpanel-compare">
         <p style="font-size:13px;color:var(--text2);margin-bottom:16px;display:none;">Comparing our model against Opta

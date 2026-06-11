@@ -1,5 +1,77 @@
 [
   {
+    "id": "fb52ad5b-efb2-4073-a3e9-979b13c01fc8",
+    "userName": "User_d2p86",
+    "championId": "FRA",
+    "championName": "France",
+    "championFlag": "🇫🇷",
+    "topPicks": [
+      {
+        "id": "FRA",
+        "name": "France",
+        "pct": 13.202
+      },
+      {
+        "id": "ARG",
+        "name": "Argentina",
+        "pct": 12.5
+      },
+      {
+        "id": "ESP",
+        "name": "Spain",
+        "pct": 9.652
+      },
+      {
+        "id": "BRA",
+        "name": "Brazil",
+        "pct": 6.332
+      },
+      {
+        "id": "BEL",
+        "name": "Belgium",
+        "pct": 5.758
+      }
+    ],
+    "simsRun": 50000,
+    "createdAt": "2026-06-11T14:31:29.431Z"
+  },
+  {
+    "id": "12eeac83-3541-47af-8116-d8466cb0f782",
+    "userName": "User_qugo0",
+    "championId": "FRA",
+    "championName": "France",
+    "championFlag": "🇫🇷",
+    "topPicks": [
+      {
+        "id": "FRA",
+        "name": "France",
+        "pct": 12.994
+      },
+      {
+        "id": "ARG",
+        "name": "Argentina",
+        "pct": 12.734000000000002
+      },
+      {
+        "id": "ESP",
+        "name": "Spain",
+        "pct": 8.924
+      },
+      {
+        "id": "BRA",
+        "name": "Brazil",
+        "pct": 6.306000000000001
+      },
+      {
+        "id": "BEL",
+        "name": "Belgium",
+        "pct": 5.795999999999999
+      }
+    ],
+    "simsRun": 50000,
+    "createdAt": "2026-06-11T14:27:16.062Z"
+  },
+  {
     "id": "7311e1d4-37a5-4c65-aa88-f772d1a7ba1c",
     "userName": "User_qugo0",
     "championId": "FRA",

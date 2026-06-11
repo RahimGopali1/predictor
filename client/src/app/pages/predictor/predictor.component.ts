@@ -671,26 +671,18 @@ export class PredictorComponent implements OnInit, OnDestroy {
     const matchups: MatchupCard[] = [];
     const seenFixtures = new Set<string>();
 
-    for (const teamId in status.nextMatches) {
-      const next = status.nextMatches[teamId];
-      if (next?.match && next.status === 'active') {
-        const fixtureKey = `${next.match.id}`;
-        if (!seenFixtures.has(fixtureKey)) {
-          seenFixtures.add(fixtureKey);
-          const teamA = this.teamService.findTeam(next.match.home);
-          const teamB = this.teamService.findTeam(next.match.away);
-          if (teamA && teamB) {
-            const probs = this.simService.winDrawLossProbs(teamA, teamB, this.recentMatches());
-            matchups.push({
-              fixture: next.match,
-              teamA,
-              teamB,
-              pw: probs.pw,
-              pd: probs.pd,
-              pl: probs.pl
-            });
-          }
-        }
+    const fixtures = (status as any).allFixtures || [];
+    for (const f of fixtures) {
+      if (f.finished) continue;
+      if (!f.home || !f.away || f.home === 'TBD' || f.away === 'TBD') continue;
+      const fixtureKey = `${f.id}`;
+      if (seenFixtures.has(fixtureKey)) continue;
+      seenFixtures.add(fixtureKey);
+      const teamA = this.teamService.findTeam(f.home);
+      const teamB = this.teamService.findTeam(f.away);
+      if (teamA && teamB) {
+        const probs = this.simService.winDrawLossProbs(teamA, teamB, this.recentMatches());
+        matchups.push({ fixture: f, teamA, teamB, pw: probs.pw, pd: probs.pd, pl: probs.pl });
       }
     }
 
@@ -712,6 +704,27 @@ export class PredictorComponent implements OnInit, OnDestroy {
       byTeam[key2].push(matchup);
     });
     return byTeam;
+  }
+
+  getAllFixturesMatchups(): MatchupCard[] {
+    const status = this.fixtureStatus();
+    if (!status) return [];
+    const fixtures = (status as any).allFixtures || [];
+    const matchups: MatchupCard[] = [];
+    for (const f of fixtures) {
+      if (!f.home || !f.away || f.home === 'TBD' || f.away === 'TBD') continue;
+      const teamA = this.teamService.findTeam(f.home) || this.teamForMatch(f.home);
+      const teamB = this.teamService.findTeam(f.away) || this.teamForMatch(f.away);
+      const probs = teamA && teamB ? this.simService.winDrawLossProbs(teamA, teamB, this.recentMatches()) : { pw: 0, pd: 0, pl: 0 };
+      matchups.push({ fixture: f, teamA, teamB, pw: probs.pw, pd: probs.pd, pl: probs.pl });
+    }
+    return matchups.sort((a, b) => new Date(a.fixture.date).getTime() - new Date(b.fixture.date).getTime());
+  }
+
+  getMatchupsToShow(): MatchupCard[] {
+    const upcoming = this.getUpcomingMatchups();
+    if (upcoming.length > 0) return upcoming;
+    return this.getAllFixturesMatchups();
   }
 
   getQualifiedTeams(): Team[] {

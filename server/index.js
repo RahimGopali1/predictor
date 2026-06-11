@@ -790,8 +790,6 @@ app.get('/api/recent-matches', (req, res) => {
 // GET /api/fixtures/status
 app.get('/api/fixtures/status', (req, res) => {
   const status = calculateFixturesAndStatus();
-  // Don't return allFixtures to save payload size, match client expectation
-  delete status.allFixtures;
   res.json(status);
 });
 
@@ -861,8 +859,6 @@ app.post('/api/fixtures/sync', (req, res) => {
   writeJson(FIXTURE_RESULTS_PATH, results);
 
   const updatedStatus = calculateFixturesAndStatus();
-  delete updatedStatus.allFixtures;
-
   res.json({ status: updatedStatus });
 });
 
@@ -882,8 +878,6 @@ app.post('/api/admin/fixtures/result', (req, res) => {
 
   writeJson(FIXTURE_RESULTS_PATH, results);
   const updatedStatus = calculateFixturesAndStatus();
-  delete updatedStatus.allFixtures;
-
   res.json({ status: updatedStatus });
 });
 
