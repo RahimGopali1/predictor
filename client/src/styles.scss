@@ -35,7 +35,7 @@
     }
 
     body {
-      font-family: var(--font-body);
+      font-family: var(--font-body), 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
@@ -52,6 +52,18 @@
       pointer-events: none;
       z-index: 0;
       opacity: 0.4;
+    }
+
+    /* EMOJI FONT SUPPORT - Ensures flags render correctly in all browsers */
+    .flag,
+    [class*='flag'],
+    .score-team,
+    .team-cell,
+    .zodiac-sign {
+      font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
+      font-variant-emoji: normal;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     .wrap {

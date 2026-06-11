@@ -76,16 +76,25 @@ export class AdminComponent implements AfterViewInit, OnDestroy {
   private renderChampionChart(stats: AdminStats): void {
     if (!this.championChartRef) return;
     this.championChart?.destroy();
+    const top = stats.championStats.slice(0, 10);
+    const labels = top.map(s => `${s.flag} ${s.name}`);
+    let data = top.map(s => s.count);
 
-    const labels = stats.championStats.slice(0, 10).map(s => `${s.flag} ${s.name}`);
-    const data = stats.championStats.slice(0, 10).map(s => s.count);
+    // If champion picks are overwhelmingly one team (e.g. only Argentina chosen),
+    // fall back to using aggregated top-picks percentage so the chart shows multiple teams.
+    const nonZero = data.filter(d => d > 0).length;
+    let datasetLabel = 'Champion Picks';
+    if (nonZero <= 1) {
+      data = top.map(s => Math.round((s.pct + Number.EPSILON) * 100) / 100); // use pct (rounded)
+      datasetLabel = 'Champion Picks (%)';
+    }
 
     this.championChart = new Chart(this.championChartRef.nativeElement, {
       type: 'bar',
       data: {
         labels,
         datasets: [{
-          label: 'Champion Picks',
+          label: datasetLabel,
           data,
           backgroundColor: 'rgba(232, 184, 75, 0.65)',
           borderColor: 'rgba(232, 184, 75, 1)',
@@ -100,7 +109,7 @@ export class AdminComponent implements AfterViewInit, OnDestroy {
         },
         scales: {
           x: { ticks: { color: '#8fa890' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-          y: { ticks: { color: '#8fa890', stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }
+          y: { ticks: { color: '#8fa890' }, grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }
         }
       }
     });
