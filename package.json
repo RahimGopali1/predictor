@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.27.0",
+    "client": "^0.0.1",
     "cors": "^2.8.5",
     "express": "^4.21.2",
+    "server": "^1.0.42",
     "serverless-http": "^3.0.0"
   },
   "devDependencies": {
