@@ -25,11 +25,22 @@ export class FixtureService {
       }
     }
 
-    const data = await firstValueFrom(
-      this.http.get<FixtureStatus>(`${this.api}/fixtures/status`)
-    );
-    this.status.set(data);
-    return data;
+    try {
+      const data = await firstValueFrom(
+        this.http.get<FixtureStatus>(`${this.api}/fixtures/status`)
+      );
+      this.status.set(data);
+      return data;
+    } catch (err) {
+      // If the API isn't available (hosting without server funcs), fall back to a
+      // static `fixture-status.json` bundled with the client app (served from /).
+      console.warn('Failed to load /api/fixtures/status, falling back to /fixture-status.json', err);
+      const fallback = await firstValueFrom(
+        this.http.get<FixtureStatus>('/fixture-status.json')
+      );
+      this.status.set(fallback);
+      return fallback;
+    }
   }
 
   getUpcomingMatch(teamId: string): UpcomingMatch | null {

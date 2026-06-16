@@ -1,0 +1,235 @@
+{
+    "teamStatus":  {
+                       "ARG":  {
+                                   "id":  "ARG",
+                                   "status":  "active"
+                               },
+                       "FRA":  {
+                                   "id":  "FRA",
+                                   "status":  "active"
+                               },
+                       "ESP":  {
+                                   "id":  "ESP",
+                                   "status":  "active"
+                               },
+                       "BRA":  {
+                                   "id":  "BRA",
+                                   "status":  "active"
+                               },
+                       "ENG":  {
+                                   "id":  "ENG",
+                                   "status":  "active"
+                               },
+                       "POR":  {
+                                   "id":  "POR",
+                                   "status":  "active"
+                               },
+                       "COL":  {
+                                   "id":  "COL",
+                                   "status":  "active"
+                               },
+                       "NED":  {
+                                   "id":  "NED",
+                                   "status":  "active"
+                               },
+                       "URU":  {
+                                   "id":  "URU",
+                                   "status":  "active"
+                               },
+                       "GER":  {
+                                   "id":  "GER",
+                                   "status":  "active"
+                               },
+                       "BEL":  {
+                                   "id":  "BEL",
+                                   "status":  "active"
+                               },
+                       "MAR":  {
+                                   "id":  "MAR",
+                                   "status":  "active"
+                               },
+                       "CRO":  {
+                                   "id":  "CRO",
+                                   "status":  "active"
+                               },
+                       "SUI":  {
+                                   "id":  "SUI",
+                                   "status":  "active"
+                               },
+                       "JPN":  {
+                                   "id":  "JPN",
+                                   "status":  "active"
+                               },
+                       "USA":  {
+                                   "id":  "USA",
+                                   "status":  "active"
+                               },
+                       "ECU":  {
+                                   "id":  "ECU",
+                                   "status":  "active"
+                               },
+                       "AUT":  {
+                                   "id":  "AUT",
+                                   "status":  "active"
+                               },
+                       "SEN":  {
+                                   "id":  "SEN",
+                                   "status":  "active"
+                               },
+                       "IRN":  {
+                                   "id":  "IRN",
+                                   "status":  "active"
+                               },
+                       "NOR":  {
+                                   "id":  "NOR",
+                                   "status":  "active"
+                               },
+                       "KOR":  {
+                                   "id":  "KOR",
+                                   "status":  "active"
+                               },
+                       "AUS":  {
+                                   "id":  "AUS",
+                                   "status":  "active"
+                               },
+                       "CIV":  {
+                                   "id":  "CIV",
+                                   "status":  "active"
+                               },
+                       "TUR":  {
+                                   "id":  "TUR",
+                                   "status":  "active"
+                               },
+                       "SWE":  {
+                                   "id":  "SWE",
+                                   "status":  "active"
+                               },
+                       "CZE":  {
+                                   "id":  "CZE",
+                                   "status":  "active"
+                               },
+                       "BIH":  {
+                                   "id":  "BIH",
+                                   "status":  "active"
+                               },
+                       "MEX":  {
+                                   "id":  "MEX",
+                                   "status":  "active"
+                               },
+                       "PAR":  {
+                                   "id":  "PAR",
+                                   "status":  "active"
+                               },
+                       "EGY":  {
+                                   "id":  "EGY",
+                                   "status":  "active"
+                               },
+                       "ALG":  {
+                                   "id":  "ALG",
+                                   "status":  "active"
+                               },
+                       "CAN":  {
+                                   "id":  "CAN",
+                                   "status":  "active"
+                               },
+                       "UZB":  {
+                                   "id":  "UZB",
+                                   "status":  "active"
+                               },
+                       "SCO":  {
+                                   "id":  "SCO",
+                                   "status":  "active"
+                               },
+                       "GHA":  {
+                                   "id":  "GHA",
+                                   "status":  "active"
+                               },
+                       "PAN":  {
+                                   "id":  "PAN",
+                                   "status":  "active"
+                               },
+                       "RSA":  {
+                                   "id":  "RSA",
+                                   "status":  "active"
+                               },
+                       "TUN":  {
+                                   "id":  "TUN",
+                                   "status":  "active"
+                               },
+                       "KSA":  {
+                                   "id":  "KSA",
+                                   "status":  "active"
+                               },
+                       "CPV":  {
+                                   "id":  "CPV",
+                                   "status":  "active"
+                               },
+                       "COD":  {
+                                   "id":  "COD",
+                                   "status":  "active"
+                               },
+                       "IRQ":  {
+                                   "id":  "IRQ",
+                                   "status":  "active"
+                               },
+                       "QAT":  {
+                                   "id":  "QAT",
+                                   "status":  "active"
+                               },
+                       "JOR":  {
+                                   "id":  "JOR",
+                                   "status":  "active"
+                               },
+                       "HAI":  {
+                                   "id":  "HAI",
+                                   "status":  "active"
+                               },
+                       "CUW":  {
+                                   "id":  "CUW",
+                                   "status":  "active"
+                               },
+                       "NZL":  {
+                                   "id":  "NZL",
+                                   "status":  "active"
+                               }
+                   },
+    "nextMatches":  {
+                        "ARG":  {
+                                    "teamId":  "ARG",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  19,
+                                                  "label":  "Group J",
+                                                  "date":  "Jun 16, 2026",
+                                                  "time":  "9:00 PM ET",
+                                                  "group":  "J",
+                                                  "venue":  "Arrowhead Stadium",
+                                                  "city":  "Kansas City",
+                                                  "home":  "ARG",
+                                                  "away":  "ALG",
+                                                  "homeTeam":  "Argentina",
+                                                  "awayTeam":  "Algeria",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Algeria in Kansas City"
+                                },
+                        "FRA":  {
+                                    "teamId":  "FRA",
+                                    "status":  "active",
+                                    "match":  {
+                                                  "id":  17,
+                                                  "label":  "Group I",
+                                                  "date":  "Jun 16, 2026",
+                                                  "time":  "3:00 PM ET",
+                                                  "group":  "I",
+                                                  "venue":  "MetLife Stadium",
+                                                  "city":  "New York/New Jersey",
+                                                  "home":  "FRA",
+                                                  "away":  "SEN",
+                                                  "homeTeam":  "France",
+                                                  "awayTeam":  "Senegal",
+                                                  "isHome":  true
+                                              },
+                                    "message":  "Next match vs Senegal in New York/New Jersey"
+                                },
+... (truncated for brevity)
