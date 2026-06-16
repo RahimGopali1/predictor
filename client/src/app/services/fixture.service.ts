@@ -1,7 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { FixtureStatus, TeamNextMatch, UpcomingMatch } from '../models/fixture.model';
+import { FixtureStatus, TeamNextMatch, TournamentFixture, UpcomingMatch } from '../models/fixture.model';
 
 @Injectable({ providedIn: 'root' })
 export class FixtureService {
@@ -44,26 +44,42 @@ export class FixtureService {
 
     if (!next?.match) return null;
 
-    const { home, away } = next.match;
+    const actual = this.getFixtureById(next.match.id);
+    const fixture = {
+      ...next.match,
+      ...(actual ? {
+        ...actual,
+        finished: actual.finished,
+        homeScore: actual.homeScore,
+        awayScore: actual.awayScore,
+        status: actual.status
+      } : {})
+    };
+    const { home, away } = fixture;
     if (!home || !away || home === 'TBD' || away === 'TBD') {
       return null;
     }
 
-    const isHome = next.match.home === teamId
+    const isHome = fixture.home === teamId
       ? true
-      : next.match.away === teamId
+      : fixture.away === teamId
         ? false
         : Boolean(next.match.isHome);
-    const opponentId = isHome ? next.match.away : next.match.home;
+    const opponentId = isHome ? fixture.away : fixture.home;
 
     return {
-      fixture: next.match,
+      fixture,
       selectedId: teamId,
       opponentId,
       isHome,
       teamStatus: next.status,
       statusMessage: next.message
     };
+  }
+
+  getFixtureById(matchId: number): TournamentFixture | null {
+    const fixtures = (this.status()?.allFixtures as TournamentFixture[] | undefined) ?? [];
+    return fixtures.find(match => match.id === matchId) ?? null;
   }
 
   getTeamNext(teamId: string): TeamNextMatch | null {

@@ -1,0 +1,5 @@
+/* Tailwind directives intentionally removed.
+   This project uses src/styles.scss -> @import './generated-tailwind.css';
+   to avoid Tailwind v4 PostCSS plugin auto-loading issues in the Angular build pipeline.
+*/
+

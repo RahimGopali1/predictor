@@ -6,13 +6,20 @@
       <h1>2026 FIFA<br><span>WORLD CUP</span><br>PREDICTOR</h1>
       <p class="header-sub">Powered by machine learning and 150 years of match data.</p>
     </div>
-    <div class="header-controls">
-      <button class="btn-sm" (click)="toggleGuides()">{{ guidesVisible() ? "📖 GUIDES: ON" : "📖 GUIDES: OFF"
-        }}</button>
-      <button class="btn-sm" (click)="toggleSenior()">{{ seniorMode() ? "⚙️ SENIOR MODE: ON" : "⚙️ ACCESSIBILITY"
-        }}</button>
-    </div>
   </header>
+
+  <div class="feature-row">
+    <a routerLink="/prediction-tracker" class="feature-card">
+      <div class="feature-eyebrow">Forecast Scorecard</div>
+      <div class="feature-title">Compare predictions vs live results.</div>
+      <div class="feature-copy">See which match forecasts are on target and which need tuning.</div>
+    </a>
+    <a routerLink="/live" class="feature-card">
+      <div class="feature-eyebrow">Live Match Center</div>
+      <div class="feature-title">Deep match view + stats.</div>
+      <div class="feature-copy">Track live events, odds, venue, and leaderboards in one focused dashboard.</div>
+    </a>
+  </div>
 
   <nav class="step-nav">
     <div class="step-card active" data-step="1" (click)="goStep(1)" [class.active]="currentStep() === 1"
@@ -52,7 +59,7 @@
     <div class="card">
       <div class="card-title">49,000 Historical Matches</div>
       <p class="card-sub">49,000+ international matches since 1872.</p>
-      <div [class]="guidesVisible() ? 'guide show' : 'guide'" id="guide-1">
+      <div class="guide show" id="guide-1">
         The foundation is a dataset of over <strong>49,000 international matches</strong> spanning 150+ years. Older
         games matter, but recent competitive fixtures count far more. This global network of results lets us link
         teams that rarely face each other — Colombia vs Japan — through shared opponents.
@@ -241,115 +248,136 @@
   <!-- PANEL 3 -->
   <div class="panel" id="panel-3" [class.active]="currentStep() === 3">
     <div class="card">
-      <div class="card-title">Goal Prediction Sandbox</div>
-      <p class="card-sub">Simulate any upcoming match minute by minute.</p>
-      <div class="guide" id="guide-3" style="display:none;">
-        The <strong>Dixon-Coles model</strong> corrects standard Poisson for low-scoring outcomes. Select any nation and
-        switch between Round 1, Round 2, and Round 3 group fixtures. Host teams (USA, Mexico, Canada) receive a
-        <strong>+75 Elo bonus</strong> at home venues.
-      </div>
 
-      <div
-        style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
-        <div style="font-family:var(--font-mono);font-size:11px;color:var(--text3);" *ngIf="fixtureStatus() as fs">
-          {{ fs.finishedMatches }}/{{ fs.totalMatches }} matches completed
+      <!-- header -->
+      <div class="sandbox-header">
+        <div>
+          <div class="sandbox-title">Goal Prediction Sandbox</div>
+          <div class="sandbox-sub">Dixon-Coles model · minute-by-minute simulation</div>
+        </div>
+        <div class="fixture-count" *ngIf="fixtureStatus() as fs">
+          {{ fs.finishedMatches }}/{{ fs.totalMatches }} completed
           <span *ngIf="fs.resultsSyncedAt"> · synced {{ fs.resultsSyncedAt | date:'short' }}</span>
         </div>
-        <button class="btn-sm" (click)="resetCurrentSandbox()">RESET MATCH</button>
       </div>
 
+      <!-- main grid -->
       <div class="sandbox-grid">
 
         <!-- LEFT: controls -->
-        <div>
-          <div class="select-wrap">
-            <label>Select Your Team</label>
-            <select id="sb-team" [(ngModel)]="selectedTeam" (ngModelChange)="onTeamSelect()">
-              <option *ngFor="let t of sortedTeamsByName()" [value]="t.id">{{ teamOptionLabel(t) }}</option>
-            </select>
+        <div class="sandbox-left">
+
+          <!-- team picker -->
+          <div>
+            <div class="ctrl-label">Select team</div>
+            <div style="position:relative;">
+              <div class="team-trigger" (click)="toggleTeamDropdown()" [class.open]="showTeamDropdown()">
+                <span>{{ selectedTeamObj()?.flag }} {{ selectedTeamObj()?.name || 'Select team' }}</span>
+                <span class="trigger-arrow"
+                  [style.transform]="showTeamDropdown() ? 'rotate(180deg)' : 'rotate(0deg)'">▼</span>
+              </div>
+              <div class="team-dropdown" *ngIf="showTeamDropdown()">
+                <input class="team-search team-search-input" type="text" [ngModel]="teamSearchInput()"
+                  (ngModelChange)="teamSearchInput.set($event)" placeholder="Search team…"
+                  (click)="$event.stopPropagation()"
+                  (keydown.escape)="showTeamDropdown.set(false); teamSearchInput.set('')" />
+                <div class="team-list">
+                  <div *ngFor="let t of searchFilteredTeams()" class="team-item" [class.active]="selectedTeam === t.id"
+                    (click)="selectedTeam = t.id; onTeamSelect(); showTeamDropdown.set(false); teamSearchInput.set('')">
+                    {{ t.flag }} {{ t.name }}
+                    <span class="team-code">{{ t.id }}</span>
+                  </div>
+                  <div *ngIf="searchFilteredTeams().length === 0" class="team-empty">No teams found</div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;">
-            <button class="btn-sm" (click)="selectSandboxRound(1)" [class.active]="selectedSandboxRound === 1">ROUND
-              1</button>
-            <button class="btn-sm" (click)="selectSandboxRound(2)" [class.active]="selectedSandboxRound === 2">ROUND
-              2</button>
-            <button class="btn-sm" (click)="selectSandboxRound(3)" [class.active]="selectedSandboxRound === 3">ROUND
-              3</button>
+          <!-- round selector -->
+          <div>
+            <div class="ctrl-label">Fixture round</div>
+            <div class="round-btns">
+              <button class="btn-round" (click)="selectSandboxRound(1)"
+                [class.active]="selectedSandboxRound === 1">Round 1</button>
+              <button class="btn-round" (click)="selectSandboxRound(2)"
+                [class.active]="selectedSandboxRound === 2">Round 2</button>
+              <button class="btn-round" (click)="selectSandboxRound(3)"
+                [class.active]="selectedSandboxRound === 3">Round 3</button>
+            </div>
           </div>
 
-          <div *ngIf="teamNextStatus === 'waiting'"
-            style="margin-top:12px;padding:16px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;">
-            <div
-              style="font-family:var(--font-mono);font-size:11px;color:var(--text3);letter-spacing:.08em;margin-bottom:6px;">
-              AWAITING NEXT FIXTURE</div>
-            <div style="font-size:13px;color:var(--text2);">{{ statusMessage }}</div>
+          <!-- awaiting fixture notice -->
+          <div class="waiting-notice" *ngIf="teamNextStatus === 'waiting'">
+            <div class="waiting-label">Awaiting next fixture</div>
+            <div class="waiting-msg">{{ statusMessage }}</div>
           </div>
 
-          <div class="math-box" style="margin-top:12px;display:none;">
-            <div class="math-box-title">Prediction Breakdown</div>
-            <div class="math-row"><span>Team A Elo</span><span id="m-elo-a">{{ math.eloA }}</span></div>
-            <div class="math-row"><span>Team A Host Bonus</span><span id="m-host-a">{{ math.hostA }}</span></div>
-            <div class="math-row"><span>Team A Form Modifier</span><span id="m-form-a">{{ math.formA }}</span></div>
-            <div class="math-row"><span>Team B Elo</span><span id="m-elo-b">{{ math.eloB }}</span></div>
-            <div class="math-row"><span>Team B Host Bonus</span><span id="m-host-b">{{ math.hostB }}</span></div>
-            <div class="math-row"><span>Team B Form Modifier</span><span id="m-form-b">{{ math.formB }}</span></div>
-            <div class="math-row"><span>Rating Gap (A − B)</span><span id="m-gap">{{ math.gap }}</span></div>
-            <div class="math-row"><span>λA (base expected goals)</span><span id="m-la">{{ math.la }}</span></div>
-            <div class="math-row"><span>λB (base expected goals)</span><span id="m-lb">{{ math.lb }}</span></div>
-            <div class="math-row"><span>Dixon-Coles ρ applied</span><span id="m-rho">{{ math.rho }}</span></div>
-            <div class="math-row"><span>Win / Draw / Win odds</span><span id="m-odds">{{ math.odds }}</span></div>
+          <!-- math box (hidden by default, toggled by component) -->
+          <div class="math-box" [style.display]="showMathBox() ? 'block' : 'none'">
+            <div class="math-title">Prediction breakdown</div>
+            <div class="math-row"><span>Team A Elo</span><span>{{ math.eloA }}</span></div>
+            <div class="math-row"><span>Team A host bonus</span><span>{{ math.hostA }}</span></div>
+            <div class="math-row"><span>Team A form modifier</span><span>{{ math.formA }}</span></div>
+            <div class="math-row"><span>Team B Elo</span><span>{{ math.eloB }}</span></div>
+            <div class="math-row"><span>Team B host bonus</span><span>{{ math.hostB }}</span></div>
+            <div class="math-row"><span>Team B form modifier</span><span>{{ math.formB }}</span></div>
+            <div class="math-row"><span>Rating gap (A − B)</span><span>{{ math.gap }}</span></div>
+            <div class="math-row"><span>λA expected goals</span><span>{{ math.la }}</span></div>
+            <div class="math-row"><span>λB expected goals</span><span>{{ math.lb }}</span></div>
+            <div class="math-row"><span>Dixon-Coles ρ</span><span>{{ math.rho }}</span></div>
+            <div class="math-row"><span>Win / Draw / Win</span><span>{{ math.odds }}</span></div>
           </div>
 
-          <button class="btn-primary" id="play-btn" (click)="startMatch()" [disabled]="!canSimulate()">▶ SIMULATE
-            MATCH</button>
+          <!-- simulate CTA -->
+          <button class="btn-simulate" (click)="startMatch()" [disabled]="!canSimulate()">▶ Simulate match</button>
+
         </div>
 
-        <!-- RIGHT: fixture + commentary unified -->
-        <div>
+        <!-- RIGHT: scoreboard + commentary -->
+        <div class="sandbox-right">
           <div class="commentary-box">
 
             <!-- scoreboard -->
             <div class="commentary-score">
+              <!-- status badge -->
+              <div *ngIf="upcomingMatch" class="match-status-wrap" [ngSwitch]="getSandboxMatchState()">
+                <span *ngSwitchCase="'LIVE'" class="status-badge badge-live">
+                  <span class="pulse-dot"></span>Live
+                </span>
+                <span *ngSwitchCase="'FINISHED'" class="status-badge badge-ft">FT</span>
+                <span *ngSwitchCase="'UPCOMING'" class="status-badge badge-upcoming">Upcoming</span>
+              </div>
+
               <div class="score-team">
-                <div style="font-size:28px;" id="sb-flag-a">{{ sbFlagA }}</div>
-                <div class="score-name" id="sb-name-a">{{ sbNameA }}</div>
-                <div *ngIf="upcomingMatch"
-                  style="font-size:10px;font-family:var(--font-mono);color:var(--text3);letter-spacing:.08em;margin-top:2px;">
-                  {{ upcomingMatch.isHome ? 'HOME' : 'AWAY' }}
-                </div>
-                <div class="score-num" id="sb-score-a">{{ sbScoreA }}</div>
+                <div class="score-flag">{{ sbFlagA }}</div>
+                <div class="score-name">{{ sbNameA }}</div>
+                <div class="score-side" *ngIf="upcomingMatch">{{ upcomingMatch.isHome ? 'HOME' : 'AWAY' }}</div>
+                <div class="score-num">{{ sbScoreA }}</div>
               </div>
               <div class="score-sep">VS</div>
               <div class="score-team">
-                <div style="font-size:28px;" id="sb-flag-b">{{ sbFlagB }}</div>
-                <div class="score-name" id="sb-name-b">{{ sbNameB }}</div>
-                <div *ngIf="upcomingMatch"
-                  style="font-size:10px;font-family:var(--font-mono);color:var(--text3);letter-spacing:.08em;margin-top:2px;">
-                  {{ upcomingMatch.isHome ? 'AWAY' : 'HOME' }}
-                </div>
-                <div class="score-num" id="sb-score-b">{{ sbScoreB }}</div>
+                <div class="score-flag">{{ sbFlagB }}</div>
+                <div class="score-name">{{ sbNameB }}</div>
+                <div class="score-side" *ngIf="upcomingMatch">{{ upcomingMatch.isHome ? 'AWAY' : 'HOME' }}</div>
+                <div class="score-num">{{ sbScoreB }}</div>
               </div>
             </div>
 
             <!-- fixture meta strip -->
-            <div *ngIf="upcomingMatch"
-              style="padding:10px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:center;align-items:center;gap:12px;font-size:12px;color:var(--text2);">
+            <div class="fixture-meta" *ngIf="upcomingMatch">
               <span>{{ upcomingMatch.fixture.date }} · {{ upcomingMatch.fixture.time }}</span>
             </div>
 
             <!-- selected team pill -->
-            <div *ngIf="upcomingMatch"
-              style="padding:8px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:8px;background:var(--bg2);font-size:12px;font-weight:600;color:var(--text);">
-              {{ selectedTeamObj()?.flag }} {{ selectedTeamObj()?.name }} {{ upcomingMatch.isHome ? '(HOME)' : '(AWAY)'
-              }}
+            <div class="team-pill" *ngIf="upcomingMatch">
+              {{ selectedTeamObj()?.flag }} {{ selectedTeamObj()?.name }}
+              {{ upcomingMatch.isHome ? '(HOME)' : '(AWAY)' }}
             </div>
 
             <!-- commentary feed -->
             <div class="commentary-feed" id="comm-feed">
-              <div *ngIf="commLines.length === 0"
-                style="padding:24px;text-align:center;color:var(--text3);font-size:13px;">
-                Select a team and click Simulate Match
+              <div class="comm-empty" *ngIf="commLines.length === 0">
+                Select a team and click simulate match
               </div>
               <div *ngFor="let line of commLines" class="ev-line" [ngClass]="line.cls">
                 <span class="ev-min">{{ line.min }}'</span>
@@ -357,17 +385,131 @@
               </div>
             </div>
 
+            <!-- action strip -->
+            <div class="action-strip">
+              <button class="btn-reset" (click)="resetCurrentSandbox()">Reset match</button>
+            </div>
+
           </div>
         </div>
 
       </div>
 
-      <div class="next-btn-wrap">
-        <button class="btn-next" (click)="goStep(4)">NEXT: RUN SIMULATIONS →</button>
+      <!-- live scores section -->
+      <div class="live-section">
+
+        <div class="live-section-header">
+          <div class="sandbox-title">Live World Cup scores</div>
+          <div class="sandbox-sub">Real-time match updates</div>
+        </div>
+
+        <section *ngIf="allMatches$ | async as matches">
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-label">Total matches</div>
+              <div class="stat-value">{{ matches.length || 0 }}</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Live now</div>
+              <div class="stat-value stat-live">{{ matches.filter(isLive).length || 0 }}</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Upcoming</div>
+              <div class="stat-value">{{ (upcomingMatches$ | async)?.length || 0 }}</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Finished</div>
+              <div class="stat-value">{{ matches.filter(isFinished).length || 0 }}</div>
+            </div>
+          </div>
+        </section>
+
+        <div class="empty-state" *ngIf="!(allMatches$ | async)?.length">
+          No matches available. Check back during tournament days for live updates.
+        </div>
+
+        <div class="matches-grid" *ngIf="(liveMatches$ | async)?.length || (upcomingMatches$ | async)?.length">
+
+          <div *ngFor="let match of (liveMatches$ | async) || []" class="match-card"
+            [routerLink]="['/live/match', match.id]">
+            <div class="match-card-header">
+              <span class="match-group">{{ match.home.displayName }} vs {{ match.away.displayName }}</span>
+              <div [ngClass]="isLive(match) ? 'status-pill status-live' : 'status-pill status-other'">
+                <span *ngIf="isLive(match)" class="pulse-dot"></span>
+                {{ isLive(match) ? 'LIVE' : (isFinished(match) ? 'FT' : 'SCHEDULED') }}
+              </div>
+            </div>
+
+            <div class="score-section">
+              <div class="team-block">
+                <div class="team-avatar">
+                  <img *ngIf="match.home.logo" [src]="match.home.logo" [alt]="match.home.abbreviation" />
+                  <span *ngIf="!match.home.logo">{{ match.home.abbreviation }}</span>
+                </div>
+                <div class="team-label">{{ match.home.abbreviation }}</div>
+              </div>
+
+              <div class="score-panel">
+                <div class="score-display">
+                  {{ match.home.score }}<span class="score-separator">–</span>{{ match.away.score }}
+                </div>
+                <div class="score-status">
+                  {{ isLive(match) ? match.displayClock : (isFinished(match) ? 'FINAL' : (match.kickoff ? (match.kickoff
+                  | date:'shortTime') : 'TBD')) }}
+                </div>
+              </div>
+
+              <div class="team-block team-block-right">
+                <div class="team-avatar">
+                  <img *ngIf="match.away.logo" [src]="match.away.logo" [alt]="match.away.abbreviation" />
+                  <span *ngIf="!match.away.logo">{{ match.away.abbreviation }}</span>
+                </div>
+                <div class="team-label">{{ match.away.abbreviation }}</div>
+              </div>
+            </div>
+
+            <div class="time-info">{{ match.kickoff ? (match.kickoff | date:'short') : '' }}</div>
+          </div>
+
+          <div *ngFor="let match of (upcomingMatches$ | async) || []" class="match-card upcoming-match-card"
+            [routerLink]="['/live/match', match.id]">
+            <div class="match-card-header">
+              <span class="match-group">{{ match.home.displayName }} vs {{ match.away.displayName }}</span>
+              <div class="status-pill status-other">Upcoming</div>
+            </div>
+            <div class="score-section">
+              <div class="team-block">
+                <div class="team-avatar">
+                  <img *ngIf="match.home.logo" [src]="match.home.logo" [alt]="match.home.abbreviation" />
+                  <span *ngIf="!match.home.logo">{{ match.home.abbreviation }}</span>
+                </div>
+                <div class="team-label">{{ match.home.abbreviation }}</div>
+              </div>
+              <div class="score-panel">
+                <div class="score-display">{{ match.kickoff ? (match.kickoff | date:'shortTime') : 'TBD' }}</div>
+                <div class="score-status">{{ match.venue || 'Upcoming kickoff' }}</div>
+              </div>
+              <div class="team-block team-block-right">
+                <div class="team-avatar">
+                  <img *ngIf="match.away.logo" [src]="match.away.logo" [alt]="match.away.abbreviation" />
+                  <span *ngIf="!match.away.logo">{{ match.away.abbreviation }}</span>
+                </div>
+                <div class="team-label">{{ match.away.abbreviation }}</div>
+              </div>
+            </div>
+            <div class="time-info">{{ match.kickoff ? (match.kickoff | date:'short') : '' }}</div>
+          </div>
+
+        </div>
+
+        <div class="next-btn-wrap">
+          <button class="btn-next" (click)="goStep(4)">Next: Run simulations →</button>
+        </div>
+
       </div>
     </div>
   </div>
-
+  
   <!-- PANEL 4 -->
   <div class="panel" id="panel-4" [class.active]="currentStep() === 4">
     <div class="card">
@@ -590,7 +732,8 @@
                 </td>
                 <td [class.diff-pos]="simsRun() > 0 && champPct(item) - benchFor(item.team.id).opta > 0"
                   [class.diff-neg]="simsRun() > 0 && champPct(item) - benchFor(item.team.id).opta < 0">
-                  {{ simsRun() > 0 ? ((champPct(item) - benchFor(item.team.id).opta) > 0 ? '+' : '') + (champPct(item) -
+                  {{ simsRun() > 0 ? ((champPct(item) - benchFor(item.team.id).opta) > 0 ? '+' : '') + (champPct(item)
+                  -
                   benchFor(item.team.id).opta).toFixed(1) + '%' : '—' }}
                 </td>
               </tr>
@@ -608,7 +751,7 @@
         <div class="astro-title">✦ COSMIC LUCK INDEX ✦</div>
         <p class="astro-sub">For entertainment: zodiac signs and cosmic influence on teams.</p>
       </div>
-      <div [class]="guidesVisible() ? 'guide show' : 'guide'" id="guide-6">
+      <div class="guide show" id="guide-6">
         Each nation's star player has a known or estimated birth date. Their <strong>zodiac sign</strong> determines a
         base cosmic energy profile. For 2026, planetary transits — particularly <strong>Jupiter in Gemini</strong>
         (expansive communication energy) and <strong>Saturn in Pisces</strong> (discipline meets intuition) — modify
@@ -696,14 +839,13 @@
           proven effect on football results. Statistical odds remain the reliable predictor.</p>
       </div>
     </div>
-  </div>
-
-</div><!-- /wrap -->
-<footer>
+  </div><!-- /wrap -->
+  <!-- <footer>
   <div class="wrap">2026 FIFA WORLD CUP PREDICTOR · DIXON-COLES MODEL · MONTE CARLO ENGINE · FOR ENTERTAINMENT
     PURPOSES</div>
-</footer>
+</footer> -->
 
 
-<a routerLink="/admin" class="btn-sm" style="position:fixed;bottom:24px;right:24px;z-index:99;text-decoration:none;">🔐
-  ADMIN</a>
+  <a routerLink="/admin" class="btn-sm"
+    style="position:fixed;bottom:24px;right:24px;z-index:99;text-decoration:none;">🔐
+    ADMIN</a>

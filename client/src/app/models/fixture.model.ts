@@ -30,6 +30,10 @@ export interface NextMatchInfo {
   home: string;
   away: string;
   isHome: boolean;
+  finished?: boolean;
+  homeScore?: number | null;
+  awayScore?: number | null;
+  status?: string;
 }
 
 export interface TeamNextMatch {
@@ -47,6 +51,7 @@ export interface FixtureStatus {
   resultsSyncedAt: string | null;
   finishedMatches: number;
   totalMatches: number;
+  allFixtures?: TournamentFixture[];
 }
 
 export interface UpcomingMatch {
@@ -56,4 +61,5 @@ export interface UpcomingMatch {
   isHome: boolean;
   teamStatus: TeamNextMatch['status'];
   statusMessage: string | null;
+  isSandbox?: boolean;
 }
