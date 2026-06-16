@@ -9,6 +9,29 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Netlify functions route `/api/*` -> `/.netlify/functions/api/:splat`.
+// When requests arrive inside the function the leading `/api` may be stripped,
+// so normalize common endpoints by prefixing `/api` when necessary so existing
+// route handlers (which use `/api/...`) continue to work unchanged.
+app.use((req, res, next) => {
+  try {
+    const p = req.path || req.url || '';
+    if (!p.startsWith('/api')) {
+      // If the path looks like one of our top-level endpoints, prefix with /api
+      const topEndpoints = ['/fixtures', '/teams', '/recent-matches', '/predictions', '/sandbox-sims', '/admin', '/teams', '/recent-matches'];
+      for (const ep of topEndpoints) {
+        if (p.startsWith(ep)) {
+          req.url = '/api' + req.url;
+          break;
+        }
+      }
+    }
+  } catch (e) {
+    // no-op
+  }
+  next();
+});
+
 const ADMIN_KEY = process.env.ADMIN_KEY || 'wc2026admin';
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;

@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-06-16T14:37:44.689Z",
+  "syncedAt": "2026-06-16T14:47:35.149Z",
   "source": "FIFA Sync / Google Search Hints",
   "teamCount": 48,
   "teams": [
@@ -548,7 +548,7 @@
       "name": "Panama",
       "flag": "🇵🇦",
       "group": "L",
-      "elo": 1747,
+      "elo": 1760,
       "fifaRank": 41,
       "star": "A. Carrasquilla",
       "starDOB": "1900-09-10",
@@ -623,7 +623,7 @@
       "name": "DR Congo",
       "flag": "🇨🇩",
       "group": "K",
-      "elo": 1678,
+      "elo": 1692,
       "fifaRank": 63,
       "star": "Chancel Mbemba",
       "starDOB": "1900-08-08",
