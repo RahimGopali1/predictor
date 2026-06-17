@@ -794,11 +794,34 @@ app.get('/api/fixtures/status', (req, res) => {
   res.json(status);
 });
 
-// Helper for Poisson goal sampling
-function simulateScore(homeElo, awayElo) {
-  const diff = homeElo - awayElo;
-  const lA = Math.max(0.1, Math.min(5.5, 1.3 * Math.exp(diff / 600)));
-  const lB = Math.max(0.1, Math.min(5.5, 1.3 * Math.exp(-diff / 600)));
+// Calibrated base lambda for Poisson goal sampling
+const BASE_LAMBDA = 1.35;
+
+// Parse squad value string (e.g. "€750M", "€1.2B") into millions
+function parseValue(value) {
+  const raw = String(value || '').replace(/[€\s]/g, '');
+  if (raw.endsWith('B')) return parseFloat(raw) * 1000;
+  if (raw.endsWith('M')) return parseFloat(raw);
+  return parseFloat(raw.replace(/[^\d.]/g, '')) || 0;
+}
+
+// Squad value modifier: ±15 ELO adjustment based on market value
+function valueMod(value) {
+  const valM = parseValue(value);
+  if (valM <= 0) return 0;
+  const mod = (Math.log10(valM) - 2.0) * 14;
+  return Math.max(-15, Math.min(15, mod));
+}
+
+function simulateScore(homeTeam, awayTeam) {
+  const eloA = (homeTeam && homeTeam.elo) || 1600;
+  const eloB = (awayTeam && awayTeam.elo) || 1600;
+  // Apply squad value adjustment (mirrors the client-side simulation engine)
+  const eA = eloA + valueMod(homeTeam ? homeTeam.value : '');
+  const eB = eloB + valueMod(awayTeam ? awayTeam.value : '');
+  const diff = eA - eB;
+  const lA = Math.max(0.1, Math.min(5.5, BASE_LAMBDA * Math.exp(diff / 600)));
+  const lB = Math.max(0.1, Math.min(5.5, BASE_LAMBDA * Math.exp(-diff / 600)));
 
   const sampleGoals = (lambda) => {
     const L = Math.exp(-lambda);
@@ -830,10 +853,10 @@ app.post('/api/fixtures/sync', (req, res) => {
 
     for (let i = 0; i < countToSim; i++) {
       const match = unfinished[i];
-      const eloA = teamsMap[match.home] ? teamsMap[match.home].elo : 1600;
-      const eloB = teamsMap[match.away] ? teamsMap[match.away].elo : 1600;
+      const homeTeam = teamsMap[match.home] || null;
+      const awayTeam = teamsMap[match.away] || null;
 
-      const score = simulateScore(eloA, eloB);
+      const score = simulateScore(homeTeam, awayTeam);
       let winner = null;
 
       if (match.stage !== 'Group') {

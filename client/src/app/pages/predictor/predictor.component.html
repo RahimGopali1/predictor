@@ -9,11 +9,6 @@
   </header>
 
   <div class="feature-row">
-    <a routerLink="/prediction-tracker" class="feature-card">
-      <div class="feature-eyebrow">Forecast Scorecard</div>
-      <div class="feature-title">Compare predictions vs live results.</div>
-      <div class="feature-copy">See which match forecasts are on target and which need tuning.</div>
-    </a>
     <a routerLink="/live" class="feature-card">
       <div class="feature-eyebrow">Live Match Center</div>
       <div class="feature-title">Deep match view + stats.</div>
@@ -64,23 +59,18 @@
         games matter, but recent competitive fixtures count far more. This global network of results lets us link
         teams that rarely face each other — Colombia vs Japan — through shared opponents.
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;">
-        <div
-          style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center;">
-          <div style="font-family:var(--font-head);font-size:48px;color:var(--green);letter-spacing:.04em;">1872</div>
-          <div style="font-size:12px;color:var(--text3);margin-top:4px;">FIRST MATCH — Scotland vs England</div>
+      <div class="data-stats-grid">
+        <div class="data-stat-box">
+          <div class="data-stat-num" style="color:var(--green);">1872</div>
+          <div class="data-stat-lbl">FIRST MATCH — Scotland vs England</div>
         </div>
-        <div
-          style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center;">
-          <div style="font-family:var(--font-head);font-size:48px;color:var(--gold);letter-spacing:.04em;">49K+</div>
-          <div style="font-size:12px;color:var(--text3);margin-top:4px;">MATCHES IN THE DATABASE</div>
+        <div class="data-stat-box">
+          <div class="data-stat-num" style="color:var(--gold);">49K+</div>
+          <div class="data-stat-lbl">MATCHES IN THE DATABASE</div>
         </div>
-        <div
-          style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center;">
-          <div style="font-family:var(--font-head);font-size:48px;color:var(--blue);letter-spacing:.04em;">{{
-            teams().length }}</div>
-          <div style="font-size:12px;color:var(--text3);margin-top:4px;">TEAMS IN 2026 TOURNAMENT ({{ syncSource() }})
-          </div>
+        <div class="data-stat-box">
+          <div class="data-stat-num" style="color:var(--blue);">{{ teams().length }}</div>
+          <div class="data-stat-lbl">TEAMS IN 2026 TOURNAMENT ({{ syncSource() }})</div>
         </div>
       </div>
       <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:20px;display:none;">
@@ -434,7 +424,7 @@
             [routerLink]="['/live/match', match.id]">
             <div class="match-card-header">
               <span class="match-group">{{ match.home.displayName }} vs {{ match.away.displayName }}</span>
-              <div [ngClass]="isLive(match) ? 'status-pill status-live' : 'status-pill status-other'">
+              <div [ngClass]="isLive(match) ? 'status-pill status-pill-live' : isFinished(match) ? 'status-pill status-pill-completed' : 'status-pill status-pill-upcoming'">
                 <span *ngIf="isLive(match)" class="pulse-dot"></span>
                 {{ isLive(match) ? 'LIVE' : (isFinished(match) ? 'FT' : 'SCHEDULED') }}
               </div>
@@ -475,7 +465,7 @@
             [routerLink]="['/live/match', match.id]">
             <div class="match-card-header">
               <span class="match-group">{{ match.home.displayName }} vs {{ match.away.displayName }}</span>
-              <div class="status-pill status-other">Upcoming</div>
+              <div class="status-pill status-pill-upcoming">Upcoming</div>
             </div>
             <div class="score-section">
               <div class="team-block">

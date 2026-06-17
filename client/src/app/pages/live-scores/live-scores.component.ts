@@ -21,37 +21,35 @@ import { EspnMatchService, EspnMatch } from '../../services/espn-match.service';
         </div>
       </header>
 
-      <section class="card hero-card">
-        <div class="hero-content">
-          <div>
-            <div class="hero-eyebrow">Live Match Feed</div>
-            <div class="hero-title">World Cup score updates with real-time momentum.</div>
-            <p class="hero-copy">Follow every fixture from kickoff to final whistle, with match status, live clock, and score momentum in one place.</p>
-          </div>
-          <div class="hero-pill-row">
-            <span class="hero-pill">Live scores</span>
-            <span class="hero-pill">Match status</span>
-            <span class="hero-pill">Fast refresh</span>
-          </div>
+      <section class="hero-card">
+        <div>
+          <div class="hero-eyebrow">Live Match Feed</div>
+          <div class="hero-title">World Cup score updates with real-time momentum.</div>
+          <p class="hero-summary">Follow every fixture from kickoff to final whistle, with match status, live clock, and score momentum in one place.</p>
+        </div>
+        <div class="hero-pill-row">
+          <span class="hero-pill">Live scores</span>
+          <span class="hero-pill">Match status</span>
+          <span class="hero-pill">Fast refresh</span>
         </div>
       </section>
 
       <section *ngIf="allMatches$ | async as all" class="stats-row">
         <div class="stat-card">
           <div class="stat-label">TOTAL MATCHES</div>
-          <div class="stat-value">{{ all.length }}</div>
+          <div class="stat-value stat-value-gold">{{ all.length }}</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">LIVE</div>
-          <div class="stat-value">{{ all.filter(isLive).length }}</div>
+          <div class="stat-value stat-value-gold">{{ all.filter(isLive).length }}</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">COMPLETED</div>
-          <div class="stat-value">{{ all.filter(isFinished).length }}</div>
+          <div class="stat-value stat-value-gold">{{ all.filter(isFinished).length }}</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">UPCOMING</div>
-          <div class="stat-value">{{ all.filter(isUpcoming).length }}</div>
+          <div class="stat-value stat-value-gold">{{ all.filter(isUpcoming).length }}</div>
         </div>
       </section>
 
@@ -60,18 +58,18 @@ import { EspnMatchService, EspnMatch } from '../../services/espn-match.service';
         <section *ngIf="status.live.length > 0" class="section-block">
           <div class="section-head">
             <div class="section-title">Live Now</div>
-            <span class="section-badge status-live-badge">
+            <span class="section-badge section-badge-live">
               <span class="pulse-dot"></span> {{ status.live.length }} match{{ status.live.length === 1 ? '' : 'es' }}
             </span>
           </div>
           <div class="matches-grid">
-            <div *ngFor="let match of status.live" class="match-card match-live-card" [routerLink]="['/live/match', match.id]" style="cursor:pointer;">
+            <div *ngFor="let match of status.live" class="match-card match-card-live" [routerLink]="['/live/match', match.id]" style="cursor:pointer;">
               <div class="match-card-header">
                 <div>
-                  <div class="meta-label">{{ match.home.displayName }} vs {{ match.away.displayName }}</div>
+                  <div class="match-meta">{{ match.home.displayName }} vs {{ match.away.displayName }}</div>
                   <div class="match-title">{{ match.home.displayName }} vs {{ match.away.displayName }}</div>
                 </div>
-                <div class="status-pill status-live">
+                <div class="status-pill status-pill-live">
                   <span class="pulse-dot"></span>
                   LIVE · {{ match.displayClock || match.shortDetail }}
                 </div>
@@ -109,13 +107,13 @@ import { EspnMatchService, EspnMatch } from '../../services/espn-match.service';
             <span class="section-badge">{{ status.completed.length }} match{{ status.completed.length === 1 ? '' : 'es' }}</span>
           </div>
           <div class="matches-grid">
-            <div *ngFor="let match of status.completed" class="match-card match-completed-card" [routerLink]="['/live/match', match.id]" style="cursor:pointer;">
+            <div *ngFor="let match of status.completed" class="match-card match-card-completed" [routerLink]="['/live/match', match.id]" style="cursor:pointer;">
               <div class="match-card-header">
                 <div>
-                  <div class="meta-label">{{ match.home.displayName }} vs {{ match.away.displayName }}</div>
+                  <div class="match-meta">{{ match.home.displayName }} vs {{ match.away.displayName }}</div>
                   <div class="match-title">{{ match.home.displayName }} vs {{ match.away.displayName }}</div>
                 </div>
-                <div class="status-pill status-completed">FT</div>
+                <div class="status-pill status-pill-completed">FT</div>
               </div>
               <div class="score-section">
                 <div class="team-block">
@@ -151,13 +149,13 @@ import { EspnMatchService, EspnMatch } from '../../services/espn-match.service';
             <span class="section-badge">{{ status.upcoming.length }} match{{ status.upcoming.length === 1 ? '' : 'es' }}</span>
           </div>
           <div class="matches-grid">
-            <div *ngFor="let match of status.upcoming" class="match-card match-upcoming-card" [routerLink]="['/live/match', match.id]" style="cursor:pointer;">
+            <div *ngFor="let match of status.upcoming" class="match-card match-card-upcoming" [routerLink]="['/live/match', match.id]" style="cursor:pointer;">
               <div class="match-card-header">
                 <div>
-                  <div class="meta-label">{{ match.home.displayName }} vs {{ match.away.displayName }}</div>
+                  <div class="match-meta">{{ match.home.displayName }} vs {{ match.away.displayName }}</div>
                   <div class="match-title">{{ match.home.displayName }} vs {{ match.away.displayName }}</div>
                 </div>
-                <div class="status-pill status-upcoming">SCHEDULED</div>
+                <div class="status-pill status-pill-upcoming">SCHEDULED</div>
               </div>
               <div class="score-section">
                 <div class="team-block">
@@ -194,52 +192,7 @@ import { EspnMatchService, EspnMatch } from '../../services/espn-match.service';
     </div>
   `,
   styles: [
-    ".hero-card { padding: 28px; margin-bottom: 28px; }",
-    ".hero-content { display: grid; gap: 18px; }",
-    "@media (min-width: 900px) { .hero-content { grid-template-columns: 1fr auto; align-items: center; } }",
-    ".hero-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }",
-    ".hero-title { font-family: var(--font-head); font-size: 2rem; color: var(--text); margin-bottom: 14px; }",
-    ".hero-copy { color: var(--text2); line-height: 1.75; max-width: 620px; }",
-    ".hero-pill-row { display: flex; flex-wrap: wrap; gap: 12px; }",
-    ".hero-pill { display: inline-flex; align-items: center; padding: 10px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg3); color: var(--text2); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; }",
-    ".stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 24px; }",
-    ".stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; text-align: center; }",
-    ".stat-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; }",
-    ".stat-value { font-family: var(--font-head); font-size: 2.2rem; color: var(--text); }",
-    ".empty-state-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 40px 24px; text-align: center; margin-bottom: 24px; }",
-    ".empty-state-copy { color: var(--text2); font-size: 0.95rem; }",
-    ".section-block { margin-bottom: 32px; }",
-    ".section-head { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }",
-    ".section-title { font-family: var(--font-head); font-size: 1.3rem; color: var(--text); }",
-    ".section-badge { display: inline-flex; align-items: center; padding: 6px 12px; border-radius: 999px; background: var(--card2); border: 1px solid var(--border); font-family: var(--font-mono); font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.08em; }",
-    ".status-live-badge { color: var(--green); border-color: rgba(45, 206, 110, 0.3); background: rgba(45, 206, 110, 0.08); }",
-    ".matches-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }",
-    ".match-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; transition: all 0.2s ease; }",
-    ".match-card:hover { transform: translateY(-3px); border-color: var(--gold); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.16); }",
-    ".match-live-card { border-color: rgba(45, 206, 110, 0.25); background: linear-gradient(180deg, rgba(45, 206, 110, 0.04), transparent); }",
-    ".match-completed-card { border-color: rgba(148, 163, 184, 0.2); }",
-    ".match-upcoming-card { border-color: rgba(77, 159, 255, 0.2); background: linear-gradient(180deg, rgba(77, 159, 255, 0.03), transparent); }",
-    ".match-card-header { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; margin-bottom: 20px; }",
-    ".meta-label { color: var(--text3); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }",
-    ".match-title { font-family: var(--font-head); font-size: 1.1rem; line-height: 1.2; color: var(--text); }",
-    ".status-pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; color: var(--text2); background: var(--card2); }",
-    ".status-live { color: var(--green); border-color: rgba(45, 206, 110, 0.2); background: rgba(45, 206, 110, 0.08); }",
-    ".status-completed { color: var(--text2); border-color: rgba(148, 163, 184, 0.2); }",
-    ".status-upcoming { color: var(--blue); border-color: rgba(77, 159, 255, 0.2); background: rgba(77, 159, 255, 0.08); }",
-    ".pulse-dot { width: 8px; height: 8px; border-radius: 999px; background: var(--green); display: inline-block; }",
-    ".score-section { display: grid; gap: 16px; margin-bottom: 18px; }",
-    "@media (min-width: 900px) { .score-section { grid-template-columns: 1fr auto 1fr; align-items: center; } }",
-    ".team-block { display: flex; flex-direction: column; align-items: center; gap: 10px; }",
-    ".team-avatar { width: 58px; height: 58px; border-radius: 16px; background: var(--bg3); border: 1px solid var(--border); display: grid; place-items: center; }",
-    ".team-avatar img { width: 36px; height: 36px; object-fit: contain; }",
-    ".team-label { font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); }",
-    ".team-name { font-size: 0.95rem; color: var(--text2); text-align: center; }",
-    ".score-panel { text-align: center; }",
-    ".score-display { font-family: var(--font-head); font-size: 3rem; color: var(--gold); line-height: 1; }",
-    ".score-placeholder { color: var(--text3); font-size: 2.4rem; }",
-    ".score-separator { color: var(--text3); margin: 0 10px; }",
-    ".score-status { margin-top: 8px; color: var(--text3); font-family: var(--font-mono); font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; }",
-    ".time-info { background: var(--bg3); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; font-family: var(--font-mono); color: var(--text2); font-size: 0.9rem; }"
+    ".score-panel { text-align: center; }"
   ]
 })
 export class LiveScoresComponent {

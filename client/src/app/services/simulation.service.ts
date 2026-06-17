@@ -9,6 +9,14 @@ export class SimulationService {
   readonly TOTAL = 50000;
   readonly BATCH = 500;
 
+  /**
+   * Base lambda for expected goals calculation.
+   * Calibrated against betting market odds via scripts/calibrate-lambda.mjs.
+   * Higher values = more goals scored across the tournament.
+   * Current calibrated value: 1.35 (was 1.30 before calibration).
+   */
+  readonly BASE_LAMBDA = 1.35;
+
   readonly bench: Record<string, { opta: number; market: number }> = {
     ESP: { opta: 16.1, market: 16.5 }, FRA: { opta: 13.0, market: 13.5 },
     ENG: { opta: 11.2, market: 11.5 }, ARG: { opta: 10.4, market: 10.5 },
@@ -22,13 +30,51 @@ export class SimulationService {
     CAN: { opta: 0.6, market: 0.5 }, SWE: { opta: 0.8, market: 0.7 }
   };
 
+  /**
+   * Parse squad value string (e.g. "€750M", "€1.2B") into millions.
+   */
+  parseValue(value: string): number {
+    const raw = value.replace(/[€\s]/g, '');
+    if (raw.endsWith('B')) {
+      return parseFloat(raw) * 1000;
+    }
+    if (raw.endsWith('M')) {
+      return parseFloat(raw);
+    }
+    // Fallback: strip trailing K or plain number
+    return parseFloat(raw.replace(/[^\d.]/g, '')) || 0;
+  }
+
+  /**
+   * Squad value modifier: converts market value to ELO adjustment.
+   * Uses a log scale so the gap between low-value and high-value teams
+   * is meaningful but not dominant over existing ELO ratings.
+   * Range: approximately -15 to +15 ELO.
+   */
+  valueMod(value: string): number {
+    const valM = this.parseValue(value);
+    if (valM <= 0) return 0;
+    // log10(200M) ≈ 2.3, log10(1.2B) ≈ 3.08, log10(8M) ≈ 0.9
+    const mod = (Math.log10(valM) - 2.0) * 14;
+    return Math.max(-15, Math.min(15, mod));
+  }
+
+  /**
+   * Recent form modifier: computes an ELO adjustment based on recent matches.
+   * Uses goal difference weighting so dominant wins (3-0) count more than
+   * narrow wins (1-0), and heavy losses penalize more.
+   * GD is scaled by 0.33 and capped at ±1 to produce a smooth curve.
+   * Range: -25 to +25 ELO.
+   */
   formMod(id: string, recent: RecentMatch[]): number {
     let ws = 0, tw = 0;
     for (const m of recent) {
-      let r = 0;
-      if (m.home === id) r = m.sH > m.sA ? 1 : m.sH < m.sA ? -1 : 0;
-      else if (m.away === id) r = m.sA > m.sH ? 1 : m.sA < m.sH ? -1 : 0;
+      let gd = 0;
+      if (m.home === id) gd = m.sH - m.sA;
+      else if (m.away === id) gd = m.sA - m.sH;
       else continue;
+      // Scale goal difference: -1..+1 range with diminishing returns beyond GD±3
+      const r = Math.max(-1, Math.min(1, gd * 0.33));
       const w = (m.k / 60) * m.rec;
       ws += r * w;
       tw += w;
@@ -38,7 +84,7 @@ export class SimulationService {
   }
 
   xGoals(tA: Team, tB: Team, recent: RecentMatch[], eloOvr: Record<string, number> = {}, isKO = false, restA = 4, restB = 4) {
-    const BASE = isKO ? 1.08 : 1.30;
+    const BASE = isKO ? this.BASE_LAMBDA * (1.08 / 1.30) : this.BASE_LAMBDA;
     const HOST = 75;
     let eA = (eloOvr[tA.id] ?? tA.elo) + this.formMod(tA.id, recent);
     let eB = (eloOvr[tB.id] ?? tB.elo) + this.formMod(tB.id, recent);
@@ -51,6 +97,10 @@ export class SimulationService {
     if (tB.host && !tA.host) eB += HOST;
     if (tA.climate === 'cold' || tA.climate === 'temperate') eA -= 15;
     if (tB.climate === 'cold' || tB.climate === 'temperate') eB -= 15;
+
+    // Squad market value adjustment: high-value squads get a small ELO boost
+    eA += this.valueMod(tA.value);
+    eB += this.valueMod(tB.value);
     const diff = eA - eB;
     let lA = BASE * Math.exp(diff / 600);
     let lB = BASE * Math.exp(-diff / 600);

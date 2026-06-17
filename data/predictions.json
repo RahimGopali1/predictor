@@ -1,5 +1,41 @@
 [
   {
+    "id": "4d05e7b3-78cd-4e29-a6bc-0a203575d672",
+    "userName": "User_qugo0",
+    "championId": "ESP",
+    "championName": "Spain",
+    "championFlag": "🇪🇸",
+    "topPicks": [
+      {
+        "id": "ESP",
+        "name": "Spain",
+        "pct": 11.09
+      },
+      {
+        "id": "FRA",
+        "name": "France",
+        "pct": 9.964
+      },
+      {
+        "id": "ARG",
+        "name": "Argentina",
+        "pct": 9.86
+      },
+      {
+        "id": "ENG",
+        "name": "England",
+        "pct": 7.1499999999999995
+      },
+      {
+        "id": "BRA",
+        "name": "Brazil",
+        "pct": 6.7940000000000005
+      }
+    ],
+    "simsRun": 50000,
+    "createdAt": "2026-06-17T17:48:53.508Z"
+  },
+  {
     "id": "d5d75e13-0001-4d45-a8e1-c3f307c37171",
     "userName": "User_qugo0",
     "championId": "FRA",

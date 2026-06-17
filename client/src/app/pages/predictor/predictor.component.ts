@@ -296,51 +296,15 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     '.empty-state-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 20px; text-align: center; margin-bottom: 12px; }',
     '.empty-state-copy { color: var(--text3); font-family: var(--font-mono); font-size: 12px; }',
 
-    /* matches grid */
+    /* matches grid - use global classes where possible, keep predictor-specific overrides */
     '.matches-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-top: 16px; }',
-    '.match-card { position: relative; background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 18px; cursor: pointer; overflow: hidden; transition: all .25s ease; }',
-    ".match-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, var(--overlay-subtle), transparent); pointer-events: none; }",
-    '.match-card:hover { transform: translateY(-4px); border-color: var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,.25); }',
     '.match-card.upcoming-match-card { background: linear-gradient(135deg, rgba(77,159,255,.08), rgba(77,159,255,.02)); border-color: rgba(77,159,255,.25); }',
     '.match-card.upcoming-counter-card { background: rgba(77, 159, 255, 0.06); border-color: rgba(77, 159, 255, 0.3); }',
     '.match-card.upcoming-counter-card .score-section { flex-direction: column; align-items: flex-start; gap: 4px; padding: 4px 0; }',
     '.upcoming-count { font-family: var(--font-head); font-size: 28px; font-weight: 700; color: var(--blue); }',
     '.upcoming-note { font-family: var(--font-mono); font-size: 11px; color: var(--text3); }',
-
-    /* card header */
-    '.match-card-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 18px; }',
-
     '.match-group { flex: 1; min-width: 0; font-size: 13px; font-weight: 600; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }',
-
-    '.meta-label { display: none; }',
-    '.match-title { font-family: var(--font-mono); font-size: 9px; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; }',
-
-    /* status badges */
-    '.status-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; font-size: 10px; font-weight: 700; letter-spacing: .08em; flex-shrink: 0; }',
-
-    '.status-live { background: var(--red-dim); color: var(--red); border: 1px solid var(--red-dim); }',
-
-    '.status-other { background: var(--overlay-subtle); color: var(--text3); border: 1px solid var(--border); }',
-
-    '.pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); display: inline-block; animation: livePulse 1.2s infinite; }',
-
-    '@keyframes livePulse { 0% { transform: scale(1); opacity: 1; } 70% { transform: scale(2); opacity: 0; } 100% { transform: scale(2); opacity: 0; } }',
-
-    /* score layout */
-    '.score-section { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; margin-bottom: 14px; }',
-    '.score-team { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }',
-    '.score-sep { font-family: var(--font-mono); font-size: 11px; color: var(--text3); padding: 0 8px; }',
-    '.team-block { display: flex; flex-direction: column; align-items: center; justify-content: center; }',
-    '.team-avatar { width: 56px; height: 56px; border-radius: 14px; background: var(--bg2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; overflow: hidden; transition: all .2s ease; }',
-    '.match-card:hover .team-avatar { border-color: rgba(255,255,255,.15); }',
-    '.team-avatar img { width: 75%; height: 75%; object-fit: contain; }',
-    '.team-label { margin-top: 8px; font-size: 13px; font-weight: 700; color: var(--text); }',
-    '.team-name { display: none; }',
-    '.score-panel { min-width: 120px; text-align: center; }',
-    '.score-display { font-size: 36px; font-weight: 800; color: var(--text); line-height: 1; }',
-    '.score-separator { margin: 0 6px; color: var(--text3); opacity: .6; }',
-    '.score-status { margin-top: 8px; font-size: 11px; font-weight: 600; color: var(--gold); letter-spacing: .08em; text-transform: uppercase; }',
-    '.time-info { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); text-align: center; font-size: 12px; color: var(--text3); }',
+    '.upcoming-counter-card .score-section { flex-direction: column; align-items: flex-start; gap: 4px; padding: 4px 0; }',
 
     /* sandbox panel */
     '.sandbox-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }',
