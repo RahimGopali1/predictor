@@ -105,11 +105,11 @@ export class AdminComponent implements AfterViewInit, OnDestroy {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { labels: { color: '#8fa890' } }
+          legend: { labels: { color: getComputedStyle(document.documentElement).getPropertyValue('--text2').trim() } }
         },
         scales: {
-          x: { ticks: { color: '#8fa890' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-          y: { ticks: { color: '#8fa890' }, grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }
+          x: { ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--text2').trim() }, grid: { color: 'rgba(128,128,128,0.1)' } },
+          y: { ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--text2').trim() }, grid: { color: 'rgba(128,128,128,0.1)' }, beginAtZero: true }
         }
       }
     });
@@ -139,11 +139,11 @@ export class AdminComponent implements AfterViewInit, OnDestroy {
         maintainAspectRatio: false,
         indexAxis: 'y',
         plugins: {
-          legend: { labels: { color: '#8fa890' } }
+          legend: { labels: { color: getComputedStyle(document.documentElement).getPropertyValue('--text2').trim() } }
         },
         scales: {
-          x: { ticks: { color: '#8fa890', stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true },
-          y: { ticks: { color: '#8fa890' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+          x: { ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--text2').trim(), stepSize: 1 }, grid: { color: 'rgba(128,128,128,0.1)' }, beginAtZero: true },
+          y: { ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--text2').trim() }, grid: { color: 'rgba(128,128,128,0.1)' } }
         }
       }
     });

@@ -585,7 +585,11 @@ async function calculateFixturesAndStatus() {
     if (!result) return match;
     const updated = { ...match, finished: true, homeScore: result.homeScore, awayScore: result.awayScore };
     if (result.homeScore !== null && result.awayScore !== null) {
-      updated.winnerId = result.winner || (updated.homeScore > updated.awayScore ? updated.home : updated.away);
+      // Validate winner: only accept stored winner if it agrees with score outcome, or if draw (KO penalty winner)
+      const scoreWinner = updated.homeScore > updated.awayScore ? updated.home : updated.awayScore > updated.homeScore ? updated.away : null;
+      const rawWinner = result.winner;
+      const validWinner = rawWinner && (rawWinner === scoreWinner || (!scoreWinner && (rawWinner === updated.home || rawWinner === updated.away))) ? rawWinner : null;
+      updated.winnerId = validWinner || scoreWinner;
       updated.winner = updated.winnerId;
       updated.status = 'Finished';
     }
@@ -593,81 +597,156 @@ async function calculateFixturesAndStatus() {
   };
 
   const groupStage = groupMatches.map(applyResult);
-  const knockoutMatches = [];
+  const groupStageComplete = groupStage.filter(m => !m.finished).length === 0;
 
-  const finishedGroup = groupStage.filter(m => !m.finished).length === 0;
-  const groupStageComplete = finishedGroup;
+  const allFixtures = [...groupStage];
 
-  const roundOf32 = finishedGroup ? generateRoundOf32(groupStage, teamsList) : generateRoundOf32(groupStage, teamsList).map(m => ({ ...m, finished: false, homeScore: null, awayScore: null, status: 'Scheduled' }));
-  const roundOf32WithResults = roundOf32.map(applyResult);
+  // 2. Round of 32
+  let r32Matches = [];
+  if (groupStageComplete) {
+    r32Matches = generateRoundOf32(groupStage, teamsList);
+    r32Matches = r32Matches.map(applyResult);
+    allFixtures.push(...r32Matches);
+  }
 
-  const roundOf16 = generateNextKnockoutStage('Round of 16', roundOf32WithResults, 89, 'R16');
-  const roundOf16WithResults = roundOf16.map(applyResult);
+  // 3. Round of 16
+  let r16Matches = [];
+  const r32Complete = r32Matches.length > 0 && r32Matches.every(m => m.finished);
+  if (r32Complete) {
+    r16Matches = generateNextKnockoutStage('Round of 16', r32Matches, 89, 'R16');
+    r16Matches = r16Matches.map(applyResult);
+    allFixtures.push(...r16Matches);
+  }
 
-  const quarterFinals = generateNextKnockoutStage('Quarter-Final', roundOf16WithResults, 97, 'QF');
-  const quarterFinalsWithResults = quarterFinals.map(applyResult);
+  // 4. Quarter-Finals
+  let qfMatches = [];
+  const r16Complete = r16Matches.length > 0 && r16Matches.every(m => m.finished);
+  if (r16Complete) {
+    qfMatches = generateNextKnockoutStage('Quarter-Final', r16Matches, 97, 'QF');
+    qfMatches = qfMatches.map(applyResult);
+    allFixtures.push(...qfMatches);
+  }
 
-  const semiFinals = generateNextKnockoutStage('Semi-Final', quarterFinalsWithResults, 101, 'SF');
-  const semiFinalsWithResults = semiFinals.map(applyResult);
+  // 5. Semi-Finals
+  let sfMatches = [];
+  const qfComplete = qfMatches.length > 0 && qfMatches.every(m => m.finished);
+  if (qfComplete) {
+    sfMatches = generateNextKnockoutStage('Semi-Final', qfMatches, 101, 'SF');
+    sfMatches = sfMatches.map(applyResult);
+    allFixtures.push(...sfMatches);
+  }
 
-  const finals = generateNextKnockoutStage('Finals', semiFinalsWithResults, 117, 'F');
-  const finalsWithResults = finals.map(applyResult);
+  // 6. Finals (Third place and Grand Final)
+  let finalMatches = [];
+  const sfComplete = sfMatches.length > 0 && sfMatches.every(m => m.finished);
+  if (sfComplete) {
+    finalMatches = generateNextKnockoutStage('Finals', sfMatches, 103, '');
+    finalMatches = finalMatches.map(applyResult);
+    allFixtures.push(...finalMatches);
+  }
 
-  const allFixtures = [...groupStage, ...roundOf32WithResults, ...roundOf16WithResults, ...quarterFinalsWithResults, ...semiFinalsWithResults, ...finalsWithResults];
+  // Determine champion
+  const champion = finalMatches.find(m => m.id === 104)?.winner || null;
 
-  const resultsByMatch = {};
-  allFixtures.forEach(match => {
-    if (match.finished) {
-      resultsByMatch[match.id] = match;
-    }
-  });
-
+  // Determine team states & stages
   const teamStatus = {};
   const nextMatches = {};
-
+  const teamsMap = {};
   teamsList.forEach(t => {
-    teamStatus[t.id] = { id: t.id, status: 'unknown', stage: 'Group', eliminatedIn: null };
-    nextMatches[t.id] = { teamId: t.id, status: 'waiting', match: null, message: 'Match schedule loading...' };
+    teamsMap[t.id] = t;
+    teamStatus[t.id] = { id: t.id, status: 'active', stage: 'Group' };
   });
 
-  const champion = finalsWithResults.find(m => m.id === 104 && m.finished && m.winner)?.winner || null;
+  teamsList.forEach(t => {
+    const nextMatch = allFixtures.find(m => !m.finished && (m.home === t.id || m.away === t.id));
 
-  if (champion) {
-    teamsList.forEach(t => {
-      const isChampion = t.id === champion;
-      teamStatus[t.id] = {
-        id: t.id,
-        status: isChampion ? 'champion' : 'eliminated',
-        stage: 'Grand Final',
-        eliminatedIn: isChampion ? null : 'Tournament complete'
+    if (champion) {
+      if (champion === t.id) {
+        teamStatus[t.id].status = 'champion';
+        teamStatus[t.id].stage = 'Grand Final';
+        nextMatches[t.id] = { teamId: t.id, status: 'champion', match: null, message: 'CHAMPION 🏆' };
+      } else {
+        teamStatus[t.id].status = 'eliminated';
+        teamStatus[t.id].stage = 'Grand Final';
+        nextMatches[t.id] = { teamId: t.id, status: 'eliminated', match: null, message: 'Runner-up / Finals complete' };
+      }
+      return;
+    }
+
+    if (nextMatch) {
+      const opponentId = nextMatch.home === t.id ? nextMatch.away : nextMatch.home;
+      const opponentName = teamsMap[opponentId] ? teamsMap[opponentId].name : opponentId;
+      const isHome = nextMatch.home === t.id;
+
+      const homeTeamName = teamsMap[nextMatch.home] ? teamsMap[nextMatch.home].name : nextMatch.homeTeam || nextMatch.home;
+      const awayTeamName = teamsMap[nextMatch.away] ? teamsMap[nextMatch.away].name : nextMatch.awayTeam || nextMatch.away;
+
+      const nextInfo = {
+        id: nextMatch.id,
+        stage: nextMatch.stage,
+        label: nextMatch.label || `Group ${nextMatch.group}`,
+        date: nextMatch.date,
+        time: nextMatch.time,
+        group: nextMatch.group || null,
+        venue: nextMatch.venue,
+        city: nextMatch.city,
+        home: nextMatch.home,
+        away: nextMatch.away,
+        homeTeam: homeTeamName,
+        awayTeam: awayTeamName,
+        isHome
       };
+
+      teamStatus[t.id].status = 'active';
+      teamStatus[t.id].stage = nextMatch.stage;
       nextMatches[t.id] = {
         teamId: t.id,
-        status: isChampion ? 'champion' : 'eliminated',
-        match: null,
-        message: isChampion ? 'Champion' : 'Tournament complete'
+        status: 'active',
+        match: nextInfo,
+        message: opponentId !== 'TBD' ? `Next match vs ${opponentName} in ${nextMatch.city}` : 'Awaiting opponent'
       };
-    });
-  } else {
-    allFixtures.forEach(match => {
-      if (!match.finished) {
-        const updateNextMatch = (teamId) => {
-          if (!teamStatus[teamId]) return;
-          const current = nextMatches[teamId];
-          if (!current || current.status === 'waiting') {
-            nextMatches[teamId] = {
-              teamId,
-              status: 'active',
-              match,
-              message: 'Next scheduled match'
-            };
-          }
-        };
-        updateNextMatch(match.home);
-        updateNextMatch(match.away);
+    } else {
+      let isEliminated = false;
+      let eliminatedStage = 'Group';
+
+      if (groupStageComplete) {
+        const r32Generated = allFixtures.filter(m => m.stage === 'Round of 32');
+        const inR32 = r32Generated.some(m => m.home === t.id || m.away === t.id);
+        if (!inR32) {
+          isEliminated = true;
+          eliminatedStage = 'Group';
+        }
       }
-    });
-  }
+
+      const finishedKO = allFixtures.filter(m => m.finished && m.stage !== 'Group' && m.stage !== 'Third Place');
+      finishedKO.forEach(m => {
+        if ((m.home === t.id || m.away === t.id) && m.winnerId !== t.id) {
+          isEliminated = true;
+          eliminatedStage = m.stage;
+        }
+      });
+
+      if (isEliminated) {
+        teamStatus[t.id].status = 'eliminated';
+        teamStatus[t.id].stage = eliminatedStage;
+        nextMatches[t.id] = {
+          teamId: t.id,
+          status: 'eliminated',
+          match: null,
+          message: `Eliminated in ${eliminatedStage}`
+        };
+      } else {
+        teamStatus[t.id].status = 'active';
+        teamStatus[t.id].stage = 'Knockouts';
+        nextMatches[t.id] = {
+          teamId: t.id,
+          status: 'waiting',
+          match: null,
+          message: 'Awaiting other matches to complete...'
+        };
+      }
+    }
+  });
 
   const finishedMatches = allFixtures.filter(m => m.finished).length;
 
@@ -746,7 +825,7 @@ app.get('/api/recent-matches', wrapAsync(async (req, res) => {
 
 app.get('/api/fixtures/status', wrapAsync(async (req, res) => {
   const status = await calculateFixturesAndStatus();
-  delete status.allFixtures;
+  // allFixtures is intentionally included - needed by the predictor component for upcoming matchups
   res.json(status);
 }));
 
@@ -791,7 +870,7 @@ app.post('/api/fixtures/sync', wrapAsync(async (req, res) => {
   results._syncedAt = new Date().toISOString();
   await writeFixtureResults(results);
   const updatedStatus = await calculateFixturesAndStatus();
-  delete updatedStatus.allFixtures;
+  // allFixtures is intentionally included - needed by predictor
   res.json({ status: updatedStatus });
 }));
 
@@ -805,14 +884,24 @@ app.post('/api/admin/fixtures/result', wrapAsync(async (req, res) => {
   results[matchId] = {
     homeScore: parseInt(homeScore, 10),
     awayScore: parseInt(awayScore, 10),
-    winner: winner || (homeScore > awayScore ? undefined : undefined)
+    winner: winner || (homeScore > awayScore ? undefined : awayScore > homeScore ? undefined : null) // null for draws in group stage
   };
 
   await writeFixtureResults(results);
   const updatedStatus = await calculateFixturesAndStatus();
-  delete updatedStatus.allFixtures;
-
+  // allFixtures is intentionally included - needed by predictor
   res.json({ status: updatedStatus });
+}));
+
+app.get('/api/espn-scores', wrapAsync(async (req, res) => {
+  try {
+    const response = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard');
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error('ESPN proxy error:', err);
+    res.status(502).json({ error: 'Failed to fetch ESPN scores' });
+  }
 }));
 
 app.post('/api/predictions', wrapAsync(async (req, res) => {

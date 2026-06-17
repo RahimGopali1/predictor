@@ -7,7 +7,7 @@
   "2": {
     "homeScore": 1,
     "awayScore": 1,
-    "winner": "KOR"
+    "winner": null
   },
   "3": {
     "homeScore": 1,
@@ -27,22 +27,22 @@
   "6": {
     "homeScore": 5,
     "awayScore": 0,
-    "winner": "BRA"
+    "winner": "AUS"
   },
   "7": {
     "homeScore": 3,
     "awayScore": 2,
-    "winner": "HAI"
+    "winner": "BRA"
   },
   "8": {
     "homeScore": 1,
     "awayScore": 0,
-    "winner": "AUS"
+    "winner": "HAI"
   },
   "9": {
     "homeScore": 1,
     "awayScore": 1,
-    "winner": "CUW"
+    "winner": null
   },
   "10": {
     "homeScore": 3,
@@ -82,7 +82,7 @@
   "17": {
     "homeScore": 1,
     "awayScore": 1,
-    "winner": "FRA"
+    "winner": null
   },
   "18": {
     "homeScore": 2,
@@ -97,22 +97,22 @@
   "20": {
     "homeScore": 1,
     "awayScore": 1,
-    "winner": "AUT"
+    "winner": null
   },
   "21": {
     "homeScore": 1,
     "awayScore": 2,
-    "winner": "COD"
+    "winner": "PAN"
   },
   "22": {
     "homeScore": 1,
     "awayScore": 1,
-    "winner": "CRO"
+    "winner": null
   },
   "23": {
     "homeScore": 2,
     "awayScore": 2,
-    "winner": "PAN"
+    "winner": null
   },
   "24": {
     "homeScore": 1,
@@ -122,7 +122,7 @@
   "25": {
     "homeScore": 1,
     "awayScore": 1,
-    "winner": "KOR"
+    "winner": null
   },
   "26": {
     "homeScore": 4,
@@ -147,17 +147,17 @@
   "30": {
     "homeScore": 2,
     "awayScore": 2,
-    "winner": "SUI"
+    "winner": null
   },
   "31": {
     "homeScore": 0,
     "awayScore": 0,
-    "winner": "SUI"
+    "winner": null
   },
   "32": {
     "homeScore": 1,
     "awayScore": 1,
-    "winner": "QAT"
+    "winner": null
   },
   "33": {
     "homeScore": 5,
@@ -197,7 +197,7 @@
   "40": {
     "homeScore": 0,
     "awayScore": 0,
-    "winner": "AUS"
+    "winner": null
   },
   "41": {
     "homeScore": 0,
@@ -257,7 +257,7 @@
   "52": {
     "homeScore": 0,
     "awayScore": 0,
-    "winner": "IRN"
+    "winner": null
   },
   "53": {
     "homeScore": 0,
@@ -297,7 +297,7 @@
   "60": {
     "homeScore": 1,
     "awayScore": 1,
-    "winner": "IRQ"
+    "winner": null
   },
   "61": {
     "homeScore": 2,
@@ -317,7 +317,7 @@
   "64": {
     "homeScore": 1,
     "awayScore": 1,
-    "winner": "ALG"
+    "winner": null
   },
   "65": {
     "homeScore": 3,
@@ -332,7 +332,7 @@
   "67": {
     "homeScore": 1,
     "awayScore": 1,
-    "winner": "POR"
+    "winner": null
   },
   "68": {
     "homeScore": 3,
@@ -352,12 +352,12 @@
   "71": {
     "homeScore": 1,
     "awayScore": 1,
-    "winner": "ENG"
+    "winner": null
   },
   "72": {
     "homeScore": 2,
     "awayScore": 0,
-    "winner": "CRO"
+    "winner": "PAN"
   },
   "73": {
     "homeScore": 2,

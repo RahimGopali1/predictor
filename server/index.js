@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const { resolveGroupWinner, resolveKOWinner } = require('./winner-utils');
 
 const app = express();
 app.use(cors());
@@ -498,7 +499,7 @@ function calculateFixturesAndStatus() {
   const results = readJson(FIXTURE_RESULTS_PATH, {});
   const groupMatches = getGroupStageMatches();
 
-  // 1. Map group stage results
+  // 1. Map group stage results with winner validation
   groupMatches.forEach(m => {
     const res = results[m.id];
     if (res) {
@@ -506,7 +507,7 @@ function calculateFixturesAndStatus() {
       m.awayScore = res.awayScore;
       m.finished = true;
       m.status = 'Finished';
-      m.winnerId = res.winner || (res.homeScore > res.awayScore ? m.home : res.awayScore > res.homeScore ? m.away : null);
+      m.winnerId = resolveGroupWinner(res.winner, res.homeScore, res.awayScore, m.home, m.away);
     }
   });
 
@@ -524,7 +525,7 @@ function calculateFixturesAndStatus() {
         m.awayScore = res.awayScore;
         m.finished = true;
         m.status = 'Finished';
-        m.winnerId = res.winner || (res.homeScore > res.awayScore ? m.home : m.away);
+        m.winnerId = resolveKOWinner(res.winner, res.homeScore, res.awayScore, m.home, m.away);
       }
     });
     allFixtures.push(...r32Matches);
@@ -542,7 +543,7 @@ function calculateFixturesAndStatus() {
         m.awayScore = res.awayScore;
         m.finished = true;
         m.status = 'Finished';
-        m.winnerId = res.winner || (res.homeScore > res.awayScore ? m.home : m.away);
+        m.winnerId = resolveKOWinner(res.winner, res.homeScore, res.awayScore, m.home, m.away);
       }
     });
     allFixtures.push(...r16Matches);
@@ -560,7 +561,7 @@ function calculateFixturesAndStatus() {
         m.awayScore = res.awayScore;
         m.finished = true;
         m.status = 'Finished';
-        m.winnerId = res.winner || (res.homeScore > res.awayScore ? m.home : m.away);
+        m.winnerId = resolveKOWinner(res.winner, res.homeScore, res.awayScore, m.home, m.away);
       }
     });
     allFixtures.push(...qfMatches);
@@ -578,7 +579,7 @@ function calculateFixturesAndStatus() {
         m.awayScore = res.awayScore;
         m.finished = true;
         m.status = 'Finished';
-        m.winnerId = res.winner || (res.homeScore > res.awayScore ? m.home : m.away);
+        m.winnerId = resolveKOWinner(res.winner, res.homeScore, res.awayScore, m.home, m.away);
       }
     });
     allFixtures.push(...sfMatches);
@@ -596,7 +597,7 @@ function calculateFixturesAndStatus() {
         m.awayScore = res.awayScore;
         m.finished = true;
         m.status = 'Finished';
-        m.winnerId = res.winner || (res.homeScore > res.awayScore ? m.home : m.away);
+        m.winnerId = resolveKOWinner(res.winner, res.homeScore, res.awayScore, m.home, m.away);
       }
     });
     allFixtures.push(...finalMatches);
@@ -873,12 +874,24 @@ app.post('/api/admin/fixtures/result', (req, res) => {
   results[matchId] = {
     homeScore: parseInt(homeScore),
     awayScore: parseInt(awayScore),
-    winner: winner || (homeScore > awayScore ? undefined : undefined) // will be determined by stage later if not specified
+    winner: winner || (homeScore > awayScore ? undefined : awayScore > homeScore ? undefined : null) // null for draws in group stage
   };
 
   writeJson(FIXTURE_RESULTS_PATH, results);
   const updatedStatus = calculateFixturesAndStatus();
   res.json({ status: updatedStatus });
+});
+
+// GET /api/espn-scores — proxy the ESPN live scoreboard
+app.get('/api/espn-scores', async (req, res) => {
+  try {
+    const response = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard');
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error('ESPN proxy error:', err);
+    res.status(502).json({ error: 'Failed to fetch ESPN scores' });
+  }
 });
 
 // POST /api/predictions

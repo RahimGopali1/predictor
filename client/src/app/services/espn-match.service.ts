@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { catchError, map, Observable, of, shareReplay, switchMap, timer } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of, shareReplay, switchMap, timer } from 'rxjs';
 
 export interface EspnMatchEvent {
   id: string;
@@ -77,16 +77,43 @@ export interface EspnMatch {
 @Injectable({ providedIn: 'root' })
 export class EspnMatchService {
   private readonly http = inject(HttpClient);
-  private readonly url = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard';
+  private readonly directUrl = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard';
+  private readonly proxyUrl = '/api/espn-scores';
+
+  private fetchFrom(url: string): Observable<EspnMatch[]> {
+    return this.http.get<any>(url).pipe(
+      map((response) => this.mapResponse(response))
+    );
+  }
+
+  private readonly teamsCache = new Map<string, { name: string; flag: string }>();
 
   readonly allMatches$: Observable<EspnMatch[]> = timer(0, 60000).pipe(
-    switchMap(() => this.http.get<any>(this.url).pipe(
-      map((response) => this.mapResponse(response)),
-      catchError((error) => {
-        console.error('EspnMatchService error', error);
-        return of([] as EspnMatch[]);
-      })
-    )),
+    switchMap(() =>
+      // Try direct ESPN URL first, fall back to proxy, then tournament data
+      this.fetchFrom(this.directUrl).pipe(
+        catchError(() => this.fetchFrom(this.proxyUrl)),
+        catchError(() =>
+          forkJoin({
+            status: this.http.get<any>('/api/fixtures/status'),
+            teams: this.http.get<any>('/api/teams')
+          }).pipe(
+            map(({ status, teams }) => {
+              if (Array.isArray(teams?.teams)) {
+                teams.teams.forEach((t: any) => {
+                  if (t.id) this.teamsCache.set(t.id, { name: t.name || t.id, flag: t.flag || '' });
+                });
+              }
+              return this.mapTournamentToEspn(status);
+            }),
+            catchError((error) => {
+              console.error('EspnMatchService: all sources failed', error);
+              return of([] as EspnMatch[]);
+            })
+          )
+        )
+      )
+    ),
     shareReplay({ bufferSize: 1, refCount: true })
   );
 
@@ -104,6 +131,72 @@ export class EspnMatchService {
 
   getLiveEventTicker(match: EspnMatch): EspnMatchEvent[] {
     return [...match.details].sort((a, b) => a.minuteValue - b.minuteValue).slice(-3);
+  }
+
+  private mapTournamentToEspn(status: any): EspnMatch[] {
+    const fixtures = Array.isArray(status?.allFixtures) ? status.allFixtures : [];
+    return fixtures.map((f: any) => {
+      const isFinished = f.finished === true;
+      const hTeam = this.teamsCache.get(f.home);
+      const aTeam = this.teamsCache.get(f.away);
+      const homeName = f.homeTeam || hTeam?.name || f.home;
+      const awayName = f.awayTeam || aTeam?.name || f.away;
+      const homeFlag = hTeam?.flag || '';
+      const awayFlag = aTeam?.flag || '';
+
+      const home: EspnCompetitor = {
+        teamId: f.home,
+        abbreviation: f.home,
+        displayName: homeName,
+        logo: homeFlag,
+        primaryColor: '',
+        altColor: '',
+        score: f.homeScore ?? 0,
+        winner: isFinished && f.winnerId === f.home,
+        form: '',
+        record: '',
+        statistics: { possessionPct: 0, totalShots: 0, shotsOnTarget: 0, wonCorners: 0, foulsCommitted: 0 }
+      };
+
+      const away: EspnCompetitor = {
+        teamId: f.away,
+        abbreviation: f.away,
+        displayName: awayName,
+        logo: awayFlag,
+        primaryColor: '',
+        altColor: '',
+        score: f.awayScore ?? 0,
+        winner: isFinished && f.winnerId === f.away,
+        form: '',
+        record: '',
+        statistics: { possessionPct: 0, totalShots: 0, shotsOnTarget: 0, wonCorners: 0, foulsCommitted: 0 }
+      };
+
+      const stage = f.stage || 'Group';
+      const groupLabel = f.group ? `Group ${f.group}` : stage;
+      const statusName = isFinished ? 'STATUS_FULL_TIME' : 'STATUS_SCHEDULED';
+      const shortDetail = isFinished ? `FT · ${f.homeScore}–${f.awayScore}` : `${f.date} · ${f.time}`;
+
+      return {
+        id: String(f.id),
+        name: `${homeName} vs ${awayName}`,
+        statusName,
+        displayClock: '',
+        shortDetail,
+        seasonSlug: stage,
+        groupLabel,
+        venue: `${f.venue}, ${f.city}`,
+        kickoff: '',
+        kickoffIso: '',
+        home,
+        away,
+        odds: undefined,
+        broadcasts: [],
+        recapHeadline: '',
+        recapShortHeadline: '',
+        details: []
+      };
+    });
   }
 
   private mapResponse(response: any): EspnMatch[] {

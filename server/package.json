@@ -4,7 +4,8 @@
   "description": "Express backend API for World Cup Predictor",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "node test-winner-validation.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

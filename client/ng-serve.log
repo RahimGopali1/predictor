@@ -1,0 +1,331 @@
+[33m❯[39m Building...
+[32m✔[39m Building...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                      [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                       [2m | [22m[36m344.65 kB[39m[2m | [22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m                     [2m | [22m [36m31.93 kB[39m[2m | [22m
+[32mchunk-W2ENZUN6.js[39m  [2m | [22m[2m-[22m                          [2m | [22m  [36m8.58 kB[39m[2m | [22m
+[32mchunk-Y5RQAIA6.js[39m  [2m | [22m[2m-[22m                          [2m | [22m  [36m1.50 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m                  [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m              [2m | [22m[1m386.75 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                      [2m | [22m [1mRaw size[22m
+[32mchunk-SYLIA6K7.js[39m  [2m | [22m[2mlive-match-center-component[22m[2m | [22m [36m89.63 kB[39m[2m | [22m
+[32mchunk-LQ7CJ2VL.js[39m  [2m | [22m[2mlive-scores-component[22m      [2m | [22m [36m39.62 kB[39m[2m | [22m
+[32mchunk-73HPEDJV.js[39m  [2m | [22m[2mlive-component[22m             [2m | [22m  [36m6.80 kB[39m[2m | [22m
+
+Application bundle generation complete. [3.256 seconds] - 2026-06-17T14:31:44.812Z
+
+Watch mode enabled. Watching for file changes...
+NOTE: Raw file sizes do not reflect development server per-request transformations.
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m4200[22m/[39m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+Application bundle generation failed. [1.665 seconds] - 2026-06-17T14:38:43.717Z
+
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 16 in [ all.filter(l => isLive(l)).length ] in D:/WORLD-CUP-PREDICTOR/client/src/app/pages/live-scores/live-scores.component.ts@45:34[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/live-scores/live-scores.component.ts:46:34:
+[37m      46 │ ...v class="stat-value">[32m{{ all.filter(l => isLive(l)).length }}[37m</div>
+         ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Unexpected token ')' at column 27 in [ all.filter(l => isLive(l)).length ] in D:/WORLD-CUP-PREDICTOR/client/src/app/pages/live-scores/live-scores.component.ts@45:34[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/live-scores/live-scores.component.ts:46:34:
+[37m      46 │ ...v class="stat-value">[32m{{ all.filter(l => isLive(l)).length }}[37m</div>
+         ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2769: No overload matches this call.
+  Overload 1 of 2, '(predicate: (value: EspnMatch, index: number, array: EspnMatch[]) => value is EspnMatch, thisArg?: any): EspnMatch[]', gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type '(value: EspnMatch, index: number, array: EspnMatch[]) => value is EspnMatch'.
+  Overload 2 of 2, '(predicate: (value: EspnMatch, index: number, array: EspnMatch[]) => unknown, thisArg?: any): EspnMatch[]', gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type '(value: EspnMatch, index: number, array: EspnMatch[]) => unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/live-scores/live-scores.component.ts:46:48:
+[37m      46 │ ...v class="stat-value">{{ all.filter([32ml => isLive(l[37m)).length }}</div>
+         ╵                                       [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 16 in [ all.filter(m => isFinished(m)).length ] in D:/WORLD-CUP-PREDICTOR/client/src/app/pages/live-scores/live-scores.component.ts@49:34[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/live-scores/live-scores.component.ts:50:34:
+[37m      50 │ ...ass="stat-value">[32m{{ all.filter(m => isFinished(m)).length }}[37m</div>
+         ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Unexpected token ')' at column 31 in [ all.filter(m => isFinished(m)).length ] in D:/WORLD-CUP-PREDICTOR/client/src/app/pages/live-scores/live-scores.component.ts@49:34[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/live-scores/live-scores.component.ts:50:34:
+[37m      50 │ ...ass="stat-value">[32m{{ all.filter(m => isFinished(m)).length }}[37m</div>
+         ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2769: No overload matches this call.
+  Overload 1 of 2, '(predicate: (value: EspnMatch, index: number, array: EspnMatch[]) => value is EspnMatch, thisArg?: any): EspnMatch[]', gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type '(value: EspnMatch, index: number, array: EspnMatch[]) => value is EspnMatch'.
+  Overload 2 of 2, '(predicate: (value: EspnMatch, index: number, array: EspnMatch[]) => unknown, thisArg?: any): EspnMatch[]', gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type '(value: EspnMatch, index: number, array: EspnMatch[]) => unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/live-scores/live-scores.component.ts:50:48:
+[37m      50 │ ...ass="stat-value">{{ all.filter([32mm => isFinished(m[37m)).length }}</div>
+         ╵                                   [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 16 in [ all.filter(m => isUpcoming(m)).length ] in D:/WORLD-CUP-PREDICTOR/client/src/app/pages/live-scores/live-scores.component.ts@53:34[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/live-scores/live-scores.component.ts:54:34:
+[37m      54 │ ...ass="stat-value">[32m{{ all.filter(m => isUpcoming(m)).length }}[37m</div>
+         ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Unexpected token ')' at column 31 in [ all.filter(m => isUpcoming(m)).length ] in D:/WORLD-CUP-PREDICTOR/client/src/app/pages/live-scores/live-scores.component.ts@53:34[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/live-scores/live-scores.component.ts:54:34:
+[37m      54 │ ...ass="stat-value">[32m{{ all.filter(m => isUpcoming(m)).length }}[37m</div>
+         ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2769: No overload matches this call.
+  Overload 1 of 2, '(predicate: (value: EspnMatch, index: number, array: EspnMatch[]) => value is EspnMatch, thisArg?: any): EspnMatch[]', gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type '(value: EspnMatch, index: number, array: EspnMatch[]) => value is EspnMatch'.
+  Overload 2 of 2, '(predicate: (value: EspnMatch, index: number, array: EspnMatch[]) => unknown, thisArg?: any): EspnMatch[]', gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type '(value: EspnMatch, index: number, array: EspnMatch[]) => unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/live-scores/live-scores.component.ts:54:48:
+[37m      54 │ ...ass="stat-value">{{ all.filter([32mm => isUpcoming(m[37m)).length }}</div>
+         ╵                                   [32m~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+Application bundle generation failed. [0.184 seconds] - 2026-06-17T14:41:55.181Z
+
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 16 in [ all.filter(l => isLive(l)).length ] in D:/WORLD-CUP-PREDICTOR/client/src/app/pages/live-scores/live-scores.component.ts@45:34[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/live-scores/live-scores.component.ts:46:34:
+[37m      46 │ ...v class="stat-value">[32m{{ all.filter(l => isLive(l)).length }}[37m</div>
+         ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Unexpected token ')' at column 27 in [ all.filter(l => isLive(l)).length ] in D:/WORLD-CUP-PREDICTOR/client/src/app/pages/live-scores/live-scores.component.ts@45:34[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/live-scores/live-scores.component.ts:46:34:
+[37m      46 │ ...v class="stat-value">[32m{{ all.filter(l => isLive(l)).length }}[37m</div>
+         ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2769: No overload matches this call.
+  Overload 1 of 2, '(predicate: (value: EspnMatch, index: number, array: EspnMatch[]) => value is EspnMatch, thisArg?: any): EspnMatch[]', gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type '(value: EspnMatch, index: number, array: EspnMatch[]) => value is EspnMatch'.
+  Overload 2 of 2, '(predicate: (value: EspnMatch, index: number, array: EspnMatch[]) => unknown, thisArg?: any): EspnMatch[]', gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type '(value: EspnMatch, index: number, array: EspnMatch[]) => unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/live-scores/live-scores.component.ts:46:48:
+[37m      46 │ ...v class="stat-value">{{ all.filter([32ml => isLive(l[37m)).length }}</div>
+         ╵                                       [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 16 in [ all.filter(m => isFinished(m)).length ] in D:/WORLD-CUP-PREDICTOR/client/src/app/pages/live-scores/live-scores.component.ts@49:34[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/live-scores/live-scores.component.ts:50:34:
+[37m      50 │ ...ass="stat-value">[32m{{ all.filter(m => isFinished(m)).length }}[37m</div>
+         ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Unexpected token ')' at column 31 in [ all.filter(m => isFinished(m)).length ] in D:/WORLD-CUP-PREDICTOR/client/src/app/pages/live-scores/live-scores.component.ts@49:34[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/live-scores/live-scores.component.ts:50:34:
+[37m      50 │ ...ass="stat-value">[32m{{ all.filter(m => isFinished(m)).length }}[37m</div>
+         ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2769: No overload matches this call.
+  Overload 1 of 2, '(predicate: (value: EspnMatch, index: number, array: EspnMatch[]) => value is EspnMatch, thisArg?: any): EspnMatch[]', gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type '(value: EspnMatch, index: number, array: EspnMatch[]) => value is EspnMatch'.
+  Overload 2 of 2, '(predicate: (value: EspnMatch, index: number, array: EspnMatch[]) => unknown, thisArg?: any): EspnMatch[]', gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type '(value: EspnMatch, index: number, array: EspnMatch[]) => unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/live-scores/live-scores.component.ts:50:48:
+[37m      50 │ ...ass="stat-value">{{ all.filter([32mm => isFinished(m[37m)).length }}</div>
+         ╵                                   [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Bindings cannot contain assignments at column 16 in [ all.filter(m => isUpcoming(m)).length ] in D:/WORLD-CUP-PREDICTOR/client/src/app/pages/live-scores/live-scores.component.ts@53:34[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/live-scores/live-scores.component.ts:54:34:
+[37m      54 │ ...ass="stat-value">[32m{{ all.filter(m => isUpcoming(m)).length }}[37m</div>
+         ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Unexpected token ')' at column 31 in [ all.filter(m => isUpcoming(m)).length ] in D:/WORLD-CUP-PREDICTOR/client/src/app/pages/live-scores/live-scores.component.ts@53:34[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/live-scores/live-scores.component.ts:54:34:
+[37m      54 │ ...ass="stat-value">[32m{{ all.filter(m => isUpcoming(m)).length }}[37m</div>
+         ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2769: No overload matches this call.
+  Overload 1 of 2, '(predicate: (value: EspnMatch, index: number, array: EspnMatch[]) => value is EspnMatch, thisArg?: any): EspnMatch[]', gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type '(value: EspnMatch, index: number, array: EspnMatch[]) => value is EspnMatch'.
+  Overload 2 of 2, '(predicate: (value: EspnMatch, index: number, array: EspnMatch[]) => unknown, thisArg?: any): EspnMatch[]', gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type '(value: EspnMatch, index: number, array: EspnMatch[]) => unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/live-scores/live-scores.component.ts:54:48:
+[37m      54 │ ...ass="stat-value">{{ all.filter([32mm => isUpcoming(m[37m)).length }}</div>
+         ╵                                   [32m~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                      [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                       [2m | [22m[36m344.65 kB[39m[2m | [22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m                     [2m | [22m [36m31.93 kB[39m[2m | [22m
+[32mchunk-CZNSVO6M.js[39m  [2m | [22m[2m-[22m                          [2m | [22m  [36m8.52 kB[39m[2m | [22m
+[32mchunk-Y5RQAIA6.js[39m  [2m | [22m[2m-[22m                          [2m | [22m  [36m1.50 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m                  [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m              [2m | [22m[1m386.69 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                      [2m | [22m [1mRaw size[22m
+[32mchunk-6OCO53DT.js[39m  [2m | [22m[2mlive-match-center-component[22m[2m | [22m [36m89.63 kB[39m[2m | [22m
+[32mchunk-G2IR7JZY.js[39m  [2m | [22m[2mlive-scores-component[22m      [2m | [22m [36m64.54 kB[39m[2m | [22m
+[32mchunk-73HPEDJV.js[39m  [2m | [22m[2mlive-component[22m             [2m | [22m  [36m6.80 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.714 seconds] - 2026-06-17T14:47:04.577Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                      [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                       [2m | [22m[36m338.98 kB[39m[2m | [22m
+[32mchunk-YSOBESMR.js[39m  [2m | [22m[2m-[22m                          [2m | [22m  [36m5.76 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                      [2m | [22m [1mRaw size[22m
+[32mchunk-XRIFN7PB.js[39m  [2m | [22m[2mlive-match-center-component[22m[2m | [22m[36m130.00 kB[39m[2m | [22m
+
+Application bundle generation complete. [1.122 seconds] - 2026-06-17T14:51:24.554Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                      [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                       [2m | [22m[36m338.98 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                      [2m | [22m [1mRaw size[22m
+[32mchunk-JZQOCSMU.js[39m  [2m | [22m[2mlive-match-center-component[22m[2m | [22m[36m130.03 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.864 seconds] - 2026-06-17T14:52:07.180Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                      [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                       [2m | [22m[36m338.98 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                      [2m | [22m [1mRaw size[22m
+[32mchunk-YXRM2DFE.js[39m  [2m | [22m[2mlive-match-center-component[22m[2m | [22m[36m130.03 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.859 seconds] - 2026-06-17T14:52:34.817Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                      [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                       [2m | [22m[36m338.98 kB[39m[2m | [22m
+[32mchunk-W2ENZUN6.js[39m  [2m | [22m[2m-[22m                          [2m | [22m  [36m8.58 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                      [2m | [22m [1mRaw size[22m
+[32mchunk-NQNGJRAM.js[39m  [2m | [22m[2mlive-match-center-component[22m[2m | [22m[36m130.03 kB[39m[2m | [22m
+[32mchunk-S53OLRAH.js[39m  [2m | [22m[2mlive-scores-component[22m      [2m | [22m [36m64.54 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.407 seconds] - 2026-06-17T14:56:36.997Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                      [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                       [2m | [22m[36m338.98 kB[39m[2m | [22m
+[32mchunk-HRR4WOGM.js[39m  [2m | [22m[2m-[22m                          [2m | [22m  [36m8.84 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                      [2m | [22m [1mRaw size[22m
+[32mchunk-VUFZLKYJ.js[39m  [2m | [22m[2mlive-match-center-component[22m[2m | [22m[36m130.03 kB[39m[2m | [22m
+[32mchunk-MGK72YED.js[39m  [2m | [22m[2mlive-scores-component[22m      [2m | [22m [36m64.54 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.242 seconds] - 2026-06-17T14:58:39.777Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                      [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                       [2m | [22m[36m338.98 kB[39m[2m | [22m
+[32mchunk-QWXJ4CZJ.js[39m  [2m | [22m[2m-[22m                          [2m | [22m  [36m8.84 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                      [2m | [22m [1mRaw size[22m
+[32mchunk-FEMCBPD2.js[39m  [2m | [22m[2mlive-match-center-component[22m[2m | [22m[36m130.03 kB[39m[2m | [22m
+[32mchunk-XJKFTIT2.js[39m  [2m | [22m[2mlive-scores-component[22m      [2m | [22m [36m64.54 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.159 seconds] - 2026-06-17T15:00:31.097Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+Application bundle generation failed. [0.277 seconds] - 2026-06-17T15:00:42.725Z
+
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'mapTournamentToEspn' does not exist on type 'EspnMatchService'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/espn-match.service.ts:107:26:
+[37m      107 │               return this.[32mmapTournamentToEspn[37m(status);
+          ╵                           [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                      [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                       [2m | [22m[36m338.98 kB[39m[2m | [22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m                     [2m | [22m [36m31.93 kB[39m[2m | [22m
+[32mchunk-DI4QJJPZ.js[39m  [2m | [22m[2m-[22m                          [2m | [22m [36m11.48 kB[39m[2m | [22m
+[32mchunk-YSOBESMR.js[39m  [2m | [22m[2m-[22m                          [2m | [22m  [36m5.76 kB[39m[2m | [22m
+[32mchunk-Y5RQAIA6.js[39m  [2m | [22m[2m-[22m                          [2m | [22m  [36m1.50 kB[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m                  [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m              [2m | [22m[1m389.75 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                      [2m | [22m [1mRaw size[22m
+[32mchunk-VYPOYGWF.js[39m  [2m | [22m[2mlive-match-center-component[22m[2m | [22m[36m130.03 kB[39m[2m | [22m
+[32mchunk-GOJ2DT7R.js[39m  [2m | [22m[2mlive-scores-component[22m      [2m | [22m [36m64.54 kB[39m[2m | [22m
+[32mchunk-73HPEDJV.js[39m  [2m | [22m[2mlive-component[22m             [2m | [22m  [36m6.80 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.282 seconds] - 2026-06-17T15:01:06.892Z
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                      [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                       [2m | [22m[36m338.98 kB[39m[2m | [22m
+[32mchunk-CWA6HNJK.js[39m  [2m | [22m[2m-[22m                          [2m | [22m [36m11.40 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                      [2m | [22m [1mRaw size[22m
+[32mchunk-BONCJ6M5.js[39m  [2m | [22m[2mlive-match-center-component[22m[2m | [22m[36m130.03 kB[39m[2m | [22m
+[32mchunk-JA72QCBH.js[39m  [2m | [22m[2mlive-scores-component[22m      [2m | [22m [36m64.54 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.134 seconds] - 2026-06-17T15:01:53.527Z
+
+Page reload sent to client(s).
+[1m[31m[2m8:50:36 PM[22m[1m [31m[1m[vite][22m[1m[31m [31mhttp proxy error: /api/fixtures/status[31m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)[39m[22m
+[1m[31m[2m8:50:47 PM[22m[1m [31m[1m[vite][22m[1m[31m [31mhttp proxy error: /api/fixtures/status[31m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)[39m[22m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m [2m | [22m[1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m[2m | [22m[36m36.23 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.213 seconds] - 2026-06-17T15:23:42.927Z
+
+Stylesheet update sent to client(s).

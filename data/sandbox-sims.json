@@ -1,5 +1,23 @@
 [
   {
+    "id": "sim_epbuozd",
+    "teamA": "POR",
+    "teamB": "COD",
+    "scoreA": 5,
+    "scoreB": 0,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-17T14:01:42.990Z"
+  },
+  {
+    "id": "sim_yavqljb",
+    "teamA": "ARG",
+    "teamB": "ALG",
+    "scoreA": 2,
+    "scoreB": 0,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-17T14:01:27.616Z"
+  },
+  {
     "id": "sim_vqrm2o0",
     "teamA": "FRA",
     "teamB": "SEN",
