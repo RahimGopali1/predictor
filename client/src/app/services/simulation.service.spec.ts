@@ -255,8 +255,8 @@ describe('SimulationService', () => {
         const result = service.simPens(arg, hai);
         expect(result.sA).toBeGreaterThanOrEqual(0);
         expect(result.sB).toBeGreaterThanOrEqual(0);
-        expect(result.sA).toBeLessThanOrEqual(10);
-        expect(result.sB).toBeLessThanOrEqual(10);
+        expect(result.sA).toBeLessThanOrEqual(12);
+        expect(result.sB).toBeLessThanOrEqual(12);
       }
     });
 

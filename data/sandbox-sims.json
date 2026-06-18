@@ -1,5 +1,32 @@
 [
   {
+    "id": "sim_eox6yh8",
+    "teamA": "RSA",
+    "teamB": "KOR",
+    "scoreA": 1,
+    "scoreB": 2,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-18T15:44:36.130Z"
+  },
+  {
+    "id": "sim_9n5amtb",
+    "teamA": "MEX",
+    "teamB": "KOR",
+    "scoreA": 3,
+    "scoreB": 0,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-18T15:44:29.707Z"
+  },
+  {
+    "id": "sim_4gmt3zn",
+    "teamA": "MEX",
+    "teamB": "KOR",
+    "scoreA": 0,
+    "scoreB": 2,
+    "userName": "User_qugo0",
+    "createdAt": "2026-06-18T14:50:33.207Z"
+  },
+  {
     "id": "sim_gs28pur",
     "teamA": "POR",
     "teamB": "COD",

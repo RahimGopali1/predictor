@@ -15,19 +15,82 @@ export class SimulationService {
    * Higher values = more goals scored across the tournament.
    * Current calibrated value: 1.35 (was 1.30 before calibration).
    */
-  readonly BASE_LAMBDA = 1.35;
+  /**
+   * Base lambda for expected goals calculation.
+   * Calibrated via scripts/calibrate-lambda.mjs (v2) using the exact
+   * DC-corrected Poisson model with attack/defense split and 35% valueMod.
+   * Optimized: 1.28 (MSE: 13.16 vs updated June 2026 market odds).
+   */
+  readonly BASE_LAMBDA = 1.28;
 
+  /**
+   * Recent tournament history (2022 + 2018 World Cups) used for experience bonus.
+   * Stages: champion = 15, runnerUp = 10, semiFinal = 7, quarterFinal = 5, round16 = 3
+   * 2022 weight: 1.0, 2018 weight: 0.5 (decay for older tournament)
+   */
+  private readonly tournamentHistory: Record<string, { stage2022: string; stage2018: string }> = {
+    ARG: { stage2022: 'champion', stage2018: 'round16' },
+    FRA: { stage2022: 'runnerUp', stage2018: 'champion' },
+    CRO: { stage2022: 'semiFinal', stage2018: 'runnerUp' },
+    MAR: { stage2022: 'semiFinal', stage2018: '' },
+    NED: { stage2022: 'quarterFinal', stage2018: 'round16' },
+    ENG: { stage2022: 'quarterFinal', stage2018: 'semiFinal' },
+    BRA: { stage2022: 'quarterFinal', stage2018: 'quarterFinal' },
+    POR: { stage2022: 'quarterFinal', stage2018: 'round16' },
+    USA: { stage2022: 'round16', stage2018: '' },
+    AUS: { stage2022: 'round16', stage2018: '' },
+    JPN: { stage2022: 'round16', stage2018: 'round16' },
+    KOR: { stage2022: 'round16', stage2018: '' },
+    SEN: { stage2022: 'round16', stage2018: '' },
+    ESP: { stage2022: 'round16', stage2018: 'round16' },
+    SUI: { stage2022: 'round16', stage2018: 'round16' },
+    BEL: { stage2022: '', stage2018: 'semiFinal' },
+    URU: { stage2022: '', stage2018: 'quarterFinal' },
+    SWE: { stage2022: '', stage2018: 'quarterFinal' },
+    COL: { stage2022: '', stage2018: 'round16' },
+    MEX: { stage2022: '', stage2018: 'round16' },
+  };
+
+  /**
+   * Tournament pedigree ELO bonus based on recent World Cup performances.
+   * Teams that reached deep stages have experience and composure advantages.
+   * Range: 0 to +15 ELO (2022 champion: +15, 2018 champion: +7.5).
+   */
+  tournamentMod(id: string): number {
+    const hist = this.tournamentHistory[id];
+    if (!hist) return 0;
+
+    const stageBonus: Record<string, number> = {
+      champion: 15,
+      runnerUp: 10,
+      semiFinal: 7,
+      quarterFinal: 5,
+      round16: 3,
+    };
+
+    const bonus2022 = stageBonus[hist.stage2022] || 0;
+    const bonus2018 = stageBonus[hist.stage2018] || 0;
+
+    // 2022 gets full weight, 2018 gets 50% (older tournament, fewer core players remain)
+    return bonus2022 * 1.0 + bonus2018 * 0.5;
+  }
+
+  /**
+   * Benchmark odds used for the 'VS OPTA' and 'VS Markets' comparison table.
+   * Market values sourced from ESPN/DraftKings — June 2026.
+   * Opta values are ESPN's Soccer Power Index projections.
+   */
   readonly bench: Record<string, { opta: number; market: number }> = {
-    ESP: { opta: 16.1, market: 16.5 }, FRA: { opta: 13.0, market: 13.5 },
-    ENG: { opta: 11.2, market: 11.5 }, ARG: { opta: 10.4, market: 10.5 },
-    POR: { opta: 7.8, market: 8.0 }, BRA: { opta: 7.2, market: 7.5 },
-    GER: { opta: 5.8, market: 6.0 }, NED: { opta: 5.2, market: 5.5 },
-    URU: { opta: 4.3, market: 4.5 }, COL: { opta: 4.1, market: 4.0 },
-    MAR: { opta: 3.5, market: 3.2 }, BEL: { opta: 3.0, market: 2.8 },
-    CRO: { opta: 2.2, market: 2.0 }, SUI: { opta: 1.5, market: 1.6 },
-    USA: { opta: 1.8, market: 1.5 }, JPN: { opta: 1.2, market: 1.0 },
-    NOR: { opta: 0.6, market: 0.5 }, MEX: { opta: 0.9, market: 0.8 },
-    CAN: { opta: 0.6, market: 0.5 }, SWE: { opta: 0.8, market: 0.7 }
+    FRA: { opta: 19.2, market: 20.8 }, ESP: { opta: 14.8, market: 15.4 },
+    ENG: { opta: 12.1, market: 12.5 }, POR: { opta: 10.5, market: 11.1 },
+    ARG: { opta: 10.1, market: 10.5 }, BRA: { opta: 8.0, market: 8.3 },
+    GER: { opta: 6.8, market: 7.1 }, NED: { opta: 5.6, market: 5.9 },
+    BEL: { opta: 3.2, market: 3.0 }, URU: { opta: 4.0, market: 4.2 },
+    CRO: { opta: 2.4, market: 2.2 }, MAR: { opta: 3.0, market: 2.8 },
+    COL: { opta: 3.5, market: 3.8 }, USA: { opta: 2.0, market: 1.8 },
+    JPN: { opta: 1.4, market: 1.2 }, SWE: { opta: 1.0, market: 0.9 },
+    MEX: { opta: 1.2, market: 1.0 }, SUI: { opta: 1.3, market: 1.4 },
+    NOR: { opta: 0.8, market: 0.6 }, CAN: { opta: 0.7, market: 0.5 }
   };
 
   /**
@@ -57,6 +120,31 @@ export class SimulationService {
     // log10(200M) ≈ 2.3, log10(1.2B) ≈ 3.08, log10(8M) ≈ 0.9
     const mod = (Math.log10(valM) - 2.0) * 14;
     return Math.max(-15, Math.min(15, mod));
+  }
+
+  /**
+   * Split a team's effective ELO into separate attack and defense ratings.
+   *
+   * Teams with high squad values tend to have stronger attacks (spend on forwards),
+   * while teams with high FIFA rankings tend to have better defensive organization.
+   * The average of att and def equals the input effectiveElo, preserving overall strength.
+   *
+   * Max spread: ±45 ELO between attack and defense ratings.
+   * Note: valueMod() is intentionally NOT added here — squad value influences the
+   * att/def spread, not the overall base. Adding valueMod separately would double-count.
+   */
+  getAttDefElo(team: Team, effectiveElo: number): { att: number; def: number } {
+    const logVal = Math.log10(Math.max(1, this.parseValue(team.value)));
+    // valueNorm: -1 (€8M) to +1 (€1.3B)
+    const valueNorm = Math.max(-1, Math.min(1, (logVal - 2.0) / 1.1));
+    // rankNorm: +1 (FIFA rank 1) to -1 (FIFA rank 100+)
+    const rankNorm = Math.max(-1, Math.min(1, 1 - (team.fifaRank - 1) / 50));
+
+    const MAX_SPREAD = 45;
+    // Positive spread → attack > defense (high value, low rank)
+    // Negative spread → defense > attack (low value, high rank)
+    const spread = (valueNorm - rankNorm) / 2 * MAX_SPREAD;
+    return { att: effectiveElo + spread, def: effectiveElo - spread };
   }
 
   /**
@@ -98,15 +186,29 @@ export class SimulationService {
     if (tA.climate === 'cold' || tA.climate === 'temperate') eA -= 15;
     if (tB.climate === 'cold' || tB.climate === 'temperate') eB -= 15;
 
-    // Squad market value adjustment: high-value squads get a small ELO boost
-    eA += this.valueMod(tA.value);
-    eB += this.valueMod(tB.value);
+    // Tournament pedigree bonus: teams with deep recent runs have experience advantage
+    eA += this.tournamentMod(tA.id);
+    eB += this.tournamentMod(tB.id);
+
+    // Small residual flat value boost (captures overall quality signal that the
+    // att/def spread may miss when value and rank are aligned)
+    eA += this.valueMod(tA.value) * 0.35;
+    eB += this.valueMod(tB.value) * 0.35;
+
+    // Split into separate attack/defense ratings for more granular match modeling.
+    // Squad value and FIFA rank determine the att/def spread (high value = stronger attack,
+    // high FIFA rank = stronger defense). Overall strength (att+def)/2 = effectiveElo.
+    const { att: attA, def: defA } = this.getAttDefElo(tA, eA);
+    const { att: attB, def: defB } = this.getAttDefElo(tB, eB);
+
+    // Attack vs defense cross: team A's attack faces team B's defense and vice versa
+    let lA = BASE * Math.exp((attA - defB) / 600);
+    let lB = BASE * Math.exp((attB - defA) / 600);
+    // Use the original ELO difference for the convergence gap (att+def = 2*elo, so
+    // (attA-defB)-(attB-defA) = 2*(eA-eB), but we want the same threshold as before)
     const diff = eA - eB;
-    let lA = BASE * Math.exp(diff / 600);
-    let lB = BASE * Math.exp(-diff / 600);
-    const gap = Math.abs(diff);
-    if (gap < 80) {
-      const c = (1 - gap / 80) * 0.12;
+    if (Math.abs(diff) < 80) {
+      const c = (1 - Math.abs(diff) / 80) * 0.12;
       const avg = (lA + lB) / 2;
       lA = lA * (1 - c) + avg * c;
       lB = lB * (1 - c) + avg * c;

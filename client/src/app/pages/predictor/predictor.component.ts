@@ -21,6 +21,10 @@ interface SandboxFixture {
   away: string;
   venue: string;
   city: string;
+  homeScore?: number;
+  awayScore?: number;
+  winner?: string | null;
+  finished?: boolean;
 }
 
 interface CommEvent {
@@ -49,6 +53,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'RSA',
     venue: 'Estadio Azteca',
     city: 'Mexico City',
+    homeScore: 2,
+    awayScore: 1,
+    winner: 'MEX',
+    finished: true,
   },
   {
     id: 2,
@@ -59,6 +67,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'CZE',
     venue: 'Estadio Akron',
     city: 'Guadalajara',
+    homeScore: 1,
+    awayScore: 1,
+    winner: null,
+    finished: true,
   },
   {
     id: 3,
@@ -69,6 +81,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'BIH',
     venue: 'BMO Field',
     city: 'Toronto',
+    homeScore: 1,
+    awayScore: 0,
+    winner: 'CAN',
+    finished: true,
   },
   {
     id: 4,
@@ -79,6 +95,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'PAR',
     venue: 'SoFi Stadium',
     city: 'Los Angeles',
+    homeScore: 0,
+    awayScore: 3,
+    winner: 'PAR',
+    finished: true,
   },
   {
     id: 5,
@@ -89,6 +109,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'SUI',
     venue: "Levi's Stadium",
     city: 'San Francisco Bay Area',
+    homeScore: 2,
+    awayScore: 3,
+    winner: 'SUI',
+    finished: true,
   },
   {
     id: 6,
@@ -99,6 +123,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'TUR',
     venue: 'BC Place',
     city: 'Vancouver',
+    homeScore: 5,
+    awayScore: 0,
+    winner: 'AUS',
+    finished: true,
   },
   {
     id: 7,
@@ -109,6 +137,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'MAR',
     venue: 'MetLife Stadium',
     city: 'New York/New Jersey',
+    homeScore: 3,
+    awayScore: 2,
+    winner: 'BRA',
+    finished: true,
   },
   {
     id: 8,
@@ -119,6 +151,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'SCO',
     venue: 'Gillette Stadium',
     city: 'Boston',
+    homeScore: 1,
+    awayScore: 0,
+    winner: 'HAI',
+    finished: true,
   },
   {
     id: 9,
@@ -129,6 +165,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'CUW',
     venue: 'NRG Stadium',
     city: 'Houston',
+    homeScore: 1,
+    awayScore: 1,
+    winner: null,
+    finished: true,
   },
   {
     id: 10,
@@ -139,6 +179,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'JPN',
     venue: 'AT&T Stadium',
     city: 'Dallas',
+    homeScore: 3,
+    awayScore: 1,
+    winner: 'NED',
+    finished: true,
   },
   {
     id: 11,
@@ -149,6 +193,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'ECU',
     venue: 'Lincoln Financial Field',
     city: 'Philadelphia',
+    homeScore: 4,
+    awayScore: 1,
+    winner: 'CIV',
+    finished: true,
   },
   {
     id: 12,
@@ -159,6 +207,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'TUN',
     venue: 'Estadio BBVA',
     city: 'Monterrey',
+    homeScore: 1,
+    awayScore: 0,
+    winner: 'SWE',
+    finished: true,
   },
   {
     id: 13,
@@ -169,6 +221,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'EGY',
     venue: 'Lumen Field',
     city: 'Seattle',
+    homeScore: 2,
+    awayScore: 0,
+    winner: 'BEL',
+    finished: true,
   },
   {
     id: 14,
@@ -179,6 +235,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'NZL',
     venue: 'SoFi Stadium',
     city: 'Los Angeles',
+    homeScore: 3,
+    awayScore: 1,
+    winner: 'IRN',
+    finished: true,
   },
   {
     id: 15,
@@ -189,6 +249,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'URU',
     venue: 'Hard Rock Stadium',
     city: 'Miami',
+    homeScore: 0,
+    awayScore: 2,
+    winner: 'URU',
+    finished: true,
   },
   {
     id: 16,
@@ -199,6 +263,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'CPV',
     venue: 'Mercedes-Benz Stadium',
     city: 'Atlanta',
+    homeScore: 3,
+    awayScore: 1,
+    winner: 'ESP',
+    finished: true,
   },
   {
     id: 17,
@@ -209,6 +277,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'SEN',
     venue: 'MetLife Stadium',
     city: 'New York/New Jersey',
+    homeScore: 1,
+    awayScore: 1,
+    winner: null,
+    finished: true,
   },
   {
     id: 18,
@@ -219,6 +291,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'NOR',
     venue: 'Gillette Stadium',
     city: 'Boston',
+    homeScore: 2,
+    awayScore: 1,
+    winner: 'IRQ',
+    finished: true,
   },
   {
     id: 19,
@@ -229,6 +305,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'ALG',
     venue: 'Arrowhead Stadium',
     city: 'Kansas City',
+    homeScore: 5,
+    awayScore: 2,
+    winner: 'ARG',
+    finished: true,
   },
   {
     id: 20,
@@ -239,6 +319,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'JOR',
     venue: "Levi's Stadium",
     city: 'San Francisco Bay Area',
+    homeScore: 1,
+    awayScore: 1,
+    winner: null,
+    finished: true,
   },
   {
     id: 21,
@@ -249,6 +333,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'PAN',
     venue: 'BMO Field',
     city: 'Toronto',
+    homeScore: 1,
+    awayScore: 2,
+    winner: 'PAN',
+    finished: true,
   },
   {
     id: 22,
@@ -259,6 +347,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'CRO',
     venue: 'AT&T Stadium',
     city: 'Dallas',
+    homeScore: 1,
+    awayScore: 1,
+    winner: null,
+    finished: true,
   },
   {
     id: 23,
@@ -269,6 +361,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'COD',
     venue: 'NRG Stadium',
     city: 'Houston',
+    homeScore: 2,
+    awayScore: 2,
+    winner: null,
+    finished: true,
   },
   {
     id: 24,
@@ -279,6 +375,10 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     away: 'COL',
     venue: 'Estadio Azteca',
     city: 'Mexico City',
+    homeScore: 1,
+    awayScore: 2,
+    winner: 'COL',
+    finished: true,
   },
 ];
 
@@ -692,6 +792,8 @@ export class PredictorComponent implements OnInit, OnDestroy {
   }
 
   private mergeStatusFixture(match: UpcomingMatch): UpcomingMatch {
+    // Sandbox fixtures use hardcoded data — don't merge server results
+    // (the OPENING_FIXTURES list already has finished: true + scores for Round 1)
     if (match.isSandbox) {
       return match;
     }
