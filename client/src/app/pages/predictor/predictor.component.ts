@@ -699,6 +699,7 @@ export class PredictorComponent implements OnInit, OnDestroy {
       this.fixtureService.loadStatus(false),
     ]).then(() => {
       this.initSimState();
+      this.restoreSimState();
       // Set selectedTeam to the first upcoming match's home team
       const allTeams = this.teams();
       if (allTeams.length > 0) {
@@ -1395,6 +1396,7 @@ export class PredictorComponent implements OnInit, OnDestroy {
 
   private finishSims(simRes: Record<string, SimResult>): void {
     this.simRunning.set(false);
+    this.saveSimState();
     void this.predictionService.savePrediction(
       this.predictionService.getUserName(),
       simRes,
@@ -1402,29 +1404,63 @@ export class PredictorComponent implements OnInit, OnDestroy {
     );
   }
 
+  /** Softmax over ELO with temperature 400 */
+  eloChampProb(teamId: string): number {
+    const teams = this.teams();
+    if (teams.length === 0) return 0;
+    const rels = teams.map(t => Math.exp(t.elo / 400));
+    const totalRel = rels.reduce((s, v) => s + v, 0);
+    const idx = teams.findIndex(t => t.id === teamId);
+    return idx === -1 ? 0 : rels[idx] / totalRel;
+  }
+
+  /** Pre-simulation ELO-based estimated odds */
+  private estimatedOdds(): SimResult[] {
+    const teams = this.teams();
+    if (teams.length === 0) return [];
+    const TOTAL = this.simService.TOTAL;
+
+    return teams.map(t => {
+      const champProb = this.eloChampProb(t.id);
+      const champ = Math.round(champProb * TOTAL);
+      const fin = Math.min(TOTAL, Math.round(champ * 3));
+      const sf = Math.min(TOTAL, Math.round(fin * 2.2));
+      const qf = Math.min(TOTAL, Math.round(sf * 2));
+      const r16 = Math.min(TOTAL, Math.round(qf * 2));
+      const r32 = Math.min(TOTAL, Math.round(r16 * 1.5));
+      return { team: t, r32, r16, qf, sf, fin, champ };
+    }).sort((a, b) => b.champ - a.champ);
+  }
+
   oddsList(): SimResult[] {
-    const has = this.simsRun() > 0;
-    if (has) return Object.values(this.simRes()).sort((a, b) => b.champ - a.champ);
-    return [...this.teams()]
-      .map((t) => ({ team: t, r32: 0, r16: 0, qf: 0, sf: 0, fin: 0, champ: 0 }))
-      .sort((a, b) => b.team.elo - a.team.elo);
+    if (this.simsRun() > 0) {
+      return Object.values(this.simRes()).sort((a, b) => b.champ - a.champ);
+    }
+    return this.estimatedOdds();
   }
 
   pct(item: SimResult, field: keyof SimResult): string {
-    if (this.simsRun() <= 0) return '—';
+    const run = this.simsRun();
+    const total = run > 0 ? run : this.simService.TOTAL;
     const val = item[field] as number;
-    return ((val / this.simService.TOTAL) * 100).toFixed(1) + '%';
+    return ((val / total) * 100).toFixed(1) + '%';
   }
 
   champPct(item: SimResult): number {
-    return this.simsRun() > 0 ? (item.champ / this.simService.TOTAL) * 100 : 0;
+    const total = this.simsRun() > 0 ? this.simService.TOTAL : this.simService.TOTAL;
+    return (item.champ / total) * 100;
+  }
+
+  estimatedChampPct(teamId: string): string {
+    const prob = this.eloChampProb(teamId);
+    return prob > 0 ? (prob * 100).toFixed(1) : '—';
   }
 
   champCi(item: SimResult): string {
-    if (this.simsRun() <= 0) return '—';
-    const p = item.champ / this.simService.TOTAL;
+    const total = this.simsRun() > 0 ? this.simService.TOTAL : this.simService.TOTAL;
+    const p = item.champ / total;
     const z = 1.96;
-    const ci = z * Math.sqrt((p * (1 - p)) / this.simService.TOTAL) * 100;
+    const ci = z * Math.sqrt((p * (1 - p)) / total) * 100;
     return '±' + ci.toFixed(2) + '%';
   }
 
@@ -1457,10 +1493,15 @@ export class PredictorComponent implements OnInit, OnDestroy {
   }
 
   blendedOdds(team: Team): string {
-    if (this.simsRun() <= 0) return '—';
-    const statOdds = (this.simRes()[team.id].champ / this.simService.TOTAL) * 100;
+    let champOdds: number;
+    if (this.simsRun() > 0 && this.simRes()[team.id]) {
+      champOdds = (this.simRes()[team.id].champ / this.simService.TOTAL) * 100;
+    } else {
+      champOdds = this.eloChampProb(team.id) * 100;
+      if (champOdds <= 0) return '—';
+    }
     const cs = this.cosmicScore(team) / 100;
-    return (statOdds * 0.85 + statOdds * 0.15 * cs * 1.2).toFixed(1) + '%';
+    return (champOdds * 0.85 + champOdds * 0.15 * cs * 1.2).toFixed(1) + '%';
   }
 
   teamForMatch(id: string | undefined): Team {
@@ -1711,6 +1752,112 @@ export class PredictorComponent implements OnInit, OnDestroy {
   }
 
   readonly groupLetters = ['A','B','C','D','E','F','G','H','I','J','K','L'];
+
+  // ── Simulation Persistence ──
+
+  private readonly SIM_STORAGE_KEY = 'wc_sim_state';
+
+  /** Save sim results + modal bracket to localStorage so they survive page refresh */
+  private saveSimState(): void {
+    try {
+      const state: any = {
+        simsRun: this.simsRun(),
+        counts: {},
+        bracket: null,
+      };
+      for (const [id, sr] of Object.entries(this.simRes())) {
+        state.counts[id] = { r32: sr.r32, r16: sr.r16, qf: sr.qf, sf: sr.sf, fin: sr.fin, champ: sr.champ };
+      }
+      const mb = this.modalBracket();
+      if (mb) {
+        state.bracket = {
+          r32: this.serializeMatches(mb.r32),
+          r16: this.serializeMatches(mb.r16),
+          qf: this.serializeMatches(mb.qf),
+          sf: this.serializeMatches(mb.sf),
+          final: this.serializeMatch(mb.final),
+        };
+      }
+      localStorage.setItem(this.SIM_STORAGE_KEY, JSON.stringify(state));
+    } catch { /* localStorage may be full or unavailable */ }
+  }
+
+  /** Restore sim results + modal bracket from localStorage */
+  private restoreSimState(): void {
+    try {
+      const raw = localStorage.getItem(this.SIM_STORAGE_KEY);
+      if (!raw) return;
+      const state = JSON.parse(raw);
+      if (!state.simsRun || state.simsRun <= 0) return;
+
+      const teams = this.teams();
+      if (teams.length === 0) return;
+
+      const simRes = this.simService.initSimResults(teams);
+      for (const t of teams) {
+        const c = state.counts?.[t.id];
+        if (c && simRes[t.id]) {
+          simRes[t.id].r32 = c.r32 ?? 0;
+          simRes[t.id].r16 = c.r16 ?? 0;
+          simRes[t.id].qf = c.qf ?? 0;
+          simRes[t.id].sf = c.sf ?? 0;
+          simRes[t.id].fin = c.fin ?? 0;
+          simRes[t.id].champ = c.champ ?? 0;
+        }
+      }
+
+      this.simsRun.set(state.simsRun);
+      this.simRes.set(simRes);
+
+      if (state.bracket) {
+        this.modalBracket.set({
+          r32: this.deserializeMatches(state.bracket.r32 || []),
+          r16: this.deserializeMatches(state.bracket.r16 || []),
+          qf: this.deserializeMatches(state.bracket.qf || []),
+          sf: this.deserializeMatches(state.bracket.sf || []),
+          final: this.deserializeMatch(state.bracket.final),
+        });
+      }
+    } catch { /* corrupted data or version mismatch */ }
+  }
+
+  private serializeMatches(matches: MatchResult[]): any[] {
+    return matches.map(m => this.serializeMatch(m));
+  }
+
+  private serializeMatch(m: MatchResult): any {
+    return {
+      tA: m.tA.id,
+      tB: m.tB.id,
+      sA: m.sA,
+      sB: m.sB,
+      et: m.et,
+      pens: m.pens,
+      pA: m.pA,
+      pB: m.pB,
+      winner: m.winner?.id ?? null,
+    };
+  }
+
+  private deserializeMatches(arr: any[]): MatchResult[] {
+    return arr.map((m: any) => this.deserializeMatch(m));
+  }
+
+  private deserializeMatch(m: any): MatchResult {
+    const tA = this.teamService.findTeam(m.tA) || this.teamForMatch(m.tA);
+    const tB = this.teamService.findTeam(m.tB) || this.teamForMatch(m.tB);
+    return {
+      tA,
+      tB,
+      sA: m.sA,
+      sB: m.sB,
+      et: m.et,
+      pens: m.pens,
+      pA: m.pA,
+      pB: m.pB,
+      winner: m.winner ? (this.teamService.findTeam(m.winner) || tA) : null,
+    };
+  }
 
   // ── Bracket Prediction Game ──
 

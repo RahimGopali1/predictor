@@ -869,6 +869,11 @@
           OPTA</button>
       </div>
       <div *ngIf="oddsTab() === 'odds'" id="tabpanel-odds">
+        <div *ngIf="simsRun() === 0" class="estimate-banner">
+          <span class="estimate-icon">⚡</span>
+          <span class="estimate-text">Estimated from ELO ratings. Run 50,000 simulations for precise Monte Carlo odds.</span>
+          <button class="btn-sm" (click)="goStep(5)" style="flex-shrink:0;">Run Simulations →</button>
+        </div>
         <div class="tbl-wrap">
           <table id="odds-table">
             <thead>
@@ -1001,6 +1006,11 @@
       <div *ngIf="oddsTab() === 'compare'" id="tabpanel-compare">
         <p style="font-size:13px;color:var(--text2);margin-bottom:16px;display:none;">Comparing our model against Opta
           Supercomputer and pre-tournament betting market estimates.</p>
+        <div *ngIf="simsRun() === 0" class="estimate-banner" style="margin-bottom:16px;">
+          <span class="estimate-icon">⚡</span>
+          <span class="estimate-text">Model odds estimated from ELO ratings. Run 50,000 simulations for precise Monte Carlo odds.</span>
+          <button class="btn-sm" (click)="goStep(5)" style="flex-shrink:0;">Run Simulations →</button>
+        </div>
         <div class="tbl-wrap">
           <table id="compare-table">
             <thead>
@@ -1020,18 +1030,18 @@
                       style="color:var(--text);font-weight:500;">{{ item.team.name }}</span></div>
                 </td>
                 <td style="font-family:var(--font-head);font-size:18px;color:var(--gold);">{{ simsRun() > 0 ?
-                  champPct(item).toFixed(1) + '%' : '—' }}</td>
+                  champPct(item).toFixed(1) + '%' : (estimatedChampPct(item.team.id) + '%') }}</td>
                 <td style="font-family:var(--font-mono);font-size:12px;color:var(--text2);">{{
                   benchFor(item.team.id).opta.toFixed(1) }}%</td>
                 <td style="font-family:var(--font-mono);font-size:12px;color:var(--text2);">{{
                   benchFor(item.team.id).market.toFixed(1) }}%</td>
                 <td style="font-family:var(--font-mono);font-size:12px;color:var(--text3);">#{{ item.team.fifaRank }}
                 </td>
-                <td [class.diff-pos]="simsRun() > 0 && champPct(item) - benchFor(item.team.id).opta > 0"
-                  [class.diff-neg]="simsRun() > 0 && champPct(item) - benchFor(item.team.id).opta < 0">
+                <td [class.diff-pos]="(simsRun() > 0 ? champPct(item) : eloChampProb(item.team.id) * 100) - benchFor(item.team.id).opta > 0"
+                  [class.diff-neg]="(simsRun() > 0 ? champPct(item) : eloChampProb(item.team.id) * 100) - benchFor(item.team.id).opta < 0">
                   {{ simsRun() > 0 ? ((champPct(item) - benchFor(item.team.id).opta) > 0 ? '+' : '') + (champPct(item)
                   -
-                  benchFor(item.team.id).opta).toFixed(1) + '%' : '—' }}
+                  benchFor(item.team.id).opta).toFixed(1) + '%' : ((eloChampProb(item.team.id) * 100 - benchFor(item.team.id).opta) > 0 ? '+' : '') + (eloChampProb(item.team.id) * 100 - benchFor(item.team.id).opta).toFixed(1) + '%' }}
                 </td>
               </tr>
             </tbody>
@@ -1130,6 +1140,11 @@
         <div class="astro-title">✦ COSMIC LUCK INDEX ✦</div>
         <p class="astro-sub">For entertainment: zodiac signs and cosmic influence on teams.</p>
       </div>
+      <div *ngIf="simsRun() === 0" class="estimate-banner" style="margin-bottom:16px;">
+        <span class="estimate-icon">⚡</span>
+        <span class="estimate-text">Stat odds estimated from ELO ratings. Run 50,000 simulations for precise odds.</span>
+        <button class="btn-sm" (click)="goStep(5)" style="flex-shrink:0;">Run Simulations →</button>
+      </div>
       <div class="guide show" id="guide-6">
         Each nation's star player has a known or estimated birth date. Their <strong>zodiac sign</strong> determines a
         base cosmic energy profile. For 2026, planetary transits — particularly <strong>Jupiter in Gemini</strong>
@@ -1208,7 +1223,7 @@
                 <td><span class="cosmic-score" [style.color]="cosmicColor(cosmicScore(t))">{{ cosmicScore(t)
                     }}</span><span style="font-size:10px;color:var(--text3);">/100</span></td>
                 <td style="font-family:var(--font-mono);font-size:13px;color:var(--gold);">{{ simsRun() > 0 ?
-                  champPct(simRes()[t.id]).toFixed(1) + '%' : '—' }}</td>
+                  champPct(simRes()[t.id]).toFixed(1) + '%' : (estimatedChampPct(t.id) + '%') }}</td>
                 <td style="font-family:var(--font-head);font-size:20px;color:var(--purple);">{{ blendedOdds(t) }}</td>
               </tr>
             </tbody>
