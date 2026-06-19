@@ -4,15 +4,30 @@
     <div>
       <div class="header-eyebrow">Dixon-Coles Model · 50,000 Monte Carlo Simulations</div>
       <h1>2026 FIFA<br><span>WORLD CUP</span><br>PREDICTOR</h1>
-      <p class="header-sub">Powered by machine learning and 150 years of match data.</p>
+      <p class="header-sub">Powered by machine learning and 150 years of match data. Compare teams, run simulations, track live scores, and make predictions.</p>
     </div>
   </header>
 
   <div class="feature-row">
-    <a routerLink="/live" class="feature-card">
-      <div class="feature-eyebrow">Live Match Center</div>
-      <div class="feature-title">Deep match view + stats.</div>
-      <div class="feature-copy">Track live events, odds, venue, and leaderboards in one focused dashboard.</div>
+    <a routerLink="/scores" class="feature-card">
+      <div class="feature-eyebrow">Live Scores</div>
+      <div class="feature-title">Track every match live.</div>
+      <div class="feature-copy">Live scores, stats, odds, and event timelines — refreshed every minute.</div>
+    </a>
+    <a routerLink="/standings" class="feature-card">
+      <div class="feature-eyebrow">Group Standings</div>
+      <div class="feature-title">Live group tables + form.</div>
+      <div class="feature-copy">Group standings with qualification tracking, goal difference, and form guide.</div>
+    </a>
+    <a routerLink="/compare" class="feature-card">
+      <div class="feature-eyebrow">Team Comparator</div>
+      <div class="feature-title">Side-by-side team analysis.</div>
+      <div class="feature-copy">Compare any two teams — ELO, form, predicted score, and full model breakdown.</div>
+    </a>
+    <a routerLink="/leaderboard" class="feature-card">
+      <div class="feature-eyebrow">Leaderboard</div>
+      <div class="feature-title">User prediction rankings.</div>
+      <div class="feature-copy">See how your predictions stack up against other users.</div>
     </a>
   </div>
 
@@ -33,19 +48,29 @@
       <div class="step-name">Goal Sandbox</div>
     </div>
     <div class="step-card" data-step="4" (click)="goStep(4)" [class.active]="currentStep() === 4"
-      style="--step-color:#4d9fff">
-      <div class="step-num">04</div>
-      <div class="step-name">Run Simulations</div>
+      style="--step-color:#22c55e">
+      <div class="step-num">🏆</div>
+      <div class="step-name">My Bracket</div>
     </div>
     <div class="step-card" data-step="5" (click)="goStep(5)" [class.active]="currentStep() === 5"
-      style="--step-color:#e8b84b">
+      style="--step-color:#4d9fff">
       <div class="step-num">05</div>
-      <div class="step-name">Final Odds</div>
+      <div class="step-name">Run Simulations</div>
     </div>
     <div class="step-card" data-step="6" (click)="goStep(6)" [class.active]="currentStep() === 6"
+      style="--step-color:#e8b84b">
+      <div class="step-num">06</div>
+      <div class="step-name">Final Odds</div>
+    </div>
+    <div class="step-card" data-step="7" (click)="goStep(7)" [class.active]="currentStep() === 7"
       style="--step-color:#a78bfa">
       <div class="step-num">⭐</div>
       <div class="step-name">Cosmic Luck</div>
+    </div>
+    <div class="step-card" data-step="8" (click)="goStep(8)" [class.active]="currentStep() === 8"
+      style="--step-color:#2dce6e">
+      <div class="step-num">08</div>
+      <div class="step-name">Group Standings</div>
     </div>
   </nav>
 
@@ -139,7 +164,7 @@
           </div>
         </div>
       </div>
-      <div class="next-btn-wrap"><button class="btn-next" (click)="goStep(2)">NEXT: TEAM RATINGS →</button></div>
+      <div class="next-btn-wrap">    <button class="btn-next" (click)="goStep(2)">Next: Team Ratings</button></div>
     </div>
   </div>
 
@@ -158,6 +183,8 @@
           [class.active]="subTab() === 'ratings'">ELO RANKINGS</button>
         <button class="sub-tab" id="stab-form" (click)="showSubTab('form')" [class.active]="subTab() === 'form'">RECENT
           FORM</button>
+        <button class="sub-tab" id="stab-compare" (click)="showSubTab('compare')"
+          [class.active]="subTab() === 'compare'">HEAD TO HEAD</button>
       </div>
       <div *ngIf="subTab() === 'ratings'" id="subtab-ratings">
         <div class="search-wrap">
@@ -231,7 +258,177 @@
           </table>
         </div>
       </div>
-      <div class="next-btn-wrap"><button class="btn-next" (click)="goStep(3)">NEXT: GOAL SANDBOX →</button></div>
+
+      <!-- HEAD TO HEAD COMPARATOR -->
+      <div *ngIf="subTab() === 'compare'" id="subtab-compare">
+        <div class="h2h-intro">
+          Compare any two teams side-by-side — ELO, form, squad value, cosmic luck, and a simulated match prediction.
+        </div>
+
+        <!-- team selectors -->
+        <div class="h2h-pickers">
+          <div class="h2h-picker-col">
+            <div class="ctrl-label">Team A</div>
+            <div style="position:relative;">
+              <div class="team-trigger" (click)="showH2hDropdownA.set(!showH2hDropdownA())" [class.open]="showH2hDropdownA()">
+                <span>{{ h2hTeamAData()?.flag }} {{ h2hTeamAData()?.name || 'Select' }}</span>
+                <span class="trigger-arrow" [style.transform]="showH2hDropdownA() ? 'rotate(180deg)' : 'rotate(0deg)'">▼</span>
+              </div>
+              <div class="team-dropdown" *ngIf="showH2hDropdownA()">
+                <input class="team-search" type="text" [ngModel]="h2hSearchA()" (ngModelChange)="h2hSearchA.set($event)" placeholder="Search team…" (click)="$event.stopPropagation()" />
+                <div class="team-list">
+                  <div *ngFor="let t of h2hFilteredTeamsA()" class="team-item" [class.active]="h2hTeamA() === t.id" (click)="selectH2hTeamA(t.id)">
+                    {{ t.flag }} {{ t.name }} <span class="team-code">{{ t.elo }}</span>
+                  </div>
+                  <div *ngIf="h2hFilteredTeamsA().length === 0" class="team-empty">No teams found</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="h2h-vs-col">
+            <button class="h2h-swap-btn" (click)="swapH2hTeams()" title="Swap teams">⇄</button>
+            <div class="h2h-vs-text">VS</div>
+          </div>
+
+          <div class="h2h-picker-col">
+            <div class="ctrl-label">Team B</div>
+            <div style="position:relative;">
+              <div class="team-trigger" (click)="showH2hDropdownB.set(!showH2hDropdownB())" [class.open]="showH2hDropdownB()">
+                <span>{{ h2hTeamBData()?.flag }} {{ h2hTeamBData()?.name || 'Select' }}</span>
+                <span class="trigger-arrow" [style.transform]="showH2hDropdownB() ? 'rotate(180deg)' : 'rotate(0deg)'">▼</span>
+              </div>
+              <div class="team-dropdown" *ngIf="showH2hDropdownB()">
+                <input class="team-search" type="text" [ngModel]="h2hSearchB()" (ngModelChange)="h2hSearchB.set($event)" placeholder="Search team…" (click)="$event.stopPropagation()" />
+                <div class="team-list">
+                  <div *ngFor="let t of h2hFilteredTeamsB()" class="team-item" [class.active]="h2hTeamB() === t.id" (click)="selectH2hTeamB(t.id)">
+                    {{ t.flag }} {{ t.name }} <span class="team-code">{{ t.elo }}</span>
+                  </div>
+                  <div *ngIf="h2hFilteredTeamsB().length === 0" class="team-empty">No teams found</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- comparison grid (only when both teams selected) -->
+        <ng-container *ngIf="h2hTeamAData() && h2hTeamBData()">
+          <!-- predicted score hero -->
+          <div class="h2h-hero">
+            <div class="h2h-hero-team">
+              <div class="h2h-hero-flag">{{ h2hTeamAData()?.flag }}</div>
+              <div class="h2h-hero-name">{{ h2hTeamAData()?.name }}</div>
+              <div class="h2h-hero-elo">{{ h2hTeamAData()?.elo }}</div>
+            </div>
+            <div class="h2h-hero-center">
+              <div class="h2h-hero-score">{{ h2hPredictedScore() }}</div>
+              <div class="h2h-hero-label">Predicted score</div>
+              <div class="h2h-hero-probs">
+                <div class="h2h-prob-bar">
+                  <div class="h2h-prob-fill h2h-prob-win" [style.width.%]="h2hProbs().pw * 100"></div>
+                  <div class="h2h-prob-fill h2h-prob-draw" [style.width.%]="h2hProbs().pd * 100"></div>
+                </div>
+                <div class="h2h-prob-labels">
+                  <span style="color:var(--green);">{{ (h2hProbs().pw * 100).toFixed(0) }}%</span>
+                  <span style="color:var(--blue);">{{ (h2hProbs().pd * 100).toFixed(0) }}%</span>
+                  <span style="color:var(--red);">{{ (h2hProbs().pl * 100).toFixed(0) }}%</span>
+                </div>
+              </div>
+            </div>
+            <div class="h2h-hero-team">
+              <div class="h2h-hero-flag">{{ h2hTeamBData()?.flag }}</div>
+              <div class="h2h-hero-name">{{ h2hTeamBData()?.name }}</div>
+              <div class="h2h-hero-elo">{{ h2hTeamBData()?.elo }}</div>
+            </div>
+          </div>
+
+          <!-- stat comparison cards -->
+          <div class="h2h-stats">
+            <div class="h2h-stat-row">
+              <div class="h2h-stat-val" [style.color]="h2hEloDiffColor(h2hTeamAData()!.elo - h2hTeamBData()!.elo)">{{ h2hTeamAData()?.elo }}</div>
+              <div class="h2h-stat-label">ELO Rating</div>
+              <div class="h2h-stat-val" [style.color]="h2hEloDiffColor(h2hTeamBData()!.elo - h2hTeamAData()!.elo)">{{ h2hTeamBData()?.elo }}</div>
+            </div>
+            <div class="h2h-stat-row">
+              <div class="h2h-stat-val">#{{ h2hTeamAData()?.fifaRank }}</div>
+              <div class="h2h-stat-label">FIFA Rank</div>
+              <div class="h2h-stat-val">#{{ h2hTeamBData()?.fifaRank }}</div>
+            </div>
+            <div class="h2h-stat-row">
+              <div class="h2h-stat-val">{{ h2hTeamAData()?.value }}</div>
+              <div class="h2h-stat-label">Squad Value</div>
+              <div class="h2h-stat-val">{{ h2hTeamBData()?.value }}</div>
+            </div>
+            <div class="h2h-stat-row">
+              <div class="h2h-stat-val">{{ (h2hTeamAData()?.penRate ?? 0) * 100 }}%</div>
+              <div class="h2h-stat-label">Penalty Rate</div>
+              <div class="h2h-stat-val">{{ (h2hTeamBData()?.penRate ?? 0) * 100 }}%</div>
+            </div>
+            <div class="h2h-stat-row">
+              <div class="h2h-stat-val" [style.color]="h2hTeamAData()?.host ? 'var(--amber)' : 'var(--text2)'">{{ h2hTeamAData()?.host ? '★ Host' : '—' }}</div>
+              <div class="h2h-stat-label">Host Nation</div>
+              <div class="h2h-stat-val" [style.color]="h2hTeamBData()?.host ? 'var(--amber)' : 'var(--text2)'">{{ h2hTeamBData()?.host ? '★ Host' : '—' }}</div>
+            </div>
+            <div class="h2h-stat-row">
+              <div class="h2h-stat-val" style="text-transform:capitalize;">{{ h2hTeamAData()?.climate || '—' }}</div>
+              <div class="h2h-stat-label">Climate</div>
+              <div class="h2h-stat-val" style="text-transform:capitalize;">{{ h2hTeamBData()?.climate || '—' }}</div>
+            </div>
+            <div class="h2h-stat-row">
+              <div class="h2h-stat-val">{{ zodiac(h2hTeamAData()!).emoji }} {{ zodiac(h2hTeamAData()!).sign }}</div>
+              <div class="h2h-stat-label">Star Zodiac</div>
+              <div class="h2h-stat-val">{{ zodiac(h2hTeamBData()!).emoji }} {{ zodiac(h2hTeamBData()!).sign }}</div>
+            </div>
+            <div class="h2h-stat-row">
+              <div class="h2h-stat-val" [style.color]="cosmicColor(cosmicScore(h2hTeamAData()!))">{{ cosmicScore(h2hTeamAData()!) }}</div>
+              <div class="h2h-stat-label">Cosmic Score</div>
+              <div class="h2h-stat-val" [style.color]="cosmicColor(cosmicScore(h2hTeamBData()!))">{{ cosmicScore(h2hTeamBData()!) }}</div>
+            </div>
+            <div class="h2h-stat-row">
+              <div class="h2h-stat-val" [style.color]="h2hEloDiffColor(h2hProbs().fa)">{{ h2hProbs().fa >= 0 ? '+' : '' }}{{ h2hProbs().fa.toFixed(1) }}</div>
+              <div class="h2h-stat-label">Form Modifier</div>
+              <div class="h2h-stat-val" [style.color]="h2hEloDiffColor(h2hProbs().fb)">{{ h2hProbs().fb >= 0 ? '+' : '' }}{{ h2hProbs().fb.toFixed(1) }}</div>
+            </div>
+            <div class="h2h-stat-row">
+              <div class="h2h-stat-val" [style.color]="h2hProbs().ha > 0 ? 'var(--amber)' : 'var(--text3)'">{{ h2hProbs().ha > 0 ? '+' + h2hProbs().ha : '0' }}</div>
+              <div class="h2h-stat-label">Host Bonus</div>
+              <div class="h2h-stat-val" [style.color]="h2hProbs().hb > 0 ? 'var(--amber)' : 'var(--text3)'">{{ h2hProbs().hb > 0 ? '+' + h2hProbs().hb : '0' }}</div>
+            </div>
+          </div>
+
+          <!-- model math breakdown -->
+          <div class="h2h-math">
+            <div class="h2h-math-title">⚙️ Dixon-Coles Model Breakdown</div>
+            <div class="h2h-math-grid">
+              <div class="h2h-math-item">
+                <span class="h2h-math-label">Effective ELO (A)</span>
+                <span class="h2h-math-val">{{ h2hProbs().effA.toFixed(0) }}</span>
+              </div>
+              <div class="h2h-math-item">
+                <span class="h2h-math-label">Effective ELO (B)</span>
+                <span class="h2h-math-val">{{ h2hProbs().effB.toFixed(0) }}</span>
+              </div>
+              <div class="h2h-math-item">
+                <span class="h2h-math-label">Rating Gap</span>
+                <span class="h2h-math-val" [style.color]="h2hEloDiffColor(h2hProbs().gap)">{{ h2hProbs().gap >= 0 ? '+' : '' }}{{ h2hProbs().gap.toFixed(0) }}</span>
+              </div>
+              <div class="h2h-math-item">
+                <span class="h2h-math-label">λA (Expected Goals A)</span>
+                <span class="h2h-math-val">{{ h2hProbs().lA.toFixed(3) }}</span>
+              </div>
+              <div class="h2h-math-item">
+                <span class="h2h-math-label">λB (Expected Goals B)</span>
+                <span class="h2h-math-val">{{ h2hProbs().lB.toFixed(3) }}</span>
+              </div>
+              <div class="h2h-math-item">
+                <span class="h2h-math-label">Dixon-Coles ρ</span>
+                <span class="h2h-math-val">{{ h2hProbs().rho.toFixed(3) }}</span>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="next-btn-wrap"><button class="btn-next" (click)="goStep(3)">Next: Goal Sandbox</button></div>
     </div>
   </div>
 
@@ -421,7 +618,7 @@
         <div class="matches-grid" *ngIf="(liveMatches$ | async)?.length || (upcomingMatches$ | async)?.length">
 
           <div *ngFor="let match of (liveMatches$ | async) || []" class="match-card"
-            [routerLink]="['/live/match', match.id]">
+            [routerLink]="['/scores', match.id]">
             <div class="match-card-header">
               <span class="match-group">{{ match.home.displayName }} vs {{ match.away.displayName }}</span>
               <div [ngClass]="isLive(match) ? 'status-pill status-pill-live' : isFinished(match) ? 'status-pill status-pill-completed' : 'status-pill status-pill-upcoming'">
@@ -462,7 +659,7 @@
           </div>
 
           <div *ngFor="let match of (upcomingMatches$ | async) || []" class="match-card upcoming-match-card"
-            [routerLink]="['/live/match', match.id]">
+            [routerLink]="['/scores', match.id]">
             <div class="match-card-header">
               <span class="match-group">{{ match.home.displayName }} vs {{ match.away.displayName }}</span>
               <div class="status-pill status-pill-upcoming">Upcoming</div>
@@ -493,15 +690,126 @@
         </div>
 
         <div class="next-btn-wrap">
-          <button class="btn-next" (click)="goStep(4)">Next: Run simulations →</button>
+          <button class="btn-next" (click)="goStep(4)">Next: My Bracket</button>
         </div>
 
       </div>
     </div>
   </div>
   
-  <!-- PANEL 4 -->
+  <!-- PANEL 4 — BRACKET PICKS -->
   <div class="panel" id="panel-4" [class.active]="currentStep() === 4">
+    <div class="card">
+      <div class="card-title">My Bracket Predictions</div>
+      <p class="card-sub">Fill out your bracket before running simulations. Pick winners for each knockout match.</p>
+
+      <div *ngIf="!bracketEditMode() && !userBracket()" class="bracket-start">
+        <div class="guide show" style="margin-bottom:20px;">
+          Predict every match from the Round of 32 through to the Grand Final. Your picks will be compared against the
+          Monte Carlo simulation and actual tournament results. Points per correct pick: <strong>R32 (1pt)</strong> ·
+          <strong>R16 (2pts)</strong> · <strong>QF (3pts)</strong> · <strong>SF (5pts)</strong> ·
+          <strong>Final (8pts)</strong> · <strong>Champion (12pts)</strong>.
+        </div>
+        <button class="btn-primary" (click)="initBracket()">START MY BRACKET</button>
+      </div>
+
+      <div *ngIf="userBracket()" class="bracket-game">
+
+        <!-- progress & controls -->
+        <div class="bracket-topbar">
+          <div class="bracket-progress">
+            <span>Bracket progress: </span>
+            <span *ngFor="let s of bracketStageOrder" class="bp-dot"
+              [class.done]="bracketStageProgress(s).done === bracketStageProgress(s).total"
+              [class.partial]="bracketStageProgress(s).done > 0 && bracketStageProgress(s).done < bracketStageProgress(s).total"
+              [title]="bracketStageLabels[s] + ': ' + bracketStageProgress(s).done + '/' + bracketStageProgress(s).total">
+            </span>
+          </div>
+          <div class="bracket-controls">
+            <button class="btn-sm" (click)="resetBracket()" *ngIf="bracketEditMode()">↻ RESET</button>
+            <button class="btn-sm" (click)="bracketEditMode.set(false); saveBracket(userBracket()!)" *ngIf="bracketEditMode()" style="border-color:var(--green);color:var(--green);">✓ DONE PICKING</button>
+            <button class="btn-sm" (click)="initBracket()" *ngIf="!bracketEditMode()">EDIT BRACKET</button>
+          </div>
+        </div>
+
+        <!-- round stages -->
+        <div class="bracket-rounds">
+          <div *ngFor="let stage of bracketStageOrder" class="bracket-round">
+            <div class="br-header">
+              <span class="br-title">{{ bracketStageLabels[stage] }}</span>
+              <span class="br-count">({{ bracketStageProgress(stage).done }}/{{ bracketStageProgress(stage).total }})</span>
+            </div>
+
+            <!-- matches for this stage -->
+            <div *ngFor="let pick of bracketStagePicks(stage)" class="br-match">
+              <div class="br-match-label">{{ pick.label || 'Match' }}</div>
+              <div class="br-team"
+                [class.winner]="pick.winner === pick.home"
+                [class.clickable]="bracketEditMode()"
+                (click)="bracketEditMode() && pickWinner(stage, pick.label, pick.home)">
+                <div class="br-team-info">
+                  <span class="br-flag">{{ bracketTeamInfo(pick.home).flag }}</span>
+                  <span class="br-name">{{ bracketTeamInfo(pick.home).name }}</span>
+                </div>
+                <span class="br-check" *ngIf="pick.winner === pick.home">✓</span>
+              </div>
+              <div class="br-team"
+                [class.winner]="pick.winner === pick.away"
+                [class.clickable]="bracketEditMode()"
+                (click)="bracketEditMode() && pickWinner(stage, pick.label, pick.away)">
+                <div class="br-team-info">
+                  <span class="br-flag">{{ bracketTeamInfo(pick.away).flag }}</span>
+                  <span class="br-name">{{ bracketTeamInfo(pick.away).name }}</span>
+                </div>
+                <span class="br-check" *ngIf="pick.winner === pick.away">✓</span>
+              </div>
+            </div>
+
+            <div *ngIf="bracketStagePicks(stage).length === 0" class="br-empty">
+              {{ stage === 'final' ? 'Awaiting semi-final winners' : 'No matches' }}
+            </div>
+          </div>
+        </div>
+
+        <!-- champion callout -->
+        <div class="bracket-champion-box" *ngIf="bracketChampion()">
+          <span class="bc-crown">🏆</span>
+          <span>Your champion: </span>
+          <span class="bc-team">{{ bracketTeamInfo(bracketChampion()!).flag }} {{ bracketTeamInfo(bracketChampion()!).name }}</span>
+        </div>
+
+        <!-- score card -->
+        <div class="bracket-score-card" *ngIf="!bracketEditMode() && scoreBracket() as sc">
+          <div class="bsc-title">Your Bracket Score</div>
+          <div class="bsc-grid">
+            <div class="bsc-stat">
+              <div class="bsc-val">{{ sc.totalCorrect }}/{{ sc.totalPossible }}</div>
+              <div class="bsc-lbl">Correct Picks</div>
+            </div>
+            <div class="bsc-stat">
+              <div class="bsc-val" style="color:var(--gold);">{{ sc.score }}</div>
+              <div class="bsc-lbl">Points</div>
+            </div>
+            <div class="bsc-stat">
+              <div class="bsc-val" [style.color]="sc.championCorrect ? 'var(--green)' : 'var(--red)'">
+                {{ sc.championCorrect ? '✓' : '✗' }}
+              </div>
+              <div class="bsc-lbl">Champion Correct</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="next-btn-wrap">
+        <button class="btn-next" (click)="goStep(3)">Back: Goal Sandbox</button>
+        <button class="btn-next" (click)="goStep(5)">Next: Run Simulations</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 5 -->
+  <div class="panel" id="panel-5" [class.active]="currentStep() === 5">
     <div class="card">
       <div class="card-title">50,000 Tournament Simulations</div>
       <p class="card-sub">Run 50,000 tournament simulations to calculate championship odds.</p>
@@ -513,8 +821,7 @@
       </div>
       <div class="sim-center">
         <button class="btn-primary" id="sim-btn" (click)="runSims()" [disabled]="simRunning()"
-          style="font-size:20px;padding:16px 32px;">RUN
-          50,000 SIMULATIONS 🏆</button>
+          style="font-size:20px;padding:16px 32px;">Run 50,000 Simulations</button>
         <div class="progress-wrap">
           <div class="progress-label"><span>Progress</span><span id="prog-text">{{ simsRun().toLocaleString() }} /
               50,000</span></div>
@@ -537,12 +844,12 @@
           </div>
         </div>
       </div>
-      <div class="next-btn-wrap"><button class="btn-next" (click)="goStep(5)">NEXT: VIEW ODDS →</button></div>
+      <div class="next-btn-wrap"><button class="btn-next" (click)="goStep(6)">Next: View Odds</button></div>
     </div>
   </div>
 
-  <!-- PANEL 5 -->
-  <div class="panel" id="panel-5" [class.active]="currentStep() === 5">
+  <!-- PANEL 6 -->
+  <div class="panel" id="panel-6" [class.active]="currentStep() === 6">
     <div class="card">
       <div class="card-title">Final Odds &amp; Bracket</div>
       <p class="card-sub">Championship odds with confidence intervals.</p>
@@ -731,11 +1038,93 @@
           </table>
         </div>
       </div>
+
+      <!-- MY BRACKET tab -->
+      <div *ngIf="oddsTab() === 'mybracket'" id="tabpanel-mybracket">
+        <div *ngIf="!userBracket()" style="text-align:center;padding:40px;color:var(--text3);">
+          No bracket picks yet. Go to <a routerLink="/" (click)="goStep(4)" style="color:var(--gold);text-decoration:underline;cursor:pointer;">Step 4 → My Bracket</a> to make your predictions.
+        </div>
+
+        <div *ngIf="userBracket() && scoreBracket() as sc" class="mybracket-content">
+          <!-- Overall score card -->
+          <div class="mybracket-hero">
+            <div class="mybracket-hero-score">{{ sc.score }} / {{ sc.maxScore }}</div>
+            <div class="mybracket-hero-lbl">Your Bracket Score</div>
+            <div class="mybracket-hero-bar">
+              <div class="mybracket-hero-fill" [style.width.%]="(sc.score / sc.maxScore) * 100"></div>
+            </div>
+          </div>
+
+          <!-- Stage breakdown -->
+          <div class="mybracket-breakdown">
+            <div class="mb-row">
+              <span class="mb-stage">Round of 32</span>
+              <span class="mb-correct">{{ sc.r32Correct }}/16</span>
+              <span class="mb-pts">({{ sc.r32Correct * 1 }} pts)</span>
+              <div class="mb-bar">
+                <div class="mb-fill mb-r32" [style.width.%]="(sc.r32Correct / 16) * 100"></div>
+              </div>
+            </div>
+            <div class="mb-row">
+              <span class="mb-stage">Round of 16</span>
+              <span class="mb-correct">{{ sc.r16Correct }}/8</span>
+              <span class="mb-pts">({{ sc.r16Correct * 2 }} pts)</span>
+              <div class="mb-bar">
+                <div class="mb-fill mb-r16" [style.width.%]="(sc.r16Correct / 8) * 100"></div>
+              </div>
+            </div>
+            <div class="mb-row">
+              <span class="mb-stage">Quarter-Finals</span>
+              <span class="mb-correct">{{ sc.qfCorrect }}/4</span>
+              <span class="mb-pts">({{ sc.qfCorrect * 3 }} pts)</span>
+              <div class="mb-bar">
+                <div class="mb-fill mb-qf" [style.width.%]="(sc.qfCorrect / 4) * 100"></div>
+              </div>
+            </div>
+            <div class="mb-row">
+              <span class="mb-stage">Semi-Finals</span>
+              <span class="mb-correct">{{ sc.sfCorrect }}/2</span>
+              <span class="mb-pts">({{ sc.sfCorrect * 5 }} pts)</span>
+              <div class="mb-bar">
+                <div class="mb-fill mb-sf" [style.width.%]="(sc.sfCorrect / 2) * 100"></div>
+              </div>
+            </div>
+            <div class="mb-row">
+              <span class="mb-stage">Grand Final</span>
+              <span class="mb-correct">{{ sc.finalCorrect ? '✓' : '✗' }}</span>
+              <span class="mb-pts">({{ sc.finalCorrect * 8 }} pts)</span>
+              <div class="mb-bar">
+                <div class="mb-fill mb-final" [style.width.%]="sc.finalCorrect ? 100 : 0"></div>
+              </div>
+            </div>
+            <div class="mb-row mb-row-champion">
+              <span class="mb-stage">🏆 Champion</span>
+              <span class="mb-correct" [style.color]="sc.championCorrect ? 'var(--green)' : 'var(--red)'">{{ sc.championCorrect ? '✓' : '✗' }}</span>
+              <span class="mb-pts">({{ sc.championCorrect ? 12 : 0 }} pts)</span>
+              <div class="mb-bar">
+                <div class="mb-fill mb-champ" [style.width.%]="sc.championCorrect ? 100 : 0"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Champion display -->
+          <div class="mybracket-champion" *ngIf="bracketChampion() as cId">
+            Your champion: <span class="flag">{{ bracketTeamInfo(cId).flag }}</span>
+            <strong>{{ bracketTeamInfo(cId).name }}</strong>
+            <span *ngIf="sc.championCorrect" style="color:var(--green);font-size:13px;margin-left:8px;">✓ Correct!</span>
+            <span *ngIf="!sc.championCorrect" style="color:var(--red);font-size:13px;margin-left:8px;">✗ Actual: {{ fixtureStatus()?.champion ? bracketTeamInfo(fixtureStatus()!.champion!).flag + ' ' + bracketTeamInfo(fixtureStatus()!.champion!).name : '—' }}</span>
+          </div>
+
+          <!-- Edit button -->
+          <button class="btn-sm" (click)="initBracket(); goStep(4)" style="margin-top:20px;">← EDIT MY BRACKET</button>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <!-- PANEL 6 — COSMIC LUCK -->
-  <div class="panel" id="panel-6" [class.active]="currentStep() === 6">
+  <!-- PANEL 7 — COSMIC LUCK -->
+  <div class="panel" id="panel-7" [class.active]="currentStep() === 7">
     <div class="card">
       <div class="astro-hero">
         <div class="astro-title">✦ COSMIC LUCK INDEX ✦</div>
@@ -830,12 +1219,95 @@
       </div>
     </div>
   </div><!-- /wrap -->
-  <!-- <footer>
-  <div class="wrap">2026 FIFA WORLD CUP PREDICTOR · DIXON-COLES MODEL · MONTE CARLO ENGINE · FOR ENTERTAINMENT
-    PURPOSES</div>
-</footer> -->
+  <!-- PANEL 8 — GROUP STANDINGS -->
+  <div class="panel" id="panel-8" [class.active]="currentStep() === 8">
+    <div class="card">
+      <div class="card-title">Group Standings</div>
+      <p class="card-sub">Live group tables with points, goal difference, and qualification status. Based on actual tournament results.</p>
+      <div class="guide show" id="guide-7">
+        <strong>2026 World Cup Format:</strong> 12 groups (A–L) of 4 teams. Top 2 from each group <strong>auto-qualify</strong> for the Round of 32 (<span class="badge badge-green">●</span>). The best <strong>8 third-placed teams</strong> also advance (<span class="badge badge-blue">●</span>). Teams are sorted by Points → Goal Difference → Goals For → ELO.
+      </div>
+      <div class="refresh-bar">
+        <span class="refresh-label">Standings based on match results</span>
+        <button class="btn-sm" (click)="refreshGroupStandings()">↻ Refresh</button>
+      </div>
+      <div class="standings-grid" *ngIf="groupStandings() as standings">
+        <div class="group-card" *ngFor="let g of groupLetters">
+        <div class="group-header" *ngIf="standings[g] && standings[g].length > 0">
+          <span class="group-letter">Group {{ g }}</span>
+          <span class="group-status" *ngIf="standings[g][0].gp === 0">No matches yet</span>
+          <span class="group-status" *ngIf="standings[g][0].gp > 0 && standings[g][0].gp < 3">
+            {{ standings[g][0].gp }}/3 matchdays
+          </span>
+          <span class="group-status group-complete" *ngIf="standings[g][0].gp >= 3">Complete</span>
+        </div>
+          <table class="standings-table" *ngIf="standings[g] && standings[g].length > 0">
+            <thead>
+              <tr>
+                <th class="col-pos">#</th>
+                <th class="col-team">Team</th>
+                <th class="col-stat">P</th>
+                <th class="col-stat">W</th>
+                <th class="col-stat">D</th>
+                <th class="col-stat">L</th>
+                <th class="col-stat">GF</th>
+                <th class="col-stat">GA</th>
+                <th class="col-stat">GD</th>
+                <th class="col-pts">Pts</th>
+                <th class="col-form">Form</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let entry of standings[g]" [class.qualified]="entry.position <= 2">
+                <td class="col-pos">
+                  <span [class]="positionBadge(entry.position, g, standings)">{{ entry.position }}</span>
+                </td>
+                <td class="col-team">
+                  <div class="team-cell">
+                    <span class="flag">{{ entry.teamFlag }}</span>
+                    <span class="team-name-text">{{ entry.teamName }}</span>
+                  </div>
+                </td>
+                <td class="col-stat">{{ entry.gp }}</td>
+                <td class="col-stat">{{ entry.w }}</td>
+                <td class="col-stat">{{ entry.d }}</td>
+                <td class="col-stat">{{ entry.l }}</td>
+                <td class="col-stat">{{ entry.gf }}</td>
+                <td class="col-stat">{{ entry.ga }}</td>
+                <td class="col-stat" [class.gd-pos]="entry.gd > 0" [class.gd-neg]="entry.gd < 0">
+                  {{ entry.gd > 0 ? '+' : '' }}{{ entry.gd }}
+                </td>
+                <td class="col-pts"><span class="pts-value">{{ entry.pts }}</span></td>
+                <td class="col-form">
+                  <span class="form-strip">
+                    <span *ngFor="let f of entry.form.split('').slice(-5)" [class]="formBadgeClass(f)">{{ f }}</span>
+                    <span *ngIf="!entry.form" class="badge badge-blue" style="opacity:0.4">–</span>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="group-empty" *ngIf="!standings[g] || standings[g].length === 0">
+            <span class="group-letter">Group {{ g }}</span>
+            <span class="group-status">Teams not available</span>
+          </div>
+        </div>
+      </div>
+      <div class="standings-empty" *ngIf="!groupStandings()">
+        <p>Load fixture data to see group standings.</p>
+        <button class="btn-sm" (click)="refreshGroupStandings()">↻ Load Standings</button>
+      </div>
+      <div class="legend-bar">
+        <span><span class="badge badge-green">●</span> Qualifying (top 2)</span>
+        <span><span class="badge badge-blue">●</span> Possible 3rd place qualifier</span>
+        <span><span class="badge badge-amber">●</span> Third place (unlikely to advance)</span>
+        <span><span class="badge badge-red">●</span> Eliminated</span>
+      </div>
+  <div class="next-btn-wrap">
+    <button class="btn-next" (click)="goStep(7)">Back: Cosmic Luck</button>
+  </div>
+    </div>
+  </div>
 
-
-  <a routerLink="/admin" class="btn-sm"
-    style="position:fixed;bottom:24px;right:24px;z-index:99;text-decoration:none;">🔐
-    ADMIN</a>
+  <div style="margin-top:24px;"><a routerLink="/leaderboard" class="btn-sm" style="text-decoration:none;">View Leaderboard</a></div>
+          

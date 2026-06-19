@@ -982,6 +982,182 @@ function adminAuth(req, res, next) {
   next();
 }
 
+// GET /api/leaderboard
+app.get('/api/leaderboard', (req, res) => {
+  const predictions = readJson(PREDICTIONS_PATH, []);
+  const results = readJson(FIXTURE_RESULTS_PATH, {});
+  const teamsCache = readJson(TEAMS_CACHE_PATH, null);
+  const teamsList = teamsCache ? teamsCache.teams : [];
+  const teamsMap = {};
+  teamsList.forEach(t => { teamsMap[t.id] = t; });
+
+  // Determine the actual champion from match 104 (Grand Final)
+  const grandFinalResult = results['104'];
+  const actualChampion = grandFinalResult ? grandFinalResult.winner : null;
+
+  // For each team, determine their furthest tournament stage based on fixture results
+  // Stage hierarchy: Group < R32 < R16 < QF < SF < Final (Runner-up) < Champion
+  const teamStages = {};
+  teamsList.forEach(t => { teamStages[t.id] = 'Group'; });
+
+  // Collect stage for each team from finished matches
+  Object.entries(results).forEach(([matchId, res]) => {
+    if (matchId === '_syncedAt') return;
+    const id = parseInt(matchId);
+    if (isNaN(id)) return;
+
+    // Determine match stage from match ID range
+    let stage;
+    if (id >= 1 && id <= 72) stage = 'Group';
+    else if (id >= 73 && id <= 88) stage = 'R32';
+    else if (id >= 89 && id <= 96) stage = 'R16';
+    else if (id >= 97 && id <= 100) stage = 'QF';
+    else if (id >= 101 && id <= 102) stage = 'SF';
+    else if (id === 103) stage = '3rd';
+    else if (id === 104) stage = 'Final';
+    else stage = 'Group';
+
+    // Find which teams played in this match
+    // We need to get teams from the calculated fixtures, but we can reconstruct from fixture-results alone
+    // Since we don't have team IDs in the results, we'll use the server's calculation
+  });
+
+  // Use calculateFixturesAndStatus to get actual team matchups and stages
+  // But that's expensive. Instead, let's use a simpler approach:
+  // Determine champion + runner-up from the final match
+  // For top 5 scoring, we'll extract team progression from the fixture results
+  
+  // We need teams playing in each match. The fixture-results only has scores, not team IDs.
+  // We need to use the server's tournament engine to reconstruct matches
+  const status = calculateFixturesAndStatus();
+  const allFixtures = status.allFixtures;
+
+  // Map teamId -> furthest stage reached
+  const teamStageMap = {};
+  teamsList.forEach(t => { teamStageMap[t.id] = 'Group'; });
+  const teamStageOrder = ['Group', 'R32', 'R16', 'QF', 'SF', 'Final', 'Champion'];
+
+  allFixtures.forEach(f => {
+    if (!f.finished) return;
+    let stageName;
+    if (f.stage === 'Group' || (!f.stage && f.matchday)) stageName = 'Group';
+    else if (f.stage === 'Round of 32') stageName = 'R32';
+    else if (f.stage === 'Round of 16') stageName = 'R16';
+    else if (f.stage === 'Quarter-Final') stageName = 'QF';
+    else if (f.stage === 'Semi-Final') stageName = 'SF';
+    else if (f.stage === 'Grand Final') stageName = 'Final';
+    else if (f.stage === 'Third Place') stageName = '3rd';
+    else stageName = 'Group';
+
+    const stageIdx = teamStageOrder.indexOf(stageName);
+    const homeIdx = teamStageOrder.indexOf(teamStageMap[f.home] || 'Group');
+    const awayIdx = teamStageOrder.indexOf(teamStageMap[f.away] || 'Group');
+
+    // Winner gets full stage credit
+    if (stageName === 'Final') {
+      if (f.winnerId) {
+        const wIdx = teamStageOrder.indexOf(teamStageMap[f.winnerId] || 'Group');
+        const championIdx = teamStageOrder.indexOf('Champion');
+        if (championIdx > wIdx) teamStageMap[f.winnerId] = 'Champion';
+      }
+      // Runner-up gets 'Final'
+      const loser = f.home === f.winnerId ? f.away : f.home;
+      if (loser) {
+        const lIdx = teamStageOrder.indexOf(teamStageMap[loser] || 'Group');
+        const finalIdx = teamStageOrder.indexOf('Final');
+        if (finalIdx > lIdx) teamStageMap[loser] = 'Final';
+      }
+    } else {
+      if (f.winnerId) {
+        const wIdx = teamStageOrder.indexOf(teamStageMap[f.winnerId] || 'Group');
+        if (stageIdx > wIdx) teamStageMap[f.winnerId] = stageName;
+      }
+      // Loser gets the previous stage (current stage is their furthest)
+      const loser = f.home === f.winnerId ? f.away : f.home;
+      if (loser) {
+        const lIdx = teamStageOrder.indexOf(teamStageMap[loser] || 'Group');
+        if (stageIdx > lIdx) teamStageMap[loser] = stageName;
+      }
+    }
+  });
+
+  // Points per stage reached
+  const stagePoints = {
+    'Group': 1,
+    'R32': 3,
+    'R16': 5,
+    'QF': 10,
+    'SF': 20,
+    '3rd': 15,
+    'Final': 30,
+    'Champion': 50
+  };
+
+  // Group predictions by user, keep latest
+  const userMap = {};
+  predictions.forEach(p => {
+    const existing = userMap[p.userName];
+    if (!existing || new Date(p.createdAt) > new Date(existing.createdAt)) {
+      userMap[p.userName] = p;
+    }
+  });
+
+  // Calculate scores
+  const leaderboard = Object.values(userMap).map(p => {
+    // Champion score
+    const championCorrect = p.championId === actualChampion;
+    const championPts = championCorrect ? 50 : 0;
+
+    // Top 5 picks score
+    let topPicksPts = 0;
+    const pickDetails = (p.topPicks || []).map(pick => {
+      const stage = teamStageMap[pick.id] || 'Group';
+      const pts = stagePoints[stage] || 0;
+      topPicksPts += pts;
+      return {
+        id: pick.id,
+        name: pick.name,
+        stage,
+        pts
+      };
+    });
+
+    const totalScore = championPts + topPicksPts;
+
+    return {
+      userName: p.userName,
+      championId: p.championId,
+      championName: p.championName,
+      championFlag: p.championFlag || '',
+      championCorrect,
+      championPts,
+      topPicksPts,
+      totalScore,
+      topPicks: p.topPicks || [],
+      pickDetails,
+      simsRun: p.simsRun,
+      createdAt: p.createdAt
+    };
+  });
+
+  // Sort by total score descending, then by simsRun descending
+  leaderboard.sort((a, b) => {
+    if (b.totalScore !== a.totalScore) return b.totalScore - a.totalScore;
+    return b.simsRun - a.simsRun;
+  });
+
+  // Add rank
+  leaderboard.forEach((entry, idx) => { entry.rank = idx + 1; });
+
+  res.json({
+    champion: actualChampion,
+    championName: actualChampion ? (teamsMap[actualChampion] ? teamsMap[actualChampion].name : actualChampion) : null,
+    championFlag: actualChampion ? (teamsMap[actualChampion] ? teamsMap[actualChampion].flag : '') : '',
+    totalUsers: leaderboard.length,
+    leaderboard
+  });
+});
+
 // GET /api/admin/predictions
 app.get('/api/admin/predictions', adminAuth, (req, res) => {
   const predictions = readJson(PREDICTIONS_PATH, []);

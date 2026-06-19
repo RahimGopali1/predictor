@@ -5,14 +5,24 @@ import { AdminComponent } from './pages/admin/admin.component';
 export const routes: Routes = [
   { path: '', component: PredictorComponent },
   {
-    path: 'live',
-    loadComponent: () => import('./pages/live/live.component').then(m => m.LiveComponent),
-    children: [
-      { path: '', redirectTo: 'match', pathMatch: 'full' },
-      { path: 'scores', loadComponent: () => import('./pages/live-scores/live-scores.component').then(m => m.LiveScoresComponent) },
-      { path: 'match', loadComponent: () => import('./pages/live-match-center/live-match-center.component').then(m => m.LiveMatchCenterComponent) },
-      { path: 'match/:id', loadComponent: () => import('./pages/live-match-center/live-match-center.component').then(m => m.LiveMatchCenterComponent) },
-    ]
+    path: 'scores',
+    loadComponent: () => import('./pages/live-match-center/live-match-center.component').then(m => m.LiveMatchCenterComponent)
+  },
+  {
+    path: 'scores/:id',
+    loadComponent: () => import('./pages/live-match-center/live-match-center.component').then(m => m.LiveMatchCenterComponent)
+  },
+  {
+    path: 'standings',
+    loadComponent: () => import('./pages/group-standings/group-standings.component').then(m => m.GroupStandingsComponent)
+  },
+  {
+    path: 'compare',
+    loadComponent: () => import('./pages/head-to-head/head-to-head.component').then(m => m.HeadToHeadComponent)
+  },
+  {
+    path: 'leaderboard',
+    loadComponent: () => import('./pages/leaderboard/leaderboard.component').then(m => m.LeaderboardComponent)
   },
   { path: 'admin', component: AdminComponent },
   { path: '**', redirectTo: '' }

@@ -18,7 +18,7 @@ app.use((req, res, next) => {
     const p = req.path || req.url || '';
     if (!p.startsWith('/api')) {
       // If the path looks like one of our top-level endpoints, prefix with /api
-      const topEndpoints = ['/fixtures', '/teams', '/recent-matches', '/predictions', '/sandbox-sims', '/admin', '/teams', '/recent-matches'];
+      const topEndpoints = ['/fixtures', '/teams', '/recent-matches', '/predictions', '/sandbox-sims', '/admin', '/teams', '/recent-matches', '/leaderboard'];
       for (const ep of topEndpoints) {
         if (p.startsWith(ep)) {
           req.url = '/api' + req.url;
@@ -975,6 +975,125 @@ app.post('/api/sandbox-sims', wrapAsync(async (req, res) => {
 
   await writeSandboxSims(sandbox);
   res.json({ success: true });
+}));
+
+// GET /api/leaderboard
+app.get('/api/leaderboard', wrapAsync(async (req, res) => {
+  const predictions = await readPredictions();
+  const teamsCache = await ensureFallbackCache();
+  const teamsList = teamsCache.teams || [];
+  const teamsMap = {};
+  teamsList.forEach(t => { teamsMap[t.id] = t; });
+
+  const status = await calculateFixturesAndStatus();
+  const allFixtures = status.allFixtures || [];
+
+  // Map teamId -> furthest stage reached
+  const teamStageOrder = ['Group', 'R32', 'R16', 'QF', 'SF', 'Final', 'Champion'];
+  const teamStageMap = {};
+  teamsList.forEach(t => { teamStageMap[t.id] = 'Group'; });
+
+  allFixtures.forEach(f => {
+    if (!f.finished) return;
+    let stageName;
+    if (f.stage === 'Group' || (!f.stage && f.matchday)) stageName = 'Group';
+    else if (f.stage === 'Round of 32') stageName = 'R32';
+    else if (f.stage === 'Round of 16') stageName = 'R16';
+    else if (f.stage === 'Quarter-Final') stageName = 'QF';
+    else if (f.stage === 'Semi-Final') stageName = 'SF';
+    else if (f.stage === 'Grand Final') stageName = 'Final';
+    else if (f.stage === 'Third Place') stageName = '3rd';
+    else stageName = 'Group';
+
+    const stageIdx = teamStageOrder.indexOf(stageName);
+
+    if (stageName === 'Final') {
+      if (f.winnerId) {
+        const wIdx = teamStageOrder.indexOf(teamStageMap[f.winnerId] || 'Group');
+        const championIdx = teamStageOrder.indexOf('Champion');
+        if (championIdx > wIdx) teamStageMap[f.winnerId] = 'Champion';
+      }
+      const loser = f.home === f.winnerId ? f.away : f.home;
+      if (loser) {
+        const lIdx = teamStageOrder.indexOf(teamStageMap[loser] || 'Group');
+        const finalIdx = teamStageOrder.indexOf('Final');
+        if (finalIdx > lIdx) teamStageMap[loser] = 'Final';
+      }
+    } else {
+      if (f.winnerId) {
+        const wIdx = teamStageOrder.indexOf(teamStageMap[f.winnerId] || 'Group');
+        if (stageIdx > wIdx) teamStageMap[f.winnerId] = stageName;
+      }
+      const loser = f.home === f.winnerId ? f.away : f.home;
+      if (loser) {
+        const lIdx = teamStageOrder.indexOf(teamStageMap[loser] || 'Group');
+        if (stageIdx > lIdx) teamStageMap[loser] = stageName;
+      }
+    }
+  });
+
+  const stagePoints = {
+    'Group': 1,
+    'R32': 3,
+    'R16': 5,
+    'QF': 10,
+    'SF': 20,
+    '3rd': 15,
+    'Final': 30,
+    'Champion': 50
+  };
+
+  const actualChampion = status.champion;
+
+  // Group predictions by user, keep latest
+  const userMap = {};
+  predictions.forEach(p => {
+    const existing = userMap[p.userName];
+    if (!existing || new Date(p.createdAt) > new Date(existing.createdAt)) {
+      userMap[p.userName] = p;
+    }
+  });
+
+  const leaderboard = Object.values(userMap).map(p => {
+    const championCorrect = p.championId === actualChampion;
+    const championPts = championCorrect ? 50 : 0;
+    let topPicksPts = 0;
+    const pickDetails = (p.topPicks || []).map(pick => {
+      const stage = teamStageMap[pick.id] || 'Group';
+      const pts = stagePoints[stage] || 0;
+      topPicksPts += pts;
+      return { id: pick.id, name: pick.name, stage, pts };
+    });
+
+    return {
+      userName: p.userName,
+      championId: p.championId,
+      championName: p.championName,
+      championFlag: p.championFlag || '',
+      championCorrect,
+      championPts,
+      topPicksPts,
+      totalScore: championPts + topPicksPts,
+      topPicks: p.topPicks || [],
+      pickDetails,
+      simsRun: p.simsRun,
+      createdAt: p.createdAt
+    };
+  });
+
+  leaderboard.sort((a, b) => {
+    if (b.totalScore !== a.totalScore) return b.totalScore - a.totalScore;
+    return b.simsRun - a.simsRun;
+  });
+  leaderboard.forEach((entry, idx) => { entry.rank = idx + 1; });
+
+  res.json({
+    champion: actualChampion,
+    championName: actualChampion ? (teamsMap[actualChampion] ? teamsMap[actualChampion].name : actualChampion) : null,
+    championFlag: actualChampion ? (teamsMap[actualChampion] ? teamsMap[actualChampion].flag : '') : '',
+    totalUsers: leaderboard.length,
+    leaderboard
+  });
 }));
 
 app.get('/api/admin/predictions', adminAuth, wrapAsync(async (req, res) => {

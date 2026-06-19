@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
 import { AdminStats, PredictionService } from '../../services/prediction.service';
 import { UserPrediction } from '../../models/team.model';
@@ -11,7 +10,7 @@ Chart.register(...registerables);
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss'
 })

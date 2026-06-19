@@ -55,6 +55,37 @@ export interface BracketData {
   final: MatchResult;
 }
 
+export interface UserBracketPick {
+  matchId: number;
+  stage: string;
+  label: string;
+  home: string;
+  away: string;
+  winner: string | null;
+}
+
+export interface UserBracket {
+  r32: Record<string, UserBracketPick>;
+  r16: Record<string, UserBracketPick>;
+  qf: Record<string, UserBracketPick>;
+  sf: Record<string, UserBracketPick>;
+  final: UserBracketPick | null;
+  champion: string | null;
+}
+
+export interface BracketScore {
+  r32Correct: number;
+  r16Correct: number;
+  qfCorrect: number;
+  sfCorrect: number;
+  finalCorrect: number;
+  championCorrect: boolean;
+  totalCorrect: number;
+  totalPossible: number;
+  score: number;
+  maxScore: number;
+}
+
 export interface UserPrediction {
   id: string;
   userName: string;

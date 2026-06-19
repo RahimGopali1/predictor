@@ -3,6 +3,30 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { SimResult, UserPrediction } from '../models/team.model';
 
+export interface LeaderboardEntry {
+  rank: number;
+  userName: string;
+  championId: string;
+  championName: string;
+  championFlag: string;
+  championCorrect: boolean;
+  championPts: number;
+  topPicksPts: number;
+  totalScore: number;
+  topPicks: { id: string; name: string; pct: number }[];
+  pickDetails: { id: string; name: string; stage: string; pts: number }[];
+  simsRun: number;
+  createdAt: string;
+}
+
+export interface LeaderboardResponse {
+  champion: string | null;
+  championName: string | null;
+  championFlag: string;
+  totalUsers: number;
+  leaderboard: LeaderboardEntry[];
+}
+
 export interface AdminStats {
   totalPredictions: number;
   uniqueUsers: number;
@@ -62,6 +86,12 @@ export class PredictionService {
       scoreB,
       userName: this.getUserName()
     }));
+  }
+
+  async getLeaderboard(): Promise<LeaderboardResponse> {
+    return firstValueFrom(
+      this.http.get<LeaderboardResponse>(`${this.api}/leaderboard`)
+    );
   }
 
   async getAdminPredictions(adminKey: string): Promise<UserPrediction[]> {

@@ -2,61 +2,69 @@
   <header>
     <div>
       <div class="header-eyebrow">Admin Dashboard</div>
-      <h1>USER<br><span>PREDICTIONS</span></h1>
+      <h1>ADMIN<br><span>PANEL</span></h1>
       <p class="header-sub">Track all user simulation results, champion picks, and prediction trends.</p>
     </div>
     <div class="header-controls">
-      <a routerLink="/" class="btn-sm" style="text-decoration:none;">← PREDICTOR</a>
-      <button class="btn-sm" *ngIf="authenticated()" (click)="refresh()">↻ REFRESH</button>
+      <button class="btn-sm" *ngIf="authenticated()" (click)="refresh()">↻ Refresh</button>
     </div>
   </header>
 
-  <div class="card" *ngIf="!authenticated()">
-    <div class="card-title">Admin Login</div>
-    <p class="card-sub">Enter admin key to view user predictions.</p>
-    <div class="login-row">
-      <input type="password" class="search-input" [(ngModel)]="adminKey" placeholder="Admin key..." (keyup.enter)="login()" />
-      <button class="btn-primary" style="width:auto;margin-top:0;" (click)="login()" [disabled]="loading()">
-        {{ loading() ? 'LOADING...' : 'LOGIN' }}
-      </button>
+  <section class="hero-card" *ngIf="!authenticated()">
+    <div>
+      <div class="hero-eyebrow">🔐 Secure access</div>
+      <div class="hero-title">Admin authentication required</div>
+      <p class="hero-summary">Enter your admin key to view user predictions, champion pick distribution, and simulation activity.</p>
     </div>
-    <p *ngIf="error()" style="color:var(--red);margin-top:12px;font-size:13px;">{{ error() }}</p>
-  </div>
+    <form (ngSubmit)="login()" style="margin-top:16px;">
+      <div class="login-row">
+        <input type="password" id="admin-key-input" name="adminKey" class="search-input" [(ngModel)]="adminKey" placeholder="Enter admin key..." />
+        <button type="submit" class="btn-sm" style="border-color:var(--gold);color:var(--gold);" [disabled]="loading()">
+          {{ loading() ? 'LOADING...' : 'AUTHENTICATE' }}
+        </button>
+      </div>
+      <p *ngIf="error()" class="admin-error">{{ error() }}</p>
+    </form>
+  </section>
 
   <ng-container *ngIf="authenticated() && stats() as s">
-    <div class="stats-grid" style="margin-bottom:24px;">
+    <div class="stats-row">
       <div class="stat-card">
-        <div class="stat-val">{{ s.totalPredictions }}</div>
-        <div class="stat-lbl">Total Predictions</div>
+        <div class="stat-label">Total Predictions</div>
+        <div class="stat-value-gold" style="font-family:var(--font-head);font-size:2.2rem;">{{ s.totalPredictions }}</div>
       </div>
       <div class="stat-card">
-        <div class="stat-val" style="color:var(--green);">{{ s.uniqueUsers }}</div>
-        <div class="stat-lbl">Unique Users</div>
+        <div class="stat-label">Unique Users</div>
+        <div class="stat-value" style="font-family:var(--font-head);font-size:2.2rem;color:var(--green);">{{ s.uniqueUsers }}</div>
       </div>
       <div class="stat-card">
-        <div class="stat-val" style="color:var(--blue);font-size:20px;">{{ s.championStats[0]?.flag }} {{ s.championStats[0]?.name || '—' }}</div>
-        <div class="stat-lbl">Most Picked Champion</div>
+        <div class="stat-label">Most Picked Champion</div>
+        <div class="stat-value" style="font-family:var(--font-head);font-size:1.6rem;">{{ s.championStats[0]?.flag }} {{ s.championStats[0]?.name || '—' }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Sandbox Sims</div>
+        <div class="stat-value" style="font-family:var(--font-head);font-size:2.2rem;color:var(--blue);">{{ s.totalSandboxSims }}</div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">Champion Picks — Bar Chart</div>
-      <p class="card-sub">Distribution of predicted winners across all user simulations.</p>
+      <div class="card-title" style="font-size:1.3rem;">Champion Picks Distribution</div>
+      <p class="card-sub">Which teams users predict will win the tournament.</p>
       <div class="chart-box">
         <canvas #championChart></canvas>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">Goal Prediction Sandbox — Activity</div>
-      <p class="card-sub">Most frequently simulated teams in the Goal Prediction Sandbox ({{ s.totalSandboxSims }} matches run).</p>
+      <div class="card-title" style="font-size:1.3rem;">Sandbox Simulation Activity</div>
+      <p class="card-sub">Most frequently simulated teams in the Goal Prediction Sandbox.</p>
       <div class="chart-box">
         <canvas #sandboxChart></canvas>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">Champion Distribution Table</div>
+      <div class="card-title" style="font-size:1.3rem;">Champion Distribution Table</div>
       <div class="tbl-wrap">
         <table>
           <thead>
@@ -64,7 +72,7 @@
               <th>Country</th>
               <th>Picks</th>
               <th>Share</th>
-              <th>Bar</th>
+              <th>Distribution</th>
             </tr>
           </thead>
           <tbody>
@@ -84,7 +92,7 @@
     </div>
 
     <div class="card">
-      <div class="card-title">All User Predictions</div>
+      <div class="card-title" style="font-size:1.3rem;">All User Predictions</div>
       <div class="tbl-wrap">
         <table>
           <thead>
@@ -115,7 +123,3 @@
     </div>
   </ng-container>
 </div>
-
-<footer>
-  <div class="wrap">2026 FIFA WORLD CUP PREDICTOR · ADMIN PANEL</div>
-</footer>

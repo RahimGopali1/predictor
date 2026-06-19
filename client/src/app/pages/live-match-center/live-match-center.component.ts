@@ -4,7 +4,7 @@ import { EspnMatchService, EspnMatch } from '../../services/espn-match.service';
 import { FixtureService } from '../../services/fixture.service';
 import { TeamService } from '../../services/team.service';
 import { TournamentFixture } from '../../models/fixture.model';
-import { RouterLink, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { combineLatest, map, from, shareReplay } from 'rxjs';
 
 interface TournamentDisplayMatch {
@@ -29,17 +29,14 @@ interface TournamentDisplayMatch {
 @Component({
   selector: 'app-live-match-center',
   standalone: true,
-  imports: [CommonModule, RouterLink, NgIf, NgForOf, AsyncPipe],
+  imports: [CommonModule, NgIf, NgForOf, AsyncPipe],
   template: `
     <div class="wrap">
       <header>
         <div>
           <div class="header-eyebrow">Live Match Center</div>
-          <h1>2026 World Cup Live Tracker</h1>
+          <h1>LIVE<br><span>SCORES</span></h1>
           <p class="header-sub">Live scores, stats, odds, and event timelines from ESPN's unofficial World Cup API — refreshed every minute.</p>
-        </div>
-        <div class="header-controls">
-          <a routerLink="/" class="btn-sm">← Back to Predictor</a>
         </div>
       </header>
 
@@ -49,11 +46,11 @@ interface TournamentDisplayMatch {
           <div class="hero-title">Premium World Cup tracking with expert-grade match visuals</div>
           <p class="hero-summary">Follow every stadium moment, possession swing, market line, and scoring event with a cleaner page layout built for world-class sport updates.</p>
         </div>
-        <div class="hero-pill-row">
-          <span class="hero-pill">Minute refresh</span>
-          <span class="hero-pill">Event ticker</span>
-          <span class="hero-pill">Market odds</span>
-          <span class="hero-pill">Possession flow</span>
+        <div class="hero-meta">
+          <span class="hero-meta-item">Minute refresh</span>
+          <span class="hero-meta-item">Event ticker</span>
+          <span class="hero-meta-item">Market odds</span>
+          <span class="hero-meta-item">Possession flow</span>
         </div>
       </section>
 
@@ -454,19 +451,19 @@ interface TournamentDisplayMatch {
     ".match-grid { display: grid; gap: 20px; margin-top: 24px; }",
     "@media (min-width: 900px) { .match-grid { grid-template-columns: 1fr 1fr 1.25fr; } }",
     ".team-panel { display: grid; gap: 14px; }",
-    ".team-card { display: flex; gap: 16px; align-items: center; background: var(--card2); border: 1px solid var(--border); border-radius: 18px; padding: 18px; }",
+    ".team-card { display: flex; gap: 16px; align-items: center; background: var(--card2); border: 1px solid var(--border); border-radius: var(--r); padding: 18px; }",
     ".team-logo { width: 56px; height: 56px; border-radius: 18px; object-fit: contain; background: var(--bg2); padding: 10px; }",
     ".team-score { font-size: 3rem; font-weight: 800; color: var(--gold); }",
-    ".event-panel { background: var(--card); border: 1px solid var(--border); border-radius: 22px; padding: 22px; }",
+    ".event-panel { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 22px; }",
     ".event-header { display: flex; justify-content: space-between; gap: 12px; font-size: 0.82rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 18px; }",
     ".event-list { display: grid; gap: 12px; }",
-    ".event-item { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; }",
+    ".event-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; }",
     ".event-headline { display: flex; justify-content: space-between; gap: 12px; align-items: start; font-weight: 700; color: var(--text); }",
     ".event-text { margin-top: 8px; color: var(--text2); font-size: 0.95rem; line-height: 1.6; }",
-    ".stats-card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 20px; }",
+    ".stats-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; }",
     ".stat-text { margin-top: 10px; color: var(--text2); font-size: 0.95rem; }",
-    ".possession-bar { background: var(--possession-bar-bg); border-radius: 999px; height: 12px; overflow: hidden; margin-top: 12px; }",
-    ".possession-fill { height: 100%; background: linear-gradient(90deg, rgba(45,206,110,0.82), rgba(232,184,75,0.82)); border-radius: 999px; }",
+    ".possession-bar { background: var(--bg3); border-radius: 6px; height: 12px; overflow: hidden; margin-top: 12px; }",
+    ".possession-fill { height: 100%; background: var(--gold); border-radius: 2px; }",
     ".completed-grid { display: grid; gap: 20px; margin-top: 22px; }",
     "@media (min-width: 900px) { .completed-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }",
     ".upcoming-grid { display: grid; gap: 20px; margin-top: 22px; }",

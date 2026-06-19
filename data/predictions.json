@@ -1,5 +1,14 @@
 [
   {
+    "id": "919b5155-4541-4c08-944f-5ef0c69cb1bb",
+    "userName": "test",
+    "championId": "ARG",
+    "championName": "Argentina",
+    "topPicks": [],
+    "simsRun": 100,
+    "createdAt": "2026-06-19T17:46:31.675Z"
+  },
+  {
     "id": "6134170d-3aeb-4e49-9800-3ac2f67e8cef",
     "userName": "User_qugo0",
     "championId": "ARG",

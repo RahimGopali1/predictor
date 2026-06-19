@@ -13,3 +13,10 @@
   height: 360px;
   position: relative;
 }
+
+.admin-error {
+  color: var(--red);
+  margin-top: 12px;
+  font-size: 13px;
+  font-family: var(--font-mono);
+}

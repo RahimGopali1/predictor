@@ -63,3 +63,20 @@ export interface UpcomingMatch {
   statusMessage: string | null;
   isSandbox?: boolean;
 }
+
+export interface GroupStandingEntry {
+  teamId: string;
+  teamName: string;
+  teamFlag: string;
+  group: string;
+  pts: number;
+  gp: number;
+  w: number;
+  d: number;
+  l: number;
+  gf: number;
+  ga: number;
+  gd: number;
+  form: string;
+  position: number;
+}

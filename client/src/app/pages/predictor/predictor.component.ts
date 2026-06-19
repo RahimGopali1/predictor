@@ -1,10 +1,10 @@
-import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { UpcomingMatch } from '../../models/fixture.model';
-import { BracketData, MatchResult, SimResult, Team } from '../../models/team.model';
+import { GroupStandingEntry, UpcomingMatch, TournamentFixture } from '../../models/fixture.model';
+import { BracketData, BracketScore, MatchResult, SimResult, Team, UserBracket, UserBracketPick } from '../../models/team.model';
 import { AstroService } from '../../services/astro.service';
 import { FixtureService } from '../../services/fixture.service';
 import { PredictionService } from '../../services/prediction.service';
@@ -398,8 +398,8 @@ const OPENING_FIXTURES: SandboxFixture[] = [
 
     /* matches grid - use global classes where possible, keep predictor-specific overrides */
     '.matches-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-top: 16px; }',
-    '.match-card.upcoming-match-card { background: linear-gradient(135deg, rgba(77,159,255,.08), rgba(77,159,255,.02)); border-color: rgba(77,159,255,.25); }',
-    '.match-card.upcoming-counter-card { background: rgba(77, 159, 255, 0.06); border-color: rgba(77, 159, 255, 0.3); }',
+    '.match-card.upcoming-match-card { background: rgba(77,159,255,.04); border-color: rgba(77,159,255,.15); }',
+    '.match-card.upcoming-counter-card { background: rgba(77, 159, 255, 0.04); border-color: rgba(77, 159, 255, 0.15); }',
     '.match-card.upcoming-counter-card .score-section { flex-direction: column; align-items: flex-start; gap: 4px; padding: 4px 0; }',
     '.upcoming-count { font-family: var(--font-head); font-size: 28px; font-weight: 700; color: var(--blue); }',
     '.upcoming-note { font-family: var(--font-mono); font-size: 11px; color: var(--text3); }',
@@ -412,7 +412,7 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     '.sandbox-sub { font-size: 11px; color: var(--text3); font-family: var(--font-mono); margin-top: 2px; }',
     '.fixture-count { font-family: var(--font-mono); font-size: 11px; color: var(--text3); }',
     '.sandbox-grid { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 12px; align-items: start; }',
-    '.sandbox-left { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }',
+    '.sandbox-left { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r); padding: 14px; display: flex; flex-direction: column; gap: 10px; }',
     '.sandbox-right { display: flex; flex-direction: column; }',
 
     /* controls */
@@ -439,7 +439,7 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     '.math-title { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }',
 
     /* commentary */
-    '.commentary-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }',
+    '.commentary-box { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; display: flex; flex-direction: column; }',
     '.commentary-score { background: var(--card); border-bottom: 1px solid var(--border); padding: 16px 18px 12px; display: flex; align-items: center; justify-content: center; position: relative; }',
     '.match-status-wrap { position: absolute; top: 10px; right: 10px; }',
     '.status-badge { font-family: var(--font-mono); font-size: 9px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 5px; }',
@@ -467,7 +467,7 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     '.live-section { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }',
     '.live-section-header { margin-bottom: 12px; }',
     /* winner highlight */
-    '.team-block.winner .team-avatar { border-color: var(--green); box-shadow: 0 0 16px var(--green-dim); }',
+    '.team-block.winner .team-avatar { border-color: var(--green); }',
 
     '.team-block.winner .team-label { color: var(--green); }',
     ".team-name { margin-top: 2px; font-size: 11px; color: var(--text3); text-align: center; max-width: 90px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }",
@@ -476,6 +476,145 @@ const OPENING_FIXTURES: SandboxFixture[] = [
     '@media (max-width: 768px) { .sandbox-grid { grid-template-columns: 1fr; } .stats-row { grid-template-columns: repeat(2, 1fr); } .matches-grid { grid-template-columns: 1fr; } }',
     /* responsive */
     '@media (max-width: 768px) { .matches-grid { grid-template-columns: 1fr; gap: 12px; } .match-card { padding: 16px; } .team-avatar { width: 48px; height: 48px; } .score-display { font-size: 30px; } .score-panel { min-width: 90px; } }',
+    /* group standings */
+    '.standings-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 16px; }',
+    '.group-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }',
+    '.group-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px 10px; border-bottom: 1px solid var(--border); }',
+    '.group-letter { font-family: var(--font-head); font-size: 22px; letter-spacing: 0.06em; color: var(--gold); }',
+    '.group-status { font-family: var(--font-mono); font-size: 10px; color: var(--text3); letter-spacing: 0.06em; }',
+    '.group-complete { color: var(--green); }',
+    '.standings-table { width: 100%; border-collapse: collapse; }',
+    '.standings-table th { background: var(--bg3); padding: 8px 6px; font-size: 9px; text-align: center; white-space: nowrap; }',
+    '.standings-table td { padding: 8px 6px; font-size: 12px; text-align: center; border-bottom: 1px solid var(--border); }',
+    '.standings-table tr:last-child td { border-bottom: none; }',
+    '.standings-table tr:hover td { background: var(--hover-bg); }',
+    '.standings-table tr.qualified td { background: rgba(45, 206, 110, 0.03); }',
+    '.col-pos { width: 32px; }',
+    '.col-team { text-align: left !important; min-width: 140px; }',
+    '.col-stat { width: 30px; font-family: var(--font-mono); font-size: 11px !important; color: var(--text2); }',
+    '.col-pts { width: 40px; }',
+    '.col-form { width: 90px; }',
+    '.team-name-text { font-weight: 500; color: var(--text); font-size: 12px; }',
+    '.pts-value { font-family: var(--font-head); font-size: 20px; letter-spacing: 0.04em; color: var(--gold); }',
+    '.gd-pos { color: var(--green) !important; font-weight: 600; }',
+    '.gd-neg { color: var(--red) !important; font-weight: 600; }',
+    '.form-strip { display: flex; gap: 3px; justify-content: center; flex-wrap: nowrap; }',
+    '.form-strip .badge { font-size: 9px; padding: 1px 5px; min-width: 20px; text-align: center; }',
+    '.group-empty { padding: 24px 16px; text-align: center; }',
+    '.standings-empty { padding: 40px; text-align: center; color: var(--text3); }',
+    '.standings-empty p { margin-bottom: 12px; }',
+    '.refresh-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }',
+    '.refresh-label { font-family: var(--font-mono); font-size: 10px; color: var(--text3); letter-spacing: 0.06em; }',
+    '.legend-bar { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; padding: 14px 16px; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--r); font-size: 11px; color: var(--text2); font-family: var(--font-mono); }',
+
+    /* responsive */
+    '@media (max-width: 768px) { .standings-grid { grid-template-columns: 1fr; } .standings-table { font-size: 11px; } .col-team { min-width: 100px; } }',
+    '@media (max-width: 480px) { .standings-table th, .standings-table td { padding: 5px 4px; font-size: 10px; } .pts-value { font-size: 16px; } .group-letter { font-size: 18px; } .legend-bar { font-size: 10px; gap: 8px; } }',
+
+    /* head-to-head comparator */
+    '.h2h-intro { font-size: 13px; color: var(--text2); margin-bottom: 20px; line-height: 1.6; }',
+    '.h2h-pickers { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: end; margin-bottom: 24px; }',
+    '.h2h-picker-col { min-width: 0; }',
+    '.h2h-vs-col { display: flex; flex-direction: column; align-items: center; gap: 4px; padding-bottom: 4px; }',
+    '.h2h-swap-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border2); background: var(--card2); color: var(--gold); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }',
+    '.h2h-swap-btn:hover { border-color: var(--gold); background: var(--gold-dim); transform: rotate(180deg); }',
+    '.h2h-vs-text { font-family: var(--font-mono); font-size: 10px; color: var(--text3); letter-spacing: 0.1em; }',
+
+    /* hero */
+    '.h2h-hero { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center; padding: 24px; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--r); margin-bottom: 20px; }',
+    '.h2h-hero-team { text-align: center; }',
+    '.h2h-hero-flag { font-size: 48px; line-height: 1; margin-bottom: 8px; }',
+    '.h2h-hero-name { font-family: var(--font-head); font-size: 22px; letter-spacing: 0.04em; color: var(--text); margin-bottom: 4px; }',
+    '.h2h-hero-elo { font-family: var(--font-mono); font-size: 13px; color: var(--gold); }',
+    '.h2h-hero-center { text-align: center; min-width: 180px; }',
+    '.h2h-hero-score { font-family: var(--font-head); font-size: 32px; letter-spacing: 0.06em; color: var(--gold); margin-bottom: 4px; }',
+    '.h2h-hero-label { font-family: var(--font-mono); font-size: 9px; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px; }',
+    '.h2h-hero-probs { width: 100%; }',
+    '.h2h-prob-bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 6px; background: var(--bg2); }',
+    '.h2h-prob-fill { transition: width 0.3s ease; }',
+    '.h2h-prob-win { background: var(--green); }',
+    '.h2h-prob-draw { background: var(--blue); }',
+    '.h2h-prob-labels { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; font-weight: 600; }',
+
+    /* stat rows */
+    '.h2h-stats { display: flex; flex-direction: column; gap: 4px; margin-bottom: 20px; }',
+    '.h2h-stat-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; padding: 10px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; }',
+    '.h2h-stat-row:first-child { border-color: var(--border2); }',
+    '.h2h-stat-val { font-family: var(--font-head); font-size: 20px; letter-spacing: 0.04em; text-align: center; color: var(--text); }',
+    '.h2h-stat-label { font-family: var(--font-mono); font-size: 9px; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; text-align: center; padding: 0 8px; }',
+
+    /* math breakdown */
+    '.h2h-math { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; }',
+    '.h2h-math-title { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }',
+    '.h2h-math-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }',
+    '.h2h-math-item { display: flex; flex-direction: column; gap: 2px; padding: 8px; background: var(--card); border: 1px solid var(--border); border-radius: 6px; text-align: center; }',
+    '.h2h-math-label { font-family: var(--font-mono); font-size: 9px; color: var(--text3); letter-spacing: 0.06em; }',
+    '.h2h-math-val { font-family: var(--font-mono); font-size: 14px; font-weight: 600; color: var(--gold); }',
+
+    /* responsive */
+    '@media (max-width: 768px) { .h2h-pickers { grid-template-columns: 1fr; } .h2h-vs-col { flex-direction: row; gap: 12px; padding: 8px 0; justify-content: center; } .h2h-hero { grid-template-columns: 1fr; gap: 12px; } .h2h-hero-center { order: -1; } .h2h-hero-flag { font-size: 36px; } .h2h-hero-name { font-size: 18px; } .h2h-hero-score { font-size: 26px; } .h2h-math-grid { grid-template-columns: repeat(2, 1fr); } }',
+    '@media (max-width: 480px) { .h2h-hero { padding: 16px; } .h2h-hero-flag { font-size: 28px; } .h2h-hero-name { font-size: 16px; } .h2h-hero-score { font-size: 22px; } .h2h-stat-row { padding: 8px 10px; } .h2h-stat-val { font-size: 16px; } .h2h-math-grid { grid-template-columns: 1fr; } }',
+
+    /* bracket game */
+    '.bracket-start { text-align: center; padding: 40px 0; }',
+    '.bracket-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }',
+    '.bracket-progress { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text2); }',
+    '.bp-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--border2); border: 1px solid var(--border); }',
+    '.bp-dot.done { background: var(--green); border-color: var(--green); }',
+    '.bp-dot.partial { background: var(--gold); border-color: var(--gold); }',
+    '.bracket-rounds { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }',
+    '.bracket-round { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--r); padding: 12px; }',
+    '.br-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }',
+    '.br-title { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); }',
+    '.br-count { font-family: var(--font-mono); font-size: 10px; color: var(--text3); }',
+    '.br-match { margin-bottom: 8px; }',
+    '.br-match:last-child { margin-bottom: 0; }',
+    '.br-match-label { font-size: 9px; color: var(--text3); font-family: var(--font-mono); margin-bottom: 2px; padding-left: 2px; }',
+    '.br-team { display: flex; align-items: center; justify-content: space-between; padding: 6px 8px; border-radius: 6px; background: var(--card); border: 1px solid var(--border); margin-bottom: 2px; transition: all 0.15s; }',
+    '.br-team:last-child { margin-bottom: 0; }',
+    '.br-team.winner { border-color: var(--green); background: rgba(45,206,110,0.06); }',
+    '.br-team.clickable { cursor: pointer; }',
+    '.br-team.clickable:hover { border-color: var(--gold); background: var(--gold-dim); }',
+    '.br-team-info { display: flex; align-items: center; gap: 6px; min-width: 0; }',
+    '.br-flag { font-size: 16px; flex-shrink: 0; }',
+    '.br-name { font-size: 12px; color: var(--text); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }',
+    '.br-check { font-size: 14px; color: var(--green); flex-shrink: 0; }',
+    '.br-empty { padding: 16px; text-align: center; color: var(--text3); font-size: 11px; font-family: var(--font-mono); }',
+    '.bracket-champion-box { display: flex; align-items: center; gap: 8px; margin-top: 16px; padding: 12px 16px; background: var(--gold-dim); border: 1px solid rgba(212,168,67,0.2); border-radius: var(--r); font-size: 14px; color: var(--text); }',
+    '.bc-crown { font-size: 24px; }',
+    '.bc-team { font-weight: 700; font-size: 16px; }',
+    '.bracket-score-card { margin-top: 16px; padding: 16px; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--r); }',
+    '.bsc-title { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }',
+    '.bsc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }',
+    '.bsc-stat { text-align: center; padding: 8px; background: var(--card); border-radius: 8px; border: 1px solid var(--border); }',
+    '.bsc-val { font-family: var(--font-head); font-size: 22px; font-weight: 700; color: var(--text); }',
+    '.bsc-lbl { font-family: var(--font-mono); font-size: 9px; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 4px; }',
+
+    /* my bracket tab */
+    '.mybracket-content { padding: 8px 0; }',
+    '.mybracket-hero { text-align: center; padding: 24px; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--r); margin-bottom: 20px; }',
+    '.mybracket-hero-score { font-family: var(--font-head); font-size: 42px; font-weight: 700; color: var(--gold); letter-spacing: 0.04em; }',
+    '.mybracket-hero-lbl { font-family: var(--font-mono); font-size: 10px; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; margin: 4px 0 12px; }',
+    '.mybracket-hero-bar { height: 6px; background: var(--border2); border-radius: 3px; overflow: hidden; max-width: 300px; margin: 0 auto; }',
+    '.mybracket-hero-fill { height: 100%; background: var(--gold); border-radius: 3px; transition: width 0.5s ease; }',
+    '.mybracket-breakdown { display: flex; flex-direction: column; gap: 8px; }',
+    '.mb-row { display: grid; grid-template-columns: 140px 60px 80px 1fr; gap: 8px; align-items: center; padding: 8px 12px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; }',
+    '.mb-stage { font-size: 12px; font-weight: 500; color: var(--text); }',
+    '.mb-correct { font-family: var(--font-mono); font-size: 14px; font-weight: 600; color: var(--text); text-align: center; }',
+    '.mb-pts { font-family: var(--font-mono); font-size: 11px; color: var(--text3); }',
+    '.mb-bar { height: 6px; background: var(--border2); border-radius: 3px; overflow: hidden; }',
+    '.mb-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }',
+    '.mb-r32 { background: var(--text3); }',
+    '.mb-r16 { background: #b8860b; }',
+    '.mb-qf { background: var(--blue); }',
+    '.mb-sf { background: var(--green); }',
+    '.mb-final { background: var(--gold); }',
+    '.mb-champ { background: var(--gold); }',
+    '.mb-row-champion { border-color: var(--gold-dim); background: var(--gold-glow); }',
+    '.mybracket-champion { margin-top: 20px; padding: 12px 16px; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; display: flex; align-items: center; gap: 6px; }',
+
+    '@media (max-width: 768px) { .bracket-rounds { grid-template-columns: 1fr; } .bsc-grid { grid-template-columns: 1fr; } .mb-row { grid-template-columns: 1fr 1fr; gap: 4px; } .mb-bar { grid-column: 1 / -1; } }',
+    '@media (max-width: 480px) { .mb-row { grid-template-columns: 1fr; } }',
   ],
 })
 export class PredictorComponent implements OnInit, OnDestroy {
@@ -486,6 +625,7 @@ export class PredictorComponent implements OnInit, OnDestroy {
   private readonly predictionService = inject(PredictionService);
   private readonly espnMatchService = inject(EspnMatchService);
   private readonly sanitizer = inject(DomSanitizer);
+  private readonly ngZone = inject(NgZone);
 
   readonly teams = this.teamService.teams;
   readonly recentMatches = this.teamService.recentMatches;
@@ -497,8 +637,8 @@ export class PredictorComponent implements OnInit, OnDestroy {
   readonly completedMatches$ = this.espnMatchService.completedMatches$;
 
   currentStep = signal(1);
-  subTab = signal<'ratings' | 'form'>('ratings');
-  oddsTab = signal<'odds' | 'bracket' | 'compare' | 'matchups'>('odds');
+  subTab = signal<'ratings' | 'form' | 'compare'>('ratings');
+  oddsTab = signal<'odds' | 'bracket' | 'compare' | 'matchups' | 'mybracket'>('odds');
   teamSearch = '';
   teamSearchInput = signal('');
   showTeamDropdown = signal(false);
@@ -544,9 +684,14 @@ export class PredictorComponent implements OnInit, OnDestroy {
   simPct = signal('—');
 
   private commInterval: ReturnType<typeof setInterval> | null = null;
-  private animFrame = 0;
+  private simWorker: Worker | null = null;
   private bracketCounts: Record<string, number> = {};
   readonly Math = Math;
+
+  // Worker-based sim state
+  private workerRes: Record<string, SimResult> = {};
+  private workerBracket: BracketData | null = null;
+  private workerCounts: Record<string, number> = {};
 
   ngOnInit(): void {
     void Promise.all([
@@ -568,12 +713,20 @@ export class PredictorComponent implements OnInit, OnDestroy {
         }
       }
       this.onTeamSelect();
+      this.refreshGroupStandings();
     });
   }
 
   ngOnDestroy(): void {
     if (this.commInterval) clearInterval(this.commInterval);
-    if (this.animFrame) cancelAnimationFrame(this.animFrame);
+    this.terminateWorker();
+  }
+
+  private terminateWorker(): void {
+    if (this.simWorker) {
+      this.simWorker.terminate();
+      this.simWorker = null;
+    }
   }
 
   initSimState(): void {
@@ -597,11 +750,11 @@ export class PredictorComponent implements OnInit, OnDestroy {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  showSubTab(name: 'ratings' | 'form'): void {
+  showSubTab(name: 'ratings' | 'form' | 'compare'): void {
     this.subTab.set(name);
   }
 
-  showTab(name: 'odds' | 'bracket' | 'compare' | 'matchups'): void {
+  showTab(name: 'odds' | 'bracket' | 'compare' | 'matchups' | 'mybracket'): void {
     this.oddsTab.set(name);
   }
 
@@ -1090,6 +1243,107 @@ export class PredictorComponent implements OnInit, OnDestroy {
     this.simRunning.set(true);
     this.simsRun.set(0);
     this.bracketCounts = {};
+
+    // Initialize worker-side result storage
+    this.workerRes = this.simService.initSimResults(this.teams());
+    this.simRes.set({ ...this.workerRes });
+    this.modalBracket.set(null);
+    this.progPct.set(0);
+    this.workerBracket = null;
+    this.workerCounts = {};
+
+    // Terminate any previous worker
+    this.terminateWorker();
+
+    // Guard: don't spawn worker with empty data
+    const teams = this.teams();
+    const recent = this.recentMatches();
+    if (!teams || teams.length === 0) {
+      console.warn('No teams data available, skipping simulation');
+      this.simRunning.set(false);
+      return;
+    }
+
+    try {
+      this.simWorker = new Worker(
+        new URL('../../services/simulation.worker.ts', import.meta.url),
+        { type: 'module' }
+      );
+    } catch (err) {
+      console.error('Failed to create Web Worker, falling back to main-thread simulation', err);
+      this.runSimsFallback();
+      return;
+    }
+
+    this.simWorker.onmessage = (e: MessageEvent<{
+      type: string;
+      simsRun: number;
+      simRes: Record<string, { r32: number; r16: number; qf: number; sf: number; fin: number; champ: number }>;
+      bracketCounts: Record<string, number>;
+      modalBracket: BracketData | null;
+      leaderId: string;
+      leaderPct: number;
+      modalBracketChanged?: boolean;
+    }>) => {
+      const msg = e.data;
+
+      if (msg.type === 'PROGRESS') {
+        // Rebuild simRes from counts + teams
+        const teams = this.teams();
+        for (const t of teams) {
+          const c = msg.simRes[t.id];
+          if (c && this.workerRes[t.id]) {
+            this.workerRes[t.id].r32 = c.r32;
+            this.workerRes[t.id].r16 = c.r16;
+            this.workerRes[t.id].qf = c.qf;
+            this.workerRes[t.id].sf = c.sf;
+            this.workerRes[t.id].fin = c.fin;
+            this.workerRes[t.id].champ = c.champ;
+          }
+        }
+
+        this.workerCounts = msg.bracketCounts;
+        this.workerBracket = msg.modalBracket;
+
+        this.simsRun.set(msg.simsRun);
+        this.progPct.set(Math.min(100, Math.floor((msg.simsRun / this.simService.TOTAL) * 100)));
+
+        const leaderTeam = this.teamService.findTeam(msg.leaderId);
+        if (leaderTeam) {
+          this.simLeader.set(`${leaderTeam.flag} ${leaderTeam.name}`);
+          this.simPct.set(msg.leaderPct.toFixed(1) + '%');
+        }
+
+        this.simRes.set({ ...this.workerRes });
+        if (msg.modalBracket || msg.modalBracketChanged) {
+          this.modalBracket.set(msg.modalBracket);
+        }
+      } else if (msg.type === 'DONE') {
+        this.ngZone.run(() => this.finishSims(this.workerRes));
+        this.terminateWorker();
+      }
+    };
+
+    this.simWorker.onerror = (err) => {
+      console.error('Web Worker error, falling back to main-thread simulation', err);
+      this.terminateWorker();
+      this.runSimsFallback();
+    };
+
+    this.simWorker.postMessage({
+      type: 'START',
+      teams,
+      recentMatches: recent,
+      TOTAL: this.simService.TOTAL,
+      BATCH: this.simService.BATCH,
+    });
+  }
+
+  private runSimsFallback(): void {
+    // Original main-thread simulation as fallback if Web Worker isn't available
+    this.simRunning.set(true);
+    this.simsRun.set(0);
+    this.bracketCounts = {};
     const simRes = this.simService.initSimResults(this.teams());
     this.simRes.set(simRes);
     this.modalBracket.set(null);
@@ -1134,7 +1388,7 @@ export class PredictorComponent implements OnInit, OnDestroy {
         this.simPct.set(((lead.champ / run) * 100).toFixed(1) + '%');
       }
       this.simRes.set({ ...simRes });
-      this.animFrame = requestAnimationFrame(batch);
+      requestAnimationFrame(batch);
     };
     batch();
   }
@@ -1359,4 +1613,444 @@ export class PredictorComponent implements OnInit, OnDestroy {
     ].includes(match.statusName);
   isFinished = (match: EspnMatch): boolean =>
     match.statusName === 'STATUS_FULL_TIME' || match.statusName === 'STATUS_FINAL';
+
+  // ── Group Standings ──
+
+  readonly groupStandings = signal<Record<string, GroupStandingEntry[]> | null>(null);
+
+  refreshGroupStandings(): void {
+    this.groupStandings.set(this.fixtureService.getGroupStandings(this.teams()));
+  }
+
+  // ── Head-to-Head Comparator ──
+
+  h2hTeamA = signal('ARG');
+  h2hTeamB = signal('FRA');
+  h2hSearchA = signal('');
+  h2hSearchB = signal('');
+  showH2hDropdownA = signal(false);
+  showH2hDropdownB = signal(false);
+
+  h2hTeamAData(): Team | undefined {
+    return this.teamService.findTeam(this.h2hTeamA());
+  }
+
+  h2hTeamBData(): Team | undefined {
+    return this.teamService.findTeam(this.h2hTeamB());
+  }
+
+  h2hFilteredTeamsA(): Team[] {
+    const q = this.h2hSearchA().toLowerCase();
+    return this.sortedTeamsByName().filter(t => 
+      !q || t.name.toLowerCase().includes(q) || t.id.toLowerCase().includes(q)
+    );
+  }
+
+  h2hFilteredTeamsB(): Team[] {
+    const q = this.h2hSearchB().toLowerCase();
+    return this.sortedTeamsByName().filter(t => 
+      !q || t.name.toLowerCase().includes(q) || t.id.toLowerCase().includes(q)
+    );
+  }
+
+  selectH2hTeamA(id: string): void {
+    this.h2hTeamA.set(id);
+    this.showH2hDropdownA.set(false);
+    this.h2hSearchA.set('');
+  }
+
+  selectH2hTeamB(id: string): void {
+    this.h2hTeamB.set(id);
+    this.showH2hDropdownB.set(false);
+    this.h2hSearchB.set('');
+  }
+
+  swapH2hTeams(): void {
+    const temp = this.h2hTeamA();
+    this.h2hTeamA.set(this.h2hTeamB());
+    this.h2hTeamB.set(temp);
+  }
+
+  h2hProbs() {
+    const a = this.h2hTeamAData();
+    const b = this.h2hTeamBData();
+    if (!a || !b) return { pw: 0, pd: 0, pl: 0, lA: 0, lB: 0, rho: 0, fa: 0, fb: 0, ha: 0, hb: 0, effA: 0, effB: 0, gap: 0 };
+    const fa = this.formMod(a.id);
+    const fb = this.formMod(b.id);
+    const ha = a.host && !b.host ? 75 : 0;
+    const hb = b.host && !a.host ? 75 : 0;
+    const effA = a.elo + ha + fa;
+    const effB = b.elo + hb + fb;
+    const probs = this.simService.winDrawLossProbs(a, b, this.recentMatches());
+    return {
+      ...probs,
+      fa,
+      fb,
+      ha,
+      hb,
+      effA,
+      effB,
+      gap: effA - effB
+    };
+  }
+
+  h2hPredictedScore(): string {
+    const a = this.h2hTeamAData();
+    const b = this.h2hTeamBData();
+    if (!a || !b) return '—';
+    const { lA, lB } = this.h2hProbs();
+    const gA = Math.round(lA);
+    const gB = Math.round(lB);
+    return `${a.flag} ${gA} – ${gB} ${b.flag}`;
+  }
+
+  h2hEloDiffColor(diff: number): string {
+    if (diff > 0) return 'var(--green)';
+    if (diff < 0) return 'var(--red)';
+    return 'var(--text2)';
+  }
+
+  readonly groupLetters = ['A','B','C','D','E','F','G','H','I','J','K','L'];
+
+  // ── Bracket Prediction Game ──
+
+  readonly STORAGE_KEY = 'wc_user_bracket';
+
+  userBracket = signal<UserBracket | null>(this.loadBracket());
+  bracketEditMode = signal(false);
+
+  bracketStageOrder = ['r32', 'r16', 'qf', 'sf', 'final'] as const;
+  bracketStageLabels: Record<string, string> = {
+    r32: 'Round of 32',
+    r16: 'Round of 16',
+    qf: 'Quarter-Final',
+    sf: 'Semi-Final',
+    final: 'Grand Final'
+  };
+  bracketStagePoints: Record<string, number> = {
+    r32: 1,
+    r16: 2,
+    qf: 3,
+    sf: 5,
+    final: 8,
+    champion: 12
+  };
+
+  loadBracket(): UserBracket | null {
+    try {
+      const raw = localStorage.getItem(this.STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch {}
+    return null;
+  }
+
+  saveBracket(bracket: UserBracket): void {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(bracket));
+  }
+
+  /** Build bracket structure from allFixtures knockout matches */
+  buildBracketTemplate(): UserBracket {
+    const fixtures = (this.fixtureStatus()?.allFixtures as TournamentFixture[]) ?? [];
+    const koFixtures = fixtures.filter(f =>
+      f.stage === 'Round of 32' || f.stage === 'Round of 16' ||
+      f.stage === 'Quarter-Final' || f.stage === 'Semi-Final' ||
+      f.stage === 'Grand Final'
+    );
+
+    const r32: Record<string, UserBracketPick> = {};
+    const r16: Record<string, UserBracketPick> = {};
+    const qf: Record<string, UserBracketPick> = {};
+    const sf: Record<string, UserBracketPick> = {};
+    let final: UserBracketPick | null = null;
+
+    koFixtures.forEach(f => {
+      const pick: UserBracketPick = {
+        matchId: f.id,
+        stage: f.stage,
+        label: f.label || '',
+        home: f.home,
+        away: f.away,
+        winner: null
+      };
+
+      if (f.stage === 'Round of 32') r32[f.label || f.id.toString()] = pick;
+      else if (f.stage === 'Round of 16') r16[f.label || f.id.toString()] = pick;
+      else if (f.stage === 'Quarter-Final') qf[f.label || f.id.toString()] = pick;
+      else if (f.stage === 'Semi-Final') sf[f.label || f.id.toString()] = pick;
+      else if (f.stage === 'Grand Final') final = pick;
+    });
+
+    return { r32, r16, qf, sf, final, champion: null };
+  }
+
+  /** Initialize or reset user bracket */
+  initBracket(): void {
+    const bracket = this.buildBracketTemplate();
+    this.userBracket.set(bracket);
+    this.saveBracket(bracket);
+    this.bracketEditMode.set(true);
+  }
+
+  /** Reset bracket to blank */
+  resetBracket(): void {
+    this.initBracket();
+  }
+
+  /** Pick a winner for a specific match */
+  pickWinner(stage: string, label: string, teamId: string): void {
+    const bracket = this.userBracket();
+    if (!bracket) return;
+
+    const updated = JSON.parse(JSON.stringify(bracket)) as UserBracket;
+    const stageMap: Record<string, Record<string, UserBracketPick>> = {
+      r32: updated.r32,
+      r16: updated.r16,
+      qf: updated.qf,
+      sf: updated.sf
+    };
+
+    if (stage === 'final') {
+      if (!updated.final) return;
+      updated.final.winner = teamId;
+      updated.champion = teamId;
+    } else if (stageMap[stage]?.[label]) {
+      stageMap[stage][label].winner = teamId;
+    } else {
+      return;
+    }
+
+    // Auto-propagate: advance winner to next round
+    this.autoPropagate(updated, stage, label, teamId);
+
+    this.userBracket.set(updated);
+    this.saveBracket(updated);
+  }
+
+  private autoPropagate(bracket: UserBracket, stage: string, label: string, teamId: string): void {
+    // R32 labels 1-16 map to R16 labels 1-8 (two R32 matches feed one R16 match)
+    // Correct bracket topology per the server's bracket generation:
+    // R32-1 + R32-13 → R16-1, R32-3 + R32-14 → R16-2,
+    // R32-5 + R32-15 → R16-3, R32-7 + R32-16 → R16-4,
+    // R32-2 + R32-4 → R16-5, R32-6 + R32-8 → R16-6,
+    // R32-9 + R32-11 → R16-7, R32-10 + R32-12 → R16-8
+    const r32PairLabels: Record<string, { nextKey: string; slot: 'home' | 'away' }> = {
+      'R32-1': { nextKey: 'R16-1', slot: 'home' },
+      'R32-13': { nextKey: 'R16-1', slot: 'away' },
+      'R32-3': { nextKey: 'R16-2', slot: 'home' },
+      'R32-14': { nextKey: 'R16-2', slot: 'away' },
+      'R32-5': { nextKey: 'R16-3', slot: 'home' },
+      'R32-15': { nextKey: 'R16-3', slot: 'away' },
+      'R32-7': { nextKey: 'R16-4', slot: 'home' },
+      'R32-16': { nextKey: 'R16-4', slot: 'away' },
+      'R32-2': { nextKey: 'R16-5', slot: 'home' },
+      'R32-4': { nextKey: 'R16-5', slot: 'away' },
+      'R32-6': { nextKey: 'R16-6', slot: 'home' },
+      'R32-8': { nextKey: 'R16-6', slot: 'away' },
+      'R32-9': { nextKey: 'R16-7', slot: 'home' },
+      'R32-11': { nextKey: 'R16-7', slot: 'away' },
+      'R32-10': { nextKey: 'R16-8', slot: 'home' },
+      'R32-12': { nextKey: 'R16-8', slot: 'away' }
+    };
+    const r16PairLabels: Record<string, { nextKey: string; slot: 'home' | 'away' }> = {
+      'R16-1': { nextKey: 'QF-1', slot: 'home' },
+      'R16-2': { nextKey: 'QF-2', slot: 'home' },
+      'R16-3': { nextKey: 'QF-3', slot: 'home' },
+      'R16-4': { nextKey: 'QF-4', slot: 'home' },
+      'R16-5': { nextKey: 'QF-1', slot: 'away' },
+      'R16-6': { nextKey: 'QF-2', slot: 'away' },
+      'R16-7': { nextKey: 'QF-3', slot: 'away' },
+      'R16-8': { nextKey: 'QF-4', slot: 'away' }
+    };
+    const qfPairLabels: Record<string, { nextKey: string; slot: 'home' | 'away' }> = {
+      'QF-1': { nextKey: 'SF-1', slot: 'home' },
+      'QF-2': { nextKey: 'SF-1', slot: 'away' },
+      'QF-3': { nextKey: 'SF-2', slot: 'home' },
+      'QF-4': { nextKey: 'SF-2', slot: 'away' }
+    };
+    const sfPairLabels: Record<string, 'home' | 'away'> = {
+      'SF-1': 'home',
+      'SF-2': 'away'
+    };
+
+    // R32 → R16
+    if (stage === 'r32' && r32PairLabels[label]) {
+      const nxt = r32PairLabels[label];
+      const nm = bracket.r16[nxt.nextKey];
+      if (nm) nm[nxt.slot] = teamId;
+    }
+
+    // R16 → QF
+    if (stage === 'r16' && r16PairLabels[label]) {
+      const nxt = r16PairLabels[label];
+      const nm = bracket.qf[nxt.nextKey];
+      if (nm) nm[nxt.slot] = teamId;
+    }
+
+    // QF → SF
+    if (stage === 'qf' && qfPairLabels[label]) {
+      const nxt = qfPairLabels[label];
+      const nm = bracket.sf[nxt.nextKey];
+      if (nm) nm[nxt.slot] = teamId;
+    }
+
+    // SF → Final
+    if (stage === 'sf' && sfPairLabels[label]) {
+      if (bracket.final) {
+        bracket.final[sfPairLabels[label]] = teamId;
+      }
+    }
+  }
+
+  /** Get the team that won a specific match in the user's bracket */
+  bracketWinner(stage: string, label: string): string | null {
+    const userB = this.userBracket();
+    if (!userB) return null;
+    const stageData = (userB as any)?.[stage];
+    if (!stageData) return null;
+    return stageData?.[label]?.winner ?? null;
+  }
+
+  /** Get all bracket picks for a stage */
+  bracketStagePicks(stage: string): UserBracketPick[] {
+    const b = this.userBracket();
+    if (!b) return [];
+    const s = b[stage as keyof UserBracket];
+    if (!s || typeof s !== 'object') return [];
+    return Object.values(s as Record<string, UserBracketPick>);
+  }
+
+  /** Get the championship pick */
+  bracketChampion(): string | null {
+    return this.userBracket()?.champion ?? null;
+  }
+
+  /** Get team display info for a team ID (used in bracket) */
+  bracketTeamInfo(id: string): { flag: string; name: string } {
+    const t = this.teamService.findTeam(id);
+    return t ? { flag: t.flag, name: t.name } : { flag: '🏳️', name: id };
+  }
+
+  /** Check if a team won in the user bracket for a match */
+  isBracketWinner(stage: string, label: string, teamId: string): boolean {
+    return this.bracketWinner(stage, label) === teamId;
+  }
+
+  /** Count how many picks have been made in a stage */
+  bracketStageProgress(stage: string): { done: number; total: number } {
+    const picks = this.bracketStagePicks(stage);
+    const total = picks.length;
+    const done = picks.filter(p => p.winner !== null).length;
+    return { done, total };
+  }
+
+  /** Check if the entire bracket is filled */
+  get bracketComplete(): boolean {
+    const b = this.userBracket();
+    if (!b || !b.final?.winner) return false;
+    return true;
+  }
+
+  /** Score the user's bracket against the actual tournament results */
+  scoreBracket(): BracketScore | null {
+    const bracket = this.userBracket();
+    if (!bracket) return null;
+
+    const fixtures = (this.fixtureStatus()?.allFixtures as TournamentFixture[]) ?? [];
+    const actualChampion = this.fixtureStatus()?.champion;
+
+    let r32Correct = 0;
+    let r16Correct = 0;
+    let qfCorrect = 0;
+    let sfCorrect = 0;
+    let finalCorrect = 0;
+    let championCorrect = false;
+
+    const getActualWinner = (matchId: number): string | null => {
+      const f = fixtures.find(fx => fx.id === matchId);
+      if (!f || !f.finished) return null;
+      if (f.homeScore == null || f.awayScore == null) return null;
+      if (f.homeScore > f.awayScore) return f.home;
+      if (f.awayScore > f.homeScore) return f.away;
+      return null;
+    };
+
+    const stageConfigs = [
+      { key: 'r32', stats: { correct: () => r32Correct, set: (v: number) => { r32Correct = v; } }, total: Object.keys(bracket.r32).length },
+      { key: 'r16', stats: { correct: () => r16Correct, set: (v: number) => { r16Correct = v; } }, total: Object.keys(bracket.r16).length },
+      { key: 'qf', stats: { correct: () => qfCorrect, set: (v: number) => { qfCorrect = v; } }, total: Object.keys(bracket.qf).length },
+      { key: 'sf', stats: { correct: () => sfCorrect, set: (v: number) => { sfCorrect = v; } }, total: Object.keys(bracket.sf).length },
+    ] as const;
+
+    // Score each stage
+    stageConfigs.forEach(({ key }) => {
+      const picks = Object.values(bracket[key] as Record<string, UserBracketPick>);
+      let correct = 0;
+      picks.forEach(pick => {
+        const actual = getActualWinner(pick.matchId);
+        if (actual && pick.winner === actual) correct++;
+      });
+      if (key === 'r32') r32Correct = correct;
+      else if (key === 'r16') r16Correct = correct;
+      else if (key === 'qf') qfCorrect = correct;
+      else if (key === 'sf') sfCorrect = correct;
+    });
+
+    // Score final
+    if (bracket.final) {
+      const actual = getActualWinner(bracket.final.matchId);
+      if (actual && bracket.final.winner === actual) finalCorrect = 1;
+    }
+
+    // Score champion
+    championCorrect = bracket.champion === actualChampion;
+
+    const totalPossible = Object.keys(bracket.r32).length + Object.keys(bracket.r16).length +
+      Object.keys(bracket.qf).length + Object.keys(bracket.sf).length + 1;
+    const totalCorrect = r32Correct + r16Correct + qfCorrect + sfCorrect + finalCorrect;
+
+    const pts = this.bracketStagePoints;
+    const score = r32Correct * pts['r32'] +
+      r16Correct * pts['r16'] +
+      qfCorrect * pts['qf'] +
+      sfCorrect * pts['sf'] +
+      finalCorrect * pts['final'] +
+      (championCorrect ? pts['champion'] : 0);
+
+    const maxScore = totalPossible * pts['champion'];
+
+    return {
+      r32Correct, r16Correct, qfCorrect, sfCorrect, finalCorrect,
+      championCorrect, totalCorrect, totalPossible, score, maxScore
+    };
+  }
+
+  formBadgeClass(letter: string): string {
+    if (letter === 'W') return 'badge badge-green';
+    if (letter === 'D') return 'badge badge-blue';
+    return 'badge badge-red';
+  }
+
+  /**
+   * Determine qualification zone color for a group position.
+   * In 2026 format: top 2 auto-qualify, best 8 thirds also qualify.
+   * For simplicity: pos 1-2 = green (qualifying), pos 3 = amber (maybe), pos 4 = red.
+   */
+  positionBadge(pos: number, group: string, allStandings: Record<string, GroupStandingEntry[]>): string {
+    if (pos <= 2) return 'badge badge-green';
+    if (pos === 3) {
+      // Check if this third-place team would be among the best 8
+      const allThirds = Object.values(allStandings)
+        .map(g => g[2])
+        .filter(Boolean)
+        .sort((a, b) => {
+          if (b.pts !== a.pts) return b.pts - a.pts;
+          if (b.gd !== a.gd) return b.gd - a.gd;
+          return b.gf - a.gf;
+        });
+      const rank = allThirds.findIndex(t => t && t.group === group) + 1;
+      if (rank > 0 && rank <= 8) return 'badge badge-blue';
+      return 'badge badge-amber';
+    }
+    return 'badge badge-red';
+  }
 }
